@@ -8,7 +8,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
   <!-- GSAP & Lenis via CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -33,9 +33,10 @@
       --accent-soft: rgba(59, 130, 246, 0.12);
       --status-active: #4cc38a;
       
-      /* Typography */
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      /* Typography System (Impeccable & Taste Craft) */
+      --font-display: 'Instrument Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
       /* Motion & Easing Constants */
       --ease-out-quint: cubic-bezier(.23, 1, .32, 1);
@@ -113,9 +114,26 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 14px;
-      font-weight: 500;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
       color: var(--text-primary);
+    }
+
+    .brand-sep {
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 13px;
+    }
+
+    .brand-affiliation {
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 12px;
+      letter-spacing: 0.04em;
     }
 
     .status-dot {
@@ -132,7 +150,8 @@
       align-items: center;
       gap: 16px;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
       color: var(--text-muted);
     }
 
@@ -194,13 +213,14 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 32px;
+      position: relative;
     }
 
     @media (min-width: 960px) {
       .hero {
         grid-template-columns: 1.15fr 0.85fr;
         align-items: center;
-        gap: 48px;
+        gap: 40px;
         max-width: 1080px;
       }
     }
@@ -209,28 +229,26 @@
       display: flex;
       flex-direction: column;
       gap: 28px;
+      position: relative;
+      z-index: 2;
     }
 
+    /* Seamless Abstract 3D Model: No box, no borders, unboxed background integration */
     .hero-3d-wrapper {
       position: relative;
       width: 100%;
-      height: 440px;
+      height: 480px;
       display: flex;
       align-items: center;
       justify-content: center;
       user-select: none;
       touch-action: none;
       cursor: grab;
-      border-radius: 16px;
-      background: radial-gradient(circle at center, rgba(30, 41, 59, 0.22) 0%, rgba(7, 8, 13, 0) 72%);
-      border: 1px solid rgba(238, 240, 245, 0.06);
-      overflow: hidden;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .hero-3d-wrapper:hover {
-      border-color: rgba(96, 165, 250, 0.22);
-      box-shadow: 0 0 32px rgba(59, 130, 246, 0.04);
+      background: transparent;
+      border: none;
+      outline: none;
+      overflow: visible;
+      pointer-events: auto;
     }
 
     .hero-3d-wrapper:active {
@@ -242,67 +260,45 @@
       height: 100% !important;
       display: block;
       outline: none;
-    }
-
-    .hero-3d-hint {
-      position: absolute;
-      bottom: 12px;
-      right: 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      pointer-events: none;
-      background: rgba(7, 8, 13, 0.75);
-      padding: 3px 8px;
-      border-radius: 4px;
-      border: 1px solid rgba(238, 240, 245, 0.08);
-      backdrop-filter: blur(4px);
-    }
-
-    .hero-3d-hint .hint-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #60a5fa;
-      opacity: 0.85;
-      animation: pulseDot 2s infinite ease-in-out;
-    }
-
-    @keyframes pulseDot {
-      0%, 100% { opacity: 0.4; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.1); }
+      background: transparent;
+      pointer-events: auto;
+      filter: drop-shadow(0 0 45px rgba(59, 130, 246, 0.08));
     }
 
     .badge-status {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 4px 10px;
+      padding: 5px 12px;
       background: var(--surface-subtle);
       border: 1px solid var(--border);
       border-radius: 6px;
       font-family: var(--font-mono);
       font-size: 12px;
       color: var(--text-secondary);
+      letter-spacing: 0.01em;
       width: fit-content;
     }
 
     h1 {
-      font-size: 52px;
+      font-family: var(--font-display);
+      font-size: 56px;
       font-weight: 500;
-      line-height: 1.08;
-      letter-spacing: -0.03em;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
       color: var(--text-primary);
+      text-wrap: balance;
     }
 
     .hero-bio {
+      font-family: var(--font-sans);
       font-size: 17px;
+      font-weight: 400;
       color: var(--text-secondary);
-      line-height: 1.65;
+      line-height: 1.68;
+      letter-spacing: -0.01em;
       max-width: 720px;
+      text-wrap: pretty;
     }
 
     .hero-bio strong {
@@ -327,6 +323,7 @@
       border-radius: 6px;
       font-family: var(--font-mono);
       font-size: 12px;
+      font-variant-numeric: tabular-nums;
       color: var(--text-muted);
     }
 
@@ -338,6 +335,13 @@
       background: rgba(76, 195, 138, 0.08);
       border: 1px solid rgba(76, 195, 138, 0.22);
       border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      color: #6ee7b7;
+      width: fit-content;
+    }
       font-family: var(--font-mono);
       font-size: 12px;
       color: #86efac;
@@ -936,8 +940,8 @@
       <div class="nav-brand">
         <span class="status-dot"></span>
         <span>Olzhas Huseynzade</span>
-        <span style="color: var(--text-muted);">//</span>
-        <span style="color: var(--text-secondary);">HITSZ</span>
+        <span class="brand-sep">//</span>
+        <span class="brand-affiliation">HITSZ</span>
       </div>
       <div class="nav-meta">
         <!-- The Only Unified Projects Trigger Button -->
@@ -991,13 +995,9 @@
         </div>
       </div>
 
-      <!-- Hero 3D Abstract Architecture Model -->
+      <!-- Hero 3D Abstract Architecture Model (Seamless Background Integration) -->
       <div class="hero-3d-wrapper" id="hero3dWrapper">
         <canvas id="hero3dCanvas"></canvas>
-        <div class="hero-3d-hint">
-          <span class="hint-dot"></span>
-          <span>drag to orbit • interactive systems lattice</span>
-        </div>
       </div>
     </section>
 
@@ -1623,8 +1623,8 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
 
         const scene = new THREE.Scene();
 
-        const camera = new THREE.PerspectiveCamera(45, (container.clientWidth || 380) / (container.clientHeight || 440), 0.1, 100);
-        camera.position.z = 6.4;
+        const camera = new THREE.PerspectiveCamera(45, (container.clientWidth || 400) / (container.clientHeight || 480), 0.1, 100);
+        camera.position.z = 5.6;
 
         const renderer = new THREE.WebGLRenderer({
           canvas: canvas,
@@ -1632,7 +1632,8 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
           antialias: true,
           powerPreference: "high-performance"
         });
-        renderer.setSize(container.clientWidth || 380, container.clientHeight || 440);
+        renderer.setClearColor(0x000000, 0);
+        renderer.setSize(container.clientWidth || 400, container.clientHeight || 480);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
         // Lighting: Subtle key and rim lights
