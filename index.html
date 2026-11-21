@@ -16,11 +16,12 @@
 
   <style>
     :root {
-      /* Palette: Ink Neutral Ramp (Unslop & Taste) */
-      --bg: #0b0d14;
+      /* Palette: Ink Neutral Ramp (Unslop & Taste & Impeccable) */
+      --bg: #07080d;
+      --bg-alt: #0b0d14;
       --surface: #11141c;
       --surface-raised: #181d28;
-      --surface-subtle: #141824;
+      --surface-subtle: #131722;
       --border: rgba(238, 240, 245, 0.08);
       --border-hover: rgba(238, 240, 245, 0.18);
       --text-primary: #eef0f5;
@@ -34,7 +35,7 @@
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-      /* Motion Constants (Emil Kowalski / animate-skill) */
+      /* Motion & Easing Constants */
       --ease-out-quint: cubic-bezier(.23, 1, .32, 1);
       --ease-in-cubic: cubic-bezier(.32, 0, .67, 0);
     }
@@ -54,11 +55,24 @@
       color: var(--text-primary);
       font-family: var(--font-sans);
       min-height: 100vh;
-      line-height: 1.5;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       font-variant-numeric: tabular-nums;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient React-Bits Background Canvas (Interactive Dot Matrix + Deep Ink Sheen) */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.85;
     }
 
     a {
@@ -66,11 +80,22 @@
       text-decoration: none;
     }
 
+    /* Impeccable Typography Balance */
+    h1, h2, h3, h4 {
+      text-wrap: balance;
+      color: var(--text-primary);
+    }
+
+    p {
+      text-wrap: pretty;
+    }
+
     .shell {
       max-width: 1080px;
       margin: 0 auto;
-      padding: 32px 24px 80px;
+      padding: 32px 24px 120px;
       position: relative;
+      z-index: 1;
     }
 
     /* Navigation */
@@ -97,6 +122,7 @@
       background-color: var(--status-active);
       border-radius: 50%;
       flex-shrink: 0;
+      box-shadow: 0 0 6px rgba(76, 195, 138, 0.4);
     }
 
     .nav-meta {
@@ -116,7 +142,7 @@
       color: var(--text-primary);
     }
 
-    /* High-Visibility Navigation Projects Button */
+    /* The Only Project Trigger Button (Top Nav) */
     .nav-projects-trigger {
       display: inline-flex;
       align-items: center;
@@ -162,15 +188,11 @@
 
     /* Hero Section */
     .hero {
-      padding: 64px 0 56px;
+      padding: 72px 0 64px;
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 40px;
-      align-items: start;
-    }
-
-    .hero-content {
-      max-width: 680px;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      max-width: 840px;
     }
 
     .badge-status {
@@ -184,23 +206,22 @@
       font-family: var(--font-mono);
       font-size: 12px;
       color: var(--text-secondary);
-      margin-bottom: 24px;
+      width: fit-content;
     }
 
     h1 {
-      font-size: 46px;
+      font-size: 52px;
       font-weight: 500;
-      line-height: 1.1;
-      letter-spacing: -0.025em;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
       color: var(--text-primary);
-      margin-bottom: 16px;
     }
 
     .hero-bio {
-      font-size: 16px;
+      font-size: 17px;
       color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 24px;
+      line-height: 1.65;
+      max-width: 720px;
     }
 
     .hero-bio strong {
@@ -212,14 +233,14 @@
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 32px;
+      margin-top: 8px;
     }
 
     .meta-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 10px;
+      padding: 4px 12px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -228,18 +249,31 @@
       color: var(--text-muted);
     }
 
-    .meta-tag svg {
-      width: 14px;
-      height: 14px;
-      stroke: var(--text-muted);
-      stroke-width: 1.5;
-      fill: none;
+    .status-badge-active {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      background: rgba(76, 195, 138, 0.08);
+      border: 1px solid rgba(76, 195, 138, 0.22);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #86efac;
+    }
+
+    .status-badge-active .dot {
+      width: 6px;
+      height: 6px;
+      background: #4cc38a;
+      border-radius: 50%;
     }
 
     .hero-actions {
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-top: 16px;
       flex-wrap: wrap;
     }
 
@@ -260,15 +294,14 @@
       transform: scale(0.97);
     }
 
-    /* Standout Hero Projects Button */
-    .btn-projects-hero {
+    .btn-primary {
       background-color: var(--text-primary);
       color: var(--bg);
       border: 1px solid transparent;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
 
-    .btn-projects-hero:hover {
+    .btn-primary:hover {
       background-color: #ffffff;
       transform: translateY(-1px);
     }
@@ -293,75 +326,21 @@
       fill: none;
     }
 
-    /* Terminal Console Box */
-    .terminal-box {
-      width: 320px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      font-family: var(--font-mono);
+    /* Section Headers */
+    .section-wrap {
+      margin-top: 80px;
     }
 
-    .terminal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px;
-      background: var(--surface-subtle);
-      border-bottom: 1px solid var(--border);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .terminal-dots {
-      display: flex;
-      gap: 6px;
-    }
-
-    .terminal-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(238, 240, 245, 0.15);
-    }
-
-    .terminal-body {
-      padding: 14px;
-      font-size: 12px;
-      line-height: 1.6;
-      color: var(--text-secondary);
-    }
-
-    .terminal-line {
-      display: flex;
-      justify-content: space-between;
-      padding: 3px 0;
-      border-bottom: 1px solid rgba(238, 240, 245, 0.04);
-    }
-
-    .terminal-line:last-child {
-      border-bottom: none;
-    }
-
-    .term-key {
-      color: var(--text-muted);
-    }
-
-    .term-val {
-      color: var(--text-primary);
-    }
-
-    /* Section Header */
     .section-title {
       font-size: 13px;
       font-weight: 500;
       font-family: var(--font-mono);
       color: var(--text-muted);
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+      letter-spacing: 0.05em;
     }
 
     .section-title::after {
@@ -371,91 +350,278 @@
       background: var(--border);
     }
 
-    /* Grid Layout */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 16px;
-      margin-bottom: 56px;
+    /* ========================================================
+       INTERACTIVE TERMINAL / CONSOLE BOX
+       Fully interactive with working shell commands
+    ======================================================== */
+    .interactive-terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-family: var(--font-mono);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+      transition: border-color 0.2s ease;
     }
 
-    .card {
+    .interactive-terminal:focus-within {
+      border-color: var(--border-hover);
+    }
+
+    .terminal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--surface-subtle);
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .terminal-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .terminal-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(238, 240, 245, 0.15);
+    }
+
+    .terminal-screen {
+      padding: 18px 20px;
+      font-size: 13px;
+      line-height: 1.6;
+      max-height: 320px;
+      overflow-y: auto;
+      color: var(--text-secondary);
+    }
+
+    .term-output-block {
+      margin-bottom: 10px;
+    }
+
+    .term-prompt-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .term-prompt-label {
+      color: #60a5fa;
+      flex-shrink: 0;
+    }
+
+    .term-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      flex: 1;
+      caret-color: #60a5fa;
+    }
+
+    .term-quick-chips {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-subtle);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .term-chip {
+      padding: 2px 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .term-chip:hover {
+      background: var(--surface-raised);
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    /* ========================================================
+       IN-PAGE FULL PROJECT CASE STUDIES
+       Substantial depth and detailed specifications
+    ======================================================== */
+    .case-studies-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .case-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .case-card:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-raised);
+      transform: translateY(-2px);
+    }
+
+    .case-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .case-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .case-pill-version {
+      padding: 2px 8px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 4px;
+      color: #93c5fd;
+    }
+
+    .case-title {
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-top: 6px;
+    }
+
+    .case-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      max-width: 800px;
+    }
+
+    .case-specs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      padding: 16px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .spec-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .spec-label {
+      color: var(--text-muted);
+      font-size: 11px;
+    }
+
+    .spec-value {
+      color: var(--text-primary);
+    }
+
+    .case-downloads {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 36px;
+      padding: 0 14px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-primary);
+      transition: all 0.15s ease;
+    }
+
+    .btn-download:hover {
+      background: var(--surface-raised);
+      border-color: var(--border-hover);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* Systems Toolkit Grid */
+    .toolkit-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .toolkit-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 24px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+      gap: 14px;
     }
 
-    .card:hover {
-      border-color: var(--border-hover);
-      background: var(--surface-raised);
-      transform: translateY(-2px);
-    }
-
-    .card-top {
-      margin-bottom: 20px;
-    }
-
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .card-title {
-      font-size: 17px;
+    .toolkit-card h3 {
+      font-size: 15px;
       font-weight: 500;
       color: var(--text-primary);
-      margin-bottom: 8px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 8px;
     }
 
-    .card-desc {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.55;
-    }
-
-    .card-stack {
+    .toolkit-items {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 16px;
     }
 
-    .card-tag {
+    .toolkit-tag {
       font-family: var(--font-mono);
-      font-size: 11px;
-      padding: 2px 8px;
+      font-size: 12px;
+      padding: 4px 10px;
       background: var(--surface-subtle);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      color: var(--text-muted);
+      border-radius: 6px;
+      color: var(--text-secondary);
     }
 
-    .subgrid {
-      display: grid;
-      grid-template-rows: 1fr 1fr;
-      gap: 16px;
-    }
-
-    /* ========================================================
-       SLIDING PROJECTS DRAWER (GSAP & Animate-Skill Driven)
-       Slides into view from the right to the left
-    ======================================================== */
+    /* SLIDING PROJECTS DRAWER */
     .drawer-backdrop {
       position: fixed;
       inset: 0;
@@ -486,7 +652,7 @@
       box-shadow: -16px 0 48px rgba(0, 0, 0, 0.7);
       display: flex;
       flex-direction: column;
-      transform: translateX(100%); /* Hidden offscreen to the right */
+      transform: translateX(100%);
       will-change: transform;
     }
 
@@ -568,40 +734,6 @@
       border-color: rgba(59, 130, 246, 0.45);
     }
 
-    .drawer-search-box::placeholder {
-      color: var(--text-muted);
-    }
-
-    .drawer-filters {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    .drawer-filters::-webkit-scrollbar {
-      display: none;
-    }
-
-    .filter-chip {
-      padding: 4px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--surface-subtle);
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.15s ease;
-    }
-
-    .filter-chip.active, .filter-chip:hover {
-      background: var(--surface-raised);
-      color: var(--text-primary);
-      border-color: var(--border-hover);
-    }
-
     .drawer-body {
       padding: 20px 24px;
       overflow-y: auto;
@@ -611,7 +743,6 @@
       gap: 12px;
     }
 
-    /* Individual Project Drawer Card */
     .project-drawer-card {
       padding: 18px;
       background: var(--surface-subtle);
@@ -620,20 +751,14 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      position: relative;
       cursor: pointer;
       transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
-      will-change: transform, opacity;
     }
 
     .project-drawer-card:hover {
       background: var(--surface-raised);
       border-color: var(--border-hover);
       transform: translateY(-2px);
-    }
-
-    .project-drawer-card:active {
-      transform: scale(0.985);
     }
 
     .pdc-header {
@@ -667,40 +792,6 @@
       color: var(--text-muted);
     }
 
-    .pdc-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .pdc-tag {
-      padding: 2px 7px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      color: var(--text-muted);
-    }
-
-    .pdc-links {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .pdc-release-btn {
-      color: #93c5fd;
-      font-weight: 500;
-      padding: 2px 8px;
-      background: rgba(59, 130, 246, 0.12);
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: 4px;
-      transition: background 0.15s ease;
-    }
-
-    .pdc-release-btn:hover {
-      background: rgba(59, 130, 246, 0.22);
-    }
-
     .drawer-footer {
       padding: 14px 24px;
       border-top: 1px solid var(--border);
@@ -713,67 +804,9 @@
       color: var(--text-muted);
     }
 
-    /* ========================================================
-       FLOATING STICKY DOCK (Apple & React-Bits Style)
-       Visible anywhere on the website
-    ======================================================== */
-    .floating-dock {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 900;
-      pointer-events: auto;
-    }
-
-    .dock-pill {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 18px;
-      background: rgba(17, 20, 28, 0.85);
-      border: 1px solid rgba(238, 240, 245, 0.14);
-      border-radius: 9999px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-      color: var(--text-primary);
-      font-family: var(--font-mono);
-      font-size: 13px;
-      cursor: pointer;
-      transition: background-color 0.15s ease, border-color 0.15s ease, transform 100ms ease-out;
-    }
-
-    .dock-pill:hover {
-      background: rgba(24, 29, 40, 0.95);
-      border-color: rgba(238, 240, 245, 0.25);
-      transform: translateY(-2px);
-    }
-
-    .dock-pill:active {
-      transform: scale(0.97);
-    }
-
-    .dock-indicator {
-      width: 7px;
-      height: 7px;
-      background: #60a5fa;
-      border-radius: 50%;
-      box-shadow: 0 0 8px rgba(96, 165, 250, 0.6);
-    }
-
-    .dock-count-badge {
-      padding: 1px 7px;
-      background: rgba(59, 130, 246, 0.15);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 10px;
-      font-size: 11px;
-      color: #93c5fd;
-    }
-
     /* Footer */
     footer {
-      padding-top: 32px;
+      padding-top: 48px;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
@@ -782,7 +815,8 @@
       font-size: 12px;
       color: var(--text-muted);
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 16px;
+      margin-top: 100px;
     }
 
     footer a {
@@ -795,33 +829,27 @@
     }
 
     @media (max-width: 820px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-      .terminal-box {
-        width: 100%;
-      }
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-      .subgrid {
-        grid-template-rows: auto;
-      }
       h1 {
-        font-size: 36px;
+        font-size: 38px;
+      }
+      .case-card {
+        padding: 24px;
+      }
+      .projects-drawer {
+        width: 100vw;
       }
       nav {
         flex-direction: column;
         align-items: flex-start;
         gap: 14px;
       }
-      .projects-drawer {
-        width: 100vw;
-      }
     }
   </style>
 </head>
 <body>
+  <!-- Ambient React-Bits Background Canvas -->
+  <canvas id="bgCanvas"></canvas>
+
   <div class="shell">
     <nav>
       <div class="nav-brand">
@@ -831,7 +859,7 @@
         <span style="color: var(--text-secondary);">HITSZ</span>
       </div>
       <div class="nav-meta">
-        <!-- High-visibility Navigation Button -->
+        <!-- The Only Unified Projects Trigger Button -->
         <button id="navProjectsBtn" class="nav-projects-trigger" type="button">
           <span class="nav-projects-dot"></span>
           <span>Projects Hub</span>
@@ -843,155 +871,269 @@
       </div>
     </nav>
 
+    <!-- Hero Section -->
     <section class="hero">
-      <div class="hero-content">
-        <div class="badge-status">
-          <span>Harbin Institute of Technology, Shenzhen</span>
-          <span style="color: var(--text-muted);">•</span>
-          <span>CS & Technology</span>
-        </div>
-        
-        <h1>Systems, agent architectures, and autonomous tooling.</h1>
-        
-        <p class="hero-bio">
-          Undergraduate researcher and software builder at <strong>HITSZ</strong>. Focusing on agentic multi-model orchestrations, low-level systems programming in C/C++, and performant web infrastructures.
-        </p>
+      <div class="badge-status">
+        <span>Harbin Institute of Technology, Shenzhen</span>
+        <span style="color: var(--text-muted);">•</span>
+        <span>CS & Technology</span>
+      </div>
+      
+      <h1>Systems architecture, autonomous agent frameworks, and low-level software.</h1>
+      
+      <p class="hero-bio">
+        Undergraduate researcher and software builder at <strong>Harbin Institute of Technology, Shenzhen (HITSZ)</strong>. Developing cross-platform native tools in <strong>C/C++ & Rust</strong>, Apple hardware developer instrumentation services, and resilient autonomous multi-agent loops.
+      </p>
 
-        <div class="hero-tags">
-          <span class="meta-tag">
-            <svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg>
-            Linux / POSIX
-          </span>
-          <span class="meta-tag">
-            <svg viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
-            C & C++ Systems
-          </span>
-          <span class="meta-tag">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20M2 12h20"/></svg>
-            22.54° N, 114.05° E
-          </span>
+      <div class="hero-tags">
+        <!-- Status badge replacing the coordinates as chosen -->
+        <div class="status-badge-active">
+          <span class="dot"></span>
+          <span>Available for Systems Research & Autonomous AI</span>
         </div>
-
-        <div class="hero-actions">
-          <!-- Standout Primary Hero Button -->
-          <button id="heroProjectsBtn" class="btn btn-projects-hero" type="button">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
-            <span>Explore All Projects</span>
-            <span style="font-family: var(--font-mono); font-size: 12px; margin-left: 2px;">→</span>
-          </button>
-          
-          <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" class="btn btn-secondary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            <span>GitHub Profile</span>
-          </a>
-        </div>
+        <span class="meta-tag">Linux / POSIX</span>
+        <span class="meta-tag">C & C++</span>
+        <span class="meta-tag">Rust / Tauri v2</span>
+        <span class="meta-tag">Python Swarms</span>
       </div>
 
-      <div class="terminal-box">
-        <div class="terminal-header">
-          <div class="terminal-dots">
-            <div class="terminal-dot"></div>
-            <div class="terminal-dot"></div>
-            <div class="terminal-dot"></div>
-          </div>
-          <span>hitsz_node_01</span>
-        </div>
-        <div class="terminal-body">
-          <div class="terminal-line">
-            <span class="term-key">Institution</span>
-            <span class="term-val">HITSZ (Shenzhen)</span>
-          </div>
-          <div class="terminal-line">
-            <span class="term-key">Major</span>
-            <span class="term-val">CS & Technology</span>
-          </div>
-          <div class="terminal-line">
-            <span class="term-key">Student ID</span>
-            <span class="term-val">2026330181</span>
-          </div>
-          <div class="terminal-line">
-            <span class="term-key">Focus</span>
-            <span class="term-val">Agentic AI & Systems</span>
-          </div>
-          <div class="terminal-line">
-            <span class="term-key">Environment</span>
-            <span class="term-val">macOS / Ubuntu</span>
-          </div>
-          <div class="terminal-line">
-            <span class="term-key">DNS / Host</span>
-            <span class="term-val">olzhas.app</span>
-          </div>
-        </div>
+      <div class="hero-actions">
+        <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          <span>GitHub Profile</span>
+        </a>
+        <a href="mailto:2026330181@stu.hit.edu.cn" class="btn btn-secondary">
+          <svg viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <span>Contact via University Mail</span>
+        </a>
       </div>
     </section>
 
-    <div class="section-title">FEATURED INITIATIVES</div>
-
-    <div class="projects-grid">
-      <div class="card" id="cardGeoShift">
-        <div class="card-top">
-          <div class="card-meta">
-            <span>RUST / TAURI V2 / HARDWARE DVT</span>
-            <span style="color: #93c5fd;">v1.0.0</span>
+    <!-- SECTION 1: INTERACTIVE TERMINAL CONSOLE -->
+    <div class="section-wrap">
+      <div class="section-title">SYSTEM CONSOLE & CLI</div>
+      <div class="interactive-terminal">
+        <div class="terminal-topbar">
+          <div class="terminal-controls">
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
           </div>
-          <div class="card-title">
-            <span>GeoShift — Desktop iOS GPS Controller</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-          </div>
-          <p class="card-desc">
-            Native desktop controller for simulating iOS GPS telemetry over USB. Built with Rust & Tauri v2 with instant satellite telemetry restoration.
-          </p>
+          <span>olzhas@hitsz-node-01: ~ (zsh)</span>
+          <span>v2026.11</span>
         </div>
-        <div class="card-stack">
-          <span class="card-tag">Rust</span>
-          <span class="card-tag">Tauri v2</span>
-          <span class="card-tag">iOS USB</span>
-          <span class="card-tag">Universal DMG</span>
+        <div id="termScreen" class="terminal-screen">
+          <div class="term-output-block">
+            <span style="color: var(--text-muted);">// Harbin Institute of Technology, Shenzhen — Node Terminal</span><br/>
+            Type <span style="color: #93c5fd;">help</span> for commands, or tap the quick action chips below:
+          </div>
+        </div>
+        <div class="term-prompt-line" style="padding: 0 20px 14px;">
+          <span class="term-prompt-label">olzhas@hitsz:~$</span>
+          <input id="termInput" type="text" class="term-input" placeholder="try typing 'projects', 'geoshift', or 'skills'..." autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="term-quick-chips">
+          <span>Quick Commands:</span>
+          <button class="term-chip" onclick="executeTermCommand('help')">help</button>
+          <button class="term-chip" onclick="executeTermCommand('geoshift')">geoshift</button>
+          <button class="term-chip" onclick="executeTermCommand('projects')">projects</button>
+          <button class="term-chip" onclick="executeTermCommand('skills')">skills</button>
+          <button class="term-chip" onclick="executeTermCommand('about')">about</button>
+          <button class="term-chip" onclick="executeTermCommand('clear')">clear</button>
         </div>
       </div>
+    </div>
 
-      <div class="subgrid">
-        <div class="card" id="cardAutonomousAI">
-          <div class="card-top">
-            <div class="card-meta">
-              <span>RESEARCH</span>
-              <span>2026</span>
+    <!-- SECTION 2: IN-PAGE FULL PROJECT CASE STUDIES -->
+    <div class="section-wrap">
+      <div class="section-title">ENGINEERING & CASE STUDIES</div>
+      <div class="case-studies-grid">
+        
+        <!-- CASE STUDY 1: GEOSHIFT -->
+        <div class="case-card">
+          <div class="case-card-header">
+            <div>
+              <div class="case-badge-row">
+                <span>RUST & TAURI V2 • HARDWARE DVT</span>
+                <span>•</span>
+                <span class="case-pill-version">v1.0.0 Release</span>
+              </div>
+              <h2 class="case-title">GeoShift — Native iOS GPS Simulation Controller</h2>
             </div>
-            <div class="card-title">
-              <span>Autonomous AI Agents</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-            </div>
-            <p class="card-desc">
-              Multi-agent reasoning loops, recursive execution contexts, and reproducible verification benchmarks.
-            </p>
+            <a href="https://github.com/shushpaaaa/GeoShift" target="_blank" rel="noopener" class="btn btn-secondary" style="height: 34px; font-size: 12px; font-family: var(--font-mono);">
+              GitHub Repo ↗
+            </a>
           </div>
-          <div class="card-stack">
-            <span class="card-tag">Python</span>
-            <span class="card-tag">Tool Calling</span>
-            <span class="card-tag">Swarm</span>
+          
+          <p class="case-desc">
+            A native cross-platform desktop instrument built in <strong>Rust (Tauri v2)</strong> to simulate and test iOS GPS telemetry over physical USB Lightning connections. Interacts directly with Apple's Developer Instrumentation services (<code>com.apple.dt.simulatelocation</code>) without requiring jailbreak or permanent operating system changes. Features high-precision Leaflet OpenStreetMap navigation and one-click instant hardware satellite restoration.
+          </p>
+
+          <div class="case-specs">
+            <div class="spec-item">
+              <span class="spec-label">Shell Architecture</span>
+              <span class="spec-value">Rust + Tauri v2 (Standalone Native Window)</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Hardware Protocol</span>
+              <span class="spec-value">Apple DVT Location Simulation over usbmuxd</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Cartography</span>
+              <span class="spec-value">High-Precision OpenStreetMap with Dark Viewport</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Safety & Recovery</span>
+              <span class="spec-value">Ephemeral in-memory override; Instant Reversion</span>
+            </div>
+          </div>
+
+          <div class="case-downloads">
+            <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); margin-right: 4px;">Download Binaries:</span>
+            <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift_1.0.0_universal.dmg" target="_blank" rel="noopener" class="btn-download">
+              macOS Universal .dmg
+            </a>
+            <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift_1.0.0_aarch64.dmg" target="_blank" rel="noopener" class="btn-download">
+              Apple Silicon (M1/M2/M3)
+            </a>
+            <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift-Setup-1.0.0.exe" target="_blank" rel="noopener" class="btn-download">
+              Windows Setup .exe
+            </a>
+            <a href="https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0" target="_blank" rel="noopener" class="btn-download" style="color: #93c5fd;">
+              All Release Assets ↗
+            </a>
           </div>
         </div>
 
-        <div class="card" id="cardCloudJukebox">
-          <div class="card-top">
-            <div class="card-meta">
-              <span>FULL-STACK</span>
-              <span>MEDIA</span>
+        <!-- CASE STUDY 2: AUTONOMOUS AI AGENT ORCHESTRATION -->
+        <div class="case-card">
+          <div class="case-card-header">
+            <div>
+              <div class="case-badge-row">
+                <span>MULTI-AGENT ORCHESTRATION • RESEARCH</span>
+                <span>•</span>
+                <span class="case-pill-version">Active</span>
+              </div>
+              <h2 class="case-title">Autonomous AI Multi-Agent Reasoning Engine</h2>
             </div>
-            <div class="card-title">
-              <span>CloudJukebox</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
-            </div>
-            <p class="card-desc">
-              Streaming client integrating SoundCloud API catalogs with custom state handling and audio player logic.
-            </p>
+            <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" class="btn btn-secondary" style="height: 34px; font-size: 12px; font-family: var(--font-mono);">
+              Research Notes ↗
+            </a>
           </div>
-          <div class="card-stack">
-            <span class="card-tag">TypeScript</span>
-            <span class="card-tag">Node.js</span>
-            <span class="card-tag">Web APIs</span>
+          
+          <p class="case-desc">
+            Research and architecture implementation exploring dynamic execution graphs, structured tool dispatch, recursive self-correction loops, and context budgeting governors. Simulating multi-agent swarm collaboration protocols for autonomous code migration and verification.
+          </p>
+
+          <div class="case-specs">
+            <div class="spec-item">
+              <span class="spec-label">Execution Loop</span>
+              <span class="spec-value">Structured Tool Dispatch & Self-Correction</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Context Management</span>
+              <span class="spec-value">Dynamic Token Budgeting & Progressive Disclosure</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Verification</span>
+              <span class="spec-value">Automated Sandboxed Execution & Static Checks</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">Core Runtime</span>
+              <span class="spec-value">Python / LLM Architecture / Swarm Protocols</span>
+            </div>
           </div>
         </div>
+
+        <!-- CASE STUDY 3: CLOUDJUKEBOX -->
+        <div class="case-card">
+          <div class="case-card-header">
+            <div>
+              <div class="case-badge-row">
+                <span>FULL-STACK AUDIO • NETWORK INFRASTRUCTURE</span>
+                <span>•</span>
+                <span class="case-pill-version">Published</span>
+              </div>
+              <h2 class="case-title">CloudJukebox — Streaming Spatial Audio Architecture</h2>
+            </div>
+            <a href="https://github.com/shushpaaaa/CloudJukebox" target="_blank" rel="noopener" class="btn btn-secondary" style="height: 34px; font-size: 12px; font-family: var(--font-mono);">
+              GitHub Repo ↗
+            </a>
+          </div>
+          
+          <p class="case-desc">
+            Networked music streaming system resolving external streaming APIs into low-latency in-memory audio buffers with spatial sound attenuation logic and persistent client playback synchronisation.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 3: SYSTEMS TOOLKIT MATRIX -->
+    <div class="section-wrap">
+      <div class="section-title">SYSTEMS & TECHNICAL PROFICIENCY</div>
+      <div class="toolkit-grid">
+        <div class="toolkit-card">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+            <span>Systems & Languages</span>
+          </h3>
+          <div class="toolkit-items">
+            <span class="toolkit-tag">C (C99 / C11)</span>
+            <span class="toolkit-tag">C++ (Modern C++17/20)</span>
+            <span class="toolkit-tag">Rust</span>
+            <span class="toolkit-tag">Python</span>
+            <span class="toolkit-tag">TypeScript / JavaScript</span>
+            <span class="toolkit-tag">Java</span>
+          </div>
+        </div>
+
+        <div class="toolkit-card">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>
+            <span>Platforms & Low-Level</span>
+          </h3>
+          <div class="toolkit-items">
+            <span class="toolkit-tag">Linux / POSIX</span>
+            <span class="toolkit-tag">Apple usbmuxd / DVT</span>
+            <span class="toolkit-tag">Tauri v2 Native</span>
+            <span class="toolkit-tag">Memory Layout Optimization</span>
+            <span class="toolkit-tag">Git / GitHub Actions CI</span>
+          </div>
+        </div>
+
+        <div class="toolkit-card">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20M2 12h20"/></svg>
+            <span>Autonomous AI & Web</span>
+          </h3>
+          <div class="toolkit-items">
+            <span class="toolkit-tag">Agentic Loops</span>
+            <span class="toolkit-tag">Tool Calling Dispatch</span>
+            <span class="toolkit-tag">Context Budget Governors</span>
+            <span class="toolkit-tag">WebSocket Streaming</span>
+            <span class="toolkit-tag">OpenStreetMap Leaflet</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: ACADEMIC CONTEXT -->
+    <div class="section-wrap">
+      <div class="section-title">ACADEMIC PROFILE & LABORATORY</div>
+      <div class="case-card" style="padding: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 style="font-size: 18px; font-weight: 500;">Harbin Institute of Technology, Shenzhen (HITSZ)</h3>
+            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">
+              School of Computer Science & Technology • Undergraduate Student (ID: <code>2026330181</code>)
+            </p>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">Greater Bay Area, Shenzhen</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6; margin-top: 12px;">
+          Focusing on rigorous foundations of computation: hardware-software co-design, linear algebra decomposition for multi-dimensional data, discrete systems, operating system scheduling, and low-overhead network protocols.
+        </p>
       </div>
     </div>
 
@@ -1002,35 +1144,25 @@
         <span>Harbin Institute of Technology, Shenzhen</span>
       </div>
       <div>
-        <span>Domain: <a href="https://olzhas.app">olzhas.app</a></span>
+        <span>Custom Domain: <a href="https://olzhas.app">olzhas.app</a></span>
         <span style="margin: 0 6px;">•</span>
-        <span>GitHub Pages (SSL Enforced)</span>
+        <span>SSL Enforced via GitHub Pages</span>
       </div>
     </footer>
-  </div>
-
-  <!-- FLOATING QUICK-ACCESS DOCK (Always visible everywhere) -->
-  <div class="floating-dock">
-    <button id="dockProjectsBtn" class="dock-pill" type="button" aria-label="Open projects archive">
-      <span class="dock-indicator"></span>
-      <span>Projects Archive</span>
-      <span id="dockCountBadge" class="dock-count-badge">5</span>
-      <kbd class="keycap">P</kbd>
-    </button>
   </div>
 
   <!-- SLIDING DRAWER BACKDROP -->
   <div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
 
-  <!-- SLIDING PROJECTS DRAWER (Slides left from right viewport edge) -->
+  <!-- SLIDING PROJECTS DRAWER (Slides left from right edge) -->
   <aside id="projectsDrawer" class="projects-drawer" role="dialog" aria-modal="true" aria-label="Projects Drawer">
     <div class="drawer-header">
       <div class="drawer-title-group">
         <span class="drawer-title">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
-          <span>Projects & Codebase</span>
+          <span>Projects & Repositories</span>
         </span>
-        <span id="drawerSyncStatus" class="drawer-subtitle">Connected to @shushpaaaa • Live Sync</span>
+        <span id="drawerSyncStatus" class="drawer-subtitle">Auto-sync with @shushpaaaa • Live</span>
       </div>
       <button id="drawerCloseBtn" class="drawer-close-btn" type="button">
         <span>Close</span>
@@ -1039,32 +1171,26 @@
     </div>
 
     <div class="drawer-search-area">
-      <input id="drawerSearchInput" type="text" class="drawer-search-box" placeholder="Filter projects by title, stack, or keyword..." />
-      <div class="drawer-filters">
-        <button class="filter-chip active" data-filter="all">All Projects</button>
-        <button class="filter-chip" data-filter="rust">Rust / Systems</button>
-        <button class="filter-chip" data-filter="ai">AI / Agents</button>
-        <button class="filter-chip" data-filter="web">Full-Stack</button>
-      </div>
+      <input id="drawerSearchInput" type="text" class="drawer-search-box" placeholder="Filter repositories by title or stack..." />
     </div>
 
     <div id="drawerList" class="drawer-body">
-      <!-- Injected by JavaScript -->
+      <!-- Dynamically Rendered -->
     </div>
 
     <div class="drawer-footer">
       <span>Auto-syncs on push via GitHub API</span>
-      <span>Shortcut: <kbd class="keycap">P</kbd> or <kbd class="keycap">⌘K</kbd></span>
+      <span>Shortcut: <kbd class="keycap">⌘K</kbd></span>
     </div>
   </aside>
 
   <script>
     (function () {
-      // 1. Initialize Lenis Smooth Scrolling (darkroomengineering/lenis)
+      // 1. Lenis Smooth Scrolling (@darkroomengineering/lenis)
       let lenis;
       try {
         lenis = new Lenis({
-          duration: 1.1,
+          duration: 1.15,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           smoothWheel: true
         });
@@ -1074,20 +1200,86 @@
         }
         requestAnimationFrame(raf);
       } catch (e) {
-        console.warn("Lenis initialization skipped", e);
+        console.warn("Lenis skipped", e);
       }
 
-      // 2. Curated Projects Source of Truth
+      // 2. React-Bits Ambient Background Canvas (Subtle Dot Matrix + Deep Ink Sheen)
+      const canvas = document.getElementById("bgCanvas");
+      const ctx = canvas.getContext("2d");
+      let width, height;
+      let mouseX = -1000, mouseY = -1000;
+
+      function resizeCanvas() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      const dotSpacing = 36;
+      let tick = 0;
+
+      function renderBg() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Subtle slow ambient gradient sheen
+        tick += 0.003;
+        const gradX = width * 0.5 + Math.sin(tick) * 120;
+        const gradY = height * 0.4 + Math.cos(tick) * 80;
+        const gradient = ctx.createRadialGradient(gradX, gradY, 40, gradX, gradY, width * 0.85);
+        gradient.addColorStop(0, "rgba(22, 28, 44, 0.45)");
+        gradient.addColorStop(0.5, "rgba(11, 13, 20, 0.7)");
+        gradient.addColorStop(1, "rgba(7, 8, 13, 0.95)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+
+        // Technical Dot-Matrix
+        const cols = Math.ceil(width / dotSpacing);
+        const rows = Math.ceil(height / dotSpacing);
+
+        for (let i = 0; i <= cols; i++) {
+          for (let j = 0; j <= rows; j++) {
+            const x = i * dotSpacing;
+            const y = j * dotSpacing;
+
+            // Distance to mouse cursor
+            const dx = x - mouseX;
+            const dy = y - mouseY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            let alpha = 0.055;
+            let radius = 1;
+
+            if (dist < 140) {
+              const proximity = 1 - (dist / 140);
+              alpha = 0.055 + (proximity * 0.28);
+              radius = 1 + (proximity * 0.8);
+            }
+
+            ctx.fillStyle = `rgba(238, 240, 245, ${alpha})`;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        requestAnimationFrame(renderBg);
+      }
+      renderBg();
+
+      // 3. Curated Repository Data
       const curatedProjects = [
         {
           name: "GeoShift",
           url: "https://github.com/shushpaaaa/GeoShift",
           releaseUrl: "https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0",
           description: "Native desktop GPS simulation controller for iOS over USB. Built with Rust and Tauri v2, implementing ephemeral developer instrumentation overrides.",
-          language: "Rust",
-          category: "rust",
-          stars: 0,
-          updated: "2026-11-21",
+          language: "Rust / Tauri v2",
           tags: ["Rust", "Tauri v2", "iOS DVT", "Universal DMG", "Windows"]
         },
         {
@@ -1095,9 +1287,6 @@
           url: "https://github.com/shushpaaaa",
           description: "Experimental multi-agent execution frameworks with structured tool calls, context budget governors, and recursive reasoning loops.",
           language: "Python",
-          category: "ai",
-          stars: 0,
-          updated: "2026-11-21",
           tags: ["Python", "LLMs", "Swarm", "Tool Calling"]
         },
         {
@@ -1105,9 +1294,6 @@
           url: "https://github.com/shushpaaaa/CloudJukebox",
           description: "Stream SoundCloud music directly with 3D spatial audio player logic, REST backend integration, and rich metadata indexing.",
           language: "Java",
-          category: "web",
-          stars: 0,
-          updated: "2026-10-18",
           tags: ["Java", "SoundCloud API", "Audio Engine"]
         },
         {
@@ -1115,9 +1301,6 @@
           url: "https://github.com/shushpaaaa/spotify_downloader",
           description: "Automated music metadata resolution and local audio fetch pipeline for tracks and playlists.",
           language: "Python",
-          category: "ai",
-          stars: 0,
-          updated: "2026-01-03",
           tags: ["Python", "Audio", "API Integration"]
         },
         {
@@ -1125,70 +1308,43 @@
           url: "https://github.com/shushpaaaa/Survey",
           description: "Full-stack survey collection and automated data submission engine with input verification.",
           language: "PHP",
-          category: "web",
-          stars: 0,
-          updated: "2026-08-07",
           tags: ["PHP", "Full-Stack", "Backend"]
         }
       ];
 
       let allProjects = [...curatedProjects];
-      let activeFilter = "all";
 
+      // 4. Sliding Projects Drawer Logic (GSAP)
       const backdrop = document.getElementById("drawerBackdrop");
       const drawer = document.getElementById("projectsDrawer");
       const drawerList = document.getElementById("drawerList");
       const searchInput = document.getElementById("drawerSearchInput");
       const closeBtn = document.getElementById("drawerCloseBtn");
-      const filterChips = document.querySelectorAll(".filter-chip");
-
       const navBtn = document.getElementById("navProjectsBtn");
-      const heroBtn = document.getElementById("heroProjectsBtn");
-      const dockBtn = document.getElementById("dockProjectsBtn");
-
       const navCount = document.getElementById("navCountBadge");
-      const dockCount = document.getElementById("dockCountBadge");
 
-      function updateCounts() {
-        const countStr = `(${allProjects.length})`;
-        if (navCount) navCount.textContent = countStr;
-        if (dockCount) dockCount.textContent = `${allProjects.length}`;
+      function updateNavCount() {
+        if (navCount) navCount.textContent = `(${allProjects.length})`;
       }
 
-      function renderProjects() {
+      function renderDrawerItems() {
         const query = searchInput.value.trim().toLowerCase();
         const filtered = allProjects.filter(p => {
-          // Category filter
-          if (activeFilter !== "all") {
-            const matchesCategory = p.category === activeFilter || 
-              (p.tags || []).some(t => t.toLowerCase().includes(activeFilter)) ||
-              (p.language || "").toLowerCase().includes(activeFilter);
-            if (!matchesCategory) return false;
-          }
-          // Query filter
           if (!query) return true;
           return p.name.toLowerCase().includes(query) ||
             (p.description || "").toLowerCase().includes(query) ||
-            (p.language || "").toLowerCase().includes(query) ||
-            (p.tags || []).some(t => t.toLowerCase().includes(query));
+            (p.language || "").toLowerCase().includes(query);
         });
 
         if (filtered.length === 0) {
-          drawerList.innerHTML = `
-            <div style="padding: 48px 16px; text-align: center; color: var(--text-muted); font-family: var(--font-mono); font-size: 13px;">
-              No matching projects found.
-            </div>
-          `;
+          drawerList.innerHTML = `<div style="padding: 40px 16px; text-align: center; color: var(--text-muted); font-size: 13px;">No projects match your query.</div>`;
           return;
         }
 
-        drawerList.innerHTML = filtered.map((proj) => {
-          const tagsHtml = (proj.tags || [proj.language].filter(Boolean))
-            .map(t => `<span class="pdc-tag">${t}</span>`).join("");
+        drawerList.innerHTML = filtered.map(proj => {
           const releaseBtn = proj.releaseUrl 
-            ? `<a href="${proj.releaseUrl}" target="_blank" rel="noopener" class="pdc-release-btn">Download v1.0.0 ↗</a>` 
+            ? `<a href="${proj.releaseUrl}" target="_blank" rel="noopener" style="color: #93c5fd; font-weight: 500;">Download v1.0.0 ↗</a>` 
             : "";
-
           return `
             <div class="project-drawer-card" onclick="window.open('${proj.url}', '_blank')">
               <div class="pdc-header">
@@ -1198,10 +1354,10 @@
                 </span>
                 <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">${proj.language || "Code"}</span>
               </div>
-              <p class="pdc-desc">${proj.description || "Project repository by Olzhas Huseynzade."}</p>
+              <p class="pdc-desc">${proj.description || "Public repository by Olzhas Huseynzade."}</p>
               <div class="pdc-footer">
-                <div class="pdc-tags">${tagsHtml}</div>
-                <div class="pdc-links" onclick="event.stopPropagation()">
+                <span style="color: var(--text-muted);">${(proj.tags || [])[0] || ""}</span>
+                <div style="display: flex; gap: 10px; align-items: center;" onclick="event.stopPropagation()">
                   ${releaseBtn}
                   <a href="${proj.url}" target="_blank" rel="noopener">Repo ↗</a>
                 </div>
@@ -1210,24 +1366,22 @@
           `;
         }).join("");
 
-        // Animate cards staggering in using GSAP
         if (window.gsap) {
           gsap.fromTo(".project-drawer-card", 
-            { opacity: 0, x: 24 }, 
-            { opacity: 1, x: 0, duration: 0.35, stagger: 0.04, ease: "power3.out" }
+            { opacity: 0, x: 20 }, 
+            { opacity: 1, x: 0, duration: 0.3, stagger: 0.04, ease: "power3.out" }
           );
         }
       }
 
-      let isOpen = false;
+      let drawerOpen = false;
 
-      // 3. GSAP Slide In to the Left Animation
       function openDrawer() {
-        if (isOpen) return;
-        isOpen = true;
+        if (drawerOpen) return;
+        drawerOpen = true;
         if (lenis) lenis.stop();
         backdrop.classList.add("active");
-        renderProjects();
+        renderDrawerItems();
 
         if (window.gsap) {
           gsap.to(backdrop, { opacity: 1, duration: 0.3, ease: "power2.out" });
@@ -1235,9 +1389,7 @@
             x: 0,
             duration: 0.42,
             ease: "power4.out",
-            onComplete: () => {
-              searchInput.focus();
-            }
+            onComplete: () => searchInput.focus()
           });
         } else {
           drawer.style.transform = "translateX(0)";
@@ -1246,14 +1398,14 @@
       }
 
       function closeDrawer() {
-        if (!isOpen) return;
-        isOpen = false;
+        if (!drawerOpen) return;
+        drawerOpen = false;
         if (lenis) lenis.start();
 
         if (window.gsap) {
           gsap.to(backdrop, {
             opacity: 0,
-            duration: 0.22,
+            duration: 0.2,
             ease: "power2.in",
             onComplete: () => backdrop.classList.remove("active")
           });
@@ -1268,57 +1420,80 @@
         }
       }
 
-      // Event Triggers
       navBtn.addEventListener("click", openDrawer);
-      heroBtn.addEventListener("click", openDrawer);
-      dockBtn.addEventListener("click", openDrawer);
       closeBtn.addEventListener("click", closeDrawer);
       backdrop.addEventListener("click", closeDrawer);
+      searchInput.addEventListener("input", renderDrawerItems);
 
-      // Featured cards open drawer
-      const cardGeoShift = document.getElementById("cardGeoShift");
-      const cardAutonomousAI = document.getElementById("cardAutonomousAI");
-      const cardCloudJukebox = document.getElementById("cardCloudJukebox");
-      if (cardGeoShift) cardGeoShift.addEventListener("click", openDrawer);
-      if (cardAutonomousAI) cardAutonomousAI.addEventListener("click", openDrawer);
-      if (cardCloudJukebox) cardCloudJukebox.addEventListener("click", openDrawer);
-
-      // Keyboard Shortcuts
       window.addEventListener("keydown", (e) => {
         if (e.key === "Escape") closeDrawer();
-        if ((e.key === "p" || e.key === "P") && document.activeElement !== searchInput) {
-          e.preventDefault();
-          openDrawer();
-        }
         if ((e.metaKey || e.ctrlKey) && e.key === "k") {
           e.preventDefault();
           openDrawer();
         }
       });
 
-      // Search & Filters
-      searchInput.addEventListener("input", renderProjects);
-      filterChips.forEach(chip => {
-        chip.addEventListener("click", () => {
-          filterChips.forEach(c => c.classList.remove("active"));
-          chip.classList.add("active");
-          activeFilter = chip.getAttribute("data-filter");
-          renderProjects();
-        });
+      // 5. Interactive Terminal Execution Logic
+      const termScreen = document.getElementById("termScreen");
+      const termInput = document.getElementById("termInput");
+
+      window.executeTermCommand = function (cmd) {
+        if (!cmd) return;
+        const cleanCmd = cmd.trim().toLowerCase();
+        
+        let output = "";
+        if (cleanCmd === "help") {
+          output = `Available Commands:
+  • <span style="color: #93c5fd;">projects</span>  : Open projects drawer & list repositories
+  • <span style="color: #93c5fd;">geoshift</span>  : View GeoShift specs & download binaries
+  • <span style="color: #93c5fd;">skills</span>    : Display technical architecture matrix
+  • <span style="color: #93c5fd;">about</span>     : Summary of research & academic credentials
+  • <span style="color: #93c5fd;">contact</span>   : University email & GitHub coordinates
+  • <span style="color: #93c5fd;">clear</span>     : Clear terminal history`;
+        } else if (cleanCmd === "projects") {
+          openDrawer();
+          output = `Opening sliding projects drawer... (Total ${allProjects.length} repositories loaded)`;
+        } else if (cleanCmd === "geoshift") {
+          output = `<span style="color: #60a5fa; font-weight: 500;">GeoShift v1.0.0</span>
+Hardware iOS GPS Simulation Controller over USB (Rust + Tauri v2).
+Direct Download: <a href="https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0" target="_blank" style="color: #93c5fd; text-decoration: underline;">GitHub Release v1.0.0</a>`;
+        } else if (cleanCmd === "skills") {
+          output = `Languages : C (C99/C11), C++ (C++17/20), Rust, Python, TypeScript
+Platforms : Linux/POSIX, Apple usbmuxd / DVT, Tauri v2
+Focus     : Low-Level Memory Optimization, Agentic Reasoning Loops`;
+        } else if (cleanCmd === "about") {
+          output = `Olzhas Huseynzade — Computer Science & Technology
+Harbin Institute of Technology, Shenzhen (HITSZ) • Student ID: 2026330181
+Research: Systems programming, low-level OS primitives & autonomous agent workflows.`;
+        } else if (cleanCmd === "contact") {
+          output = `Email  : <a href="mailto:2026330181@stu.hit.edu.cn" style="color: #93c5fd;">2026330181@stu.hit.edu.cn</a>
+GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #93c5fd;">https://github.com/shushpaaaa</a>`;
+        } else if (cleanCmd === "clear") {
+          termScreen.innerHTML = "";
+          return;
+        } else {
+          output = `zsh: command not found: ${cleanCmd}. Type '<span style="color: #93c5fd;">help</span>' for a list of valid commands.`;
+        }
+
+        const block = document.createElement("div");
+        block.className = "term-output-block";
+        block.innerHTML = `
+          <div style="color: var(--text-muted);"><span style="color: #60a5fa;">olzhas@hitsz:~$</span> ${cmd}</div>
+          <div style="margin-top: 4px; color: var(--text-secondary);">${output}</div>
+        `;
+        termScreen.appendChild(block);
+        termScreen.scrollTop = termScreen.scrollHeight;
+      };
+
+      termInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const val = termInput.value;
+          termInput.value = "";
+          executeTermCommand(val);
+        }
       });
 
-      // 4. React-Bits / Spotlight effect on cards
-      document.querySelectorAll(".card").forEach(c => {
-        c.addEventListener("mousemove", (e) => {
-          const rect = c.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          c.style.setProperty("--mouse-x", `${x}px`);
-          c.style.setProperty("--mouse-y", `${y}px`);
-        });
-      });
-
-      // 5. Dynamic GitHub API Sync: Auto-detects whenever you upload or push to GitHub
+      // 6. Dynamic GitHub Repositories Sync
       fetch("https://api.github.com/users/shushpaaaa/repos?sort=updated&per_page=30")
         .then(res => res.json())
         .then(repos => {
@@ -1327,34 +1502,24 @@
             .filter(r => r.name !== "shushpaaaa" && r.name !== "shushpaaaa.github.io")
             .map(r => {
               const existing = curatedProjects.find(c => c.name.toLowerCase() === r.name.toLowerCase());
-              let cat = "web";
-              const lang = (r.language || "").toLowerCase();
-              if (lang.includes("rust") || lang.includes("c") || r.name === "GeoShift") cat = "rust";
-              else if (lang.includes("python") || r.name.includes("Agent")) cat = "ai";
-
               return {
                 name: r.name,
                 url: r.html_url,
                 releaseUrl: existing ? existing.releaseUrl : (r.has_pages ? r.homepage : null),
-                description: r.description || (existing ? existing.description : "Public project on GitHub."),
+                description: r.description || (existing ? existing.description : "Public project repository on GitHub."),
                 language: r.language || (existing ? existing.language : "Code"),
-                category: existing ? existing.category : cat,
-                stars: r.stargazers_count || 0,
-                updated: r.updated_at ? r.updated_at.split("T")[0] : "",
                 tags: existing ? existing.tags : [r.language].filter(Boolean)
               };
             });
 
           const extraCurated = curatedProjects.filter(c => !remoteProjects.some(r => r.name.toLowerCase() === c.name.toLowerCase()));
           allProjects = [...remoteProjects, ...extraCurated];
-          updateCounts();
-          if (isOpen) renderProjects();
+          updateNavCount();
+          if (drawerOpen) renderDrawerItems();
         })
-        .catch(() => {
-          updateCounts();
-        });
+        .catch(() => updateNavCount());
 
-      updateCounts();
+      updateNavCount();
     })();
   </script>
 </body>
