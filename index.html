@@ -8,7 +8,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <!-- GSAP & Lenis via CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -35,6 +35,7 @@
       
       /* Typography System (Impeccable & Taste Craft) */
       --font-display: 'Instrument Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-serif: 'Instrument Serif', Georgia, serif;
       --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
@@ -113,10 +114,24 @@
     .nav-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-family: var(--font-display);
+      gap: 10px;
       font-size: 15px;
+      color: var(--text-primary);
+    }
+
+    .brand-name-first {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 21px;
+      line-height: 1;
+      color: #93c5fd;
+      letter-spacing: 0.01em;
+    }
+
+    .brand-name-last {
+      font-family: var(--font-sans);
       font-weight: 600;
+      font-size: 14px;
       letter-spacing: -0.02em;
       color: var(--text-primary);
     }
@@ -237,7 +252,7 @@
     .hero-3d-wrapper {
       position: relative;
       width: 100%;
-      height: 480px;
+      height: 520px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -262,7 +277,6 @@
       outline: none;
       background: transparent;
       pointer-events: auto;
-      filter: drop-shadow(0 0 45px rgba(59, 130, 246, 0.08));
     }
 
     .badge-status {
@@ -281,13 +295,30 @@
     }
 
     h1 {
-      font-family: var(--font-display);
-      font-size: 56px;
-      font-weight: 500;
-      line-height: 1.05;
-      letter-spacing: -0.035em;
+      font-size: 54px;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
       color: var(--text-primary);
       text-wrap: balance;
+    }
+
+    .font-sans-title {
+      font-family: var(--font-sans);
+      font-weight: 500;
+      letter-spacing: -0.035em;
+      color: var(--text-primary);
+    }
+
+    .font-serif-title {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.14em;
+      line-height: 1.02;
+      letter-spacing: -0.005em;
+      color: #93c5fd;
+      text-shadow: 0 0 30px rgba(59, 130, 246, 0.16);
     }
 
     .hero-bio {
@@ -939,7 +970,8 @@
     <nav>
       <div class="nav-brand">
         <span class="status-dot"></span>
-        <span>Olzhas Huseynzade</span>
+        <span class="brand-name-first">Olzhas</span>
+        <span class="brand-name-last">Huseynzade</span>
         <span class="brand-sep">//</span>
         <span class="brand-affiliation">HITSZ</span>
       </div>
@@ -965,7 +997,11 @@
           <span>CS & Technology</span>
         </div>
         
-        <h1>Systems architecture, autonomous agent frameworks, and low-level software.</h1>
+        <h1>
+          <span class="font-sans-title">Systems architecture,</span>
+          <span class="font-serif-title">autonomous agent frameworks,</span>
+          <span class="font-sans-title">and</span> <span class="font-serif-title">low-level software.</span>
+        </h1>
         
         <p class="hero-bio">
           Undergraduate researcher and software builder at <strong>Harbin Institute of Technology, Shenzhen (HITSZ)</strong>. Developing cross-platform native tools in <strong>C/C++ & Rust</strong>, Apple hardware developer instrumentation services, and resilient autonomous multi-agent loops.
@@ -1623,8 +1659,8 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
 
         const scene = new THREE.Scene();
 
-        const camera = new THREE.PerspectiveCamera(45, (container.clientWidth || 400) / (container.clientHeight || 480), 0.1, 100);
-        camera.position.z = 5.6;
+        const camera = new THREE.PerspectiveCamera(45, (container.clientWidth || 400) / (container.clientHeight || 520), 0.1, 100);
+        camera.position.z = 6.8;
 
         const renderer = new THREE.WebGLRenderer({
           canvas: canvas,
@@ -1633,7 +1669,7 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
           powerPreference: "high-performance"
         });
         renderer.setClearColor(0x000000, 0);
-        renderer.setSize(container.clientWidth || 400, container.clientHeight || 480);
+        renderer.setSize(container.clientWidth || 400, container.clientHeight || 520);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
         // Lighting: Subtle key and rim lights
@@ -1653,7 +1689,7 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
         scene.add(rootGroup);
 
         // 1. Central Faceted Crystal Core (Kernel)
-        const coreGeo = new THREE.IcosahedronGeometry(1.15, 0);
+        const coreGeo = new THREE.IcosahedronGeometry(0.82, 0);
         const coreMat = new THREE.MeshStandardMaterial({
           color: 0x0f172a,
           metalness: 0.85,
@@ -1674,7 +1710,7 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
         coreMesh.add(coreEdges);
 
         // 2. Outer Geodesic Sphere Frame
-        const outerGeo = new THREE.IcosahedronGeometry(2.05, 1);
+        const outerGeo = new THREE.IcosahedronGeometry(1.42, 1);
         const outerWireGeo = new THREE.WireframeGeometry(outerGeo);
         const outerWireMat = new THREE.LineBasicMaterial({
           color: 0x38bdf8,
@@ -1701,7 +1737,7 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
         const dotTex = new THREE.CanvasTexture(dotCanvas);
 
         const pointsMat = new THREE.PointsMaterial({
-          size: 0.18,
+          size: 0.13,
           map: dotTex,
           transparent: true,
           blending: THREE.AdditiveBlending,
@@ -1727,7 +1763,7 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
           ringMesh.rotation.y = tiltY;
           ringsGroup.add(ringMesh);
 
-          const satGeo = new THREE.SphereGeometry(0.045, 12, 12);
+          const satGeo = new THREE.SphereGeometry(0.035, 12, 12);
           const satMat = new THREE.MeshBasicMaterial({ color: 0x93c5fd });
           const satMesh = new THREE.Mesh(satGeo, satMat);
           ringMesh.add(satMesh);
@@ -1735,16 +1771,16 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
           return { ringMesh, satMesh, radius, speed: 0.012 + Math.random() * 0.008 };
         }
 
-        const ring1 = createOrbitRing(1.6, 0.012, 0x60a5fa, Math.PI / 4, 0);
-        const ring2 = createOrbitRing(1.88, 0.01, 0x38bdf8, -Math.PI / 3, Math.PI / 6);
-        const ring3 = createOrbitRing(2.35, 0.01, 0x94a3b8, Math.PI / 6, Math.PI / 3);
+        const ring1 = createOrbitRing(1.15, 0.009, 0x60a5fa, Math.PI / 4, 0);
+        const ring2 = createOrbitRing(1.36, 0.008, 0x38bdf8, -Math.PI / 3, Math.PI / 6);
+        const ring3 = createOrbitRing(1.65, 0.008, 0x94a3b8, Math.PI / 6, Math.PI / 3);
 
         // 5. Floating Ambient Micro-Nodes
         const particleCount = 45;
         const pGeo = new THREE.BufferGeometry();
         const pPos = new Float32Array(particleCount * 3);
         for (let i = 0; i < particleCount; i++) {
-          const r = 2.1 + Math.random() * 1.1;
+          const r = 1.55 + Math.random() * 0.35;
           const theta = Math.random() * Math.PI * 2;
           const phi = Math.acos(Math.random() * 2 - 1);
           pPos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
@@ -1753,7 +1789,7 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
         }
         pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
         const particleMat = new THREE.PointsMaterial({
-          size: 0.08,
+          size: 0.07,
           map: dotTex,
           transparent: true,
           opacity: 0.5,
@@ -1783,8 +1819,8 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
           const cy = rect.top + rect.height / 2;
           const dx = (e.clientX - cx) / (window.innerWidth / 2);
           const dy = (e.clientY - cy) / (window.innerHeight / 2);
-          targetTiltY = dx * 0.35;
-          targetTiltX = dy * 0.35;
+          targetTiltY = dx * 0.25;
+          targetTiltX = dy * 0.25;
         }, { passive: true });
 
         // Direct Drag Interaction
@@ -1851,8 +1887,8 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
 
             currentTiltX += (targetTiltX - currentTiltX) * 0.05;
             currentTiltY += (targetTiltY - currentTiltY) * 0.05;
-            camera.position.x = currentTiltY * 1.1;
-            camera.position.y = -currentTiltX * 1.1;
+            camera.position.x = currentTiltY * 0.45;
+            camera.position.y = -currentTiltX * 0.45;
             camera.lookAt(0, 0, 0);
           }
 
