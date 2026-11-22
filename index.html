@@ -7,6 +7,21 @@
   <meta name="description" content="Olzhas Huseynzade — Computer Science & Technology at Harbin Institute of Technology, Shenzhen (HITSZ). Native tools in Rust & C++, Apple hardware instrumentation, and autonomous multi-agent systems." />
   <meta name="theme-color" content="#08090c" />
 
+  <!-- Custom Favicon & Social Preview Cards -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://olzhas.app/" />
+  <meta property="og:title" content="Olzhas Huseynzade — Systems Architecture & Autonomous AI" />
+  <meta property="og:description" content="CS & Technology at HITSZ. Native instruments in Rust & C++, Apple USB developer tooling (GeoShift), and autonomous multi-agent systems." />
+  <meta property="og:image" content="https://olzhas.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Olzhas Huseynzade — Systems Architecture & Autonomous AI" />
+  <meta name="twitter:description" content="Native instruments in Rust & C++, Apple USB developer tooling (GeoShift), and autonomous multi-agent systems." />
+  <meta name="twitter:image" content="https://olzhas.app/og-image.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -1737,9 +1752,10 @@
 
       <nav class="nav-links" aria-label="Primary sections">
         <a href="#work" data-nav="work">Work</a>
+        <a href="/geoshift/">GeoShift</a>
+        <a href="/notes/">Notes</a>
         <a href="#console" data-nav="console">Console</a>
-        <a href="#capabilities" data-nav="capabilities">Architecture</a>
-        <a href="#background" data-nav="background">Background</a>
+        <a href="#background" data-nav="background">Contact</a>
       </nav>
 
       <div class="nav-actions">
@@ -1893,8 +1909,14 @@
                   <span>Windows Setup .exe</span>
                   <span class="dl-size">1.5 MB</span>
                 </a>
-                <a href="https://github.com/shushpaaaa/GeoShift" target="_blank" rel="noopener" class="dl-btn" style="color: var(--accent-text);">
-                  <span>Source on GitHub ↗</span>
+                <a href="/geoshift/" class="dl-btn" style="color: var(--accent-text); border-color: var(--accent-border);">
+                  <span>Product page &amp; SHA-256 →</span>
+                </a>
+                <a href="/notes/ios-gps-usbmuxd.html" class="dl-btn">
+                  <span>Architecture note →</span>
+                </a>
+                <a href="https://github.com/shushpaaaa/GeoShift" target="_blank" rel="noopener" class="dl-btn">
+                  <span>Source ↗</span>
                 </a>
               </div>
             </div>
@@ -2181,15 +2203,30 @@
           <div class="contact-panel">
             <h3>Direct correspondence</h3>
             <div class="contact-email-box">
-              <span class="contact-email-text">2026330181@stu.hit.edu.cn</span>
-              <button id="contactCopyBtn" type="button" class="copy-btn">Copy</button>
+              <span class="contact-email-text"><span style="color: var(--text-muted); margin-right: 8px;">Email</span>2026330181@stu.hit.edu.cn</span>
+              <button id="contactCopyBtn" type="button" class="copy-btn" data-copy="2026330181@stu.hit.edu.cn">Copy</button>
+            </div>
+            <div class="contact-email-box">
+              <span class="contact-email-text"><span style="color: var(--text-muted); margin-right: 8px;">Telegram</span><a href="https://t.me/depictionatitsfinest" target="_blank" rel="noopener" style="color: var(--accent-text);">@depictionatitsfinest ↗</a></span>
+              <button type="button" class="copy-btn" data-copy="@depictionatitsfinest">Copy</button>
+            </div>
+            <div class="contact-email-box">
+              <span class="contact-email-text"><span style="color: var(--text-muted); margin-right: 8px;">WeChat</span>shushpaaaa</span>
+              <button type="button" class="copy-btn" data-copy="shushpaaaa">Copy ID</button>
+            </div>
+            <div class="contact-email-box">
+              <span class="contact-email-text"><span style="color: var(--text-muted); margin-right: 8px;">Discord</span>shushpaa</span>
+              <button type="button" class="copy-btn" data-copy="shushpaa">Copy ID</button>
             </div>
             <div class="contact-links">
               <a href="mailto:2026330181@stu.hit.edu.cn" class="btn btn-primary" style="height: 38px; padding: 0 16px; font-size: 13px;">
                 <span>Compose email</span>
               </a>
+              <a href="https://t.me/depictionatitsfinest" target="_blank" rel="noopener" class="btn btn-secondary" style="height: 38px; padding: 0 16px; font-size: 13px;">
+                <span>Telegram ↗</span>
+              </a>
               <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" class="btn btn-secondary" style="height: 38px; padding: 0 16px; font-size: 13px;">
-                <span>GitHub @shushpaaaa ↗</span>
+                <span>GitHub ↗</span>
               </a>
             </div>
           </div>
@@ -2799,24 +2836,26 @@
       })();
 
       // ==========================================
-      // 6. ONE-CLICK COPY EMAIL FEEDBACK
+      // 6. ONE-CLICK COPY FEEDBACK (Email, Telegram, WeChat, Discord)
       // ==========================================
-      function bindCopyEmail(btnId, labelId, defaultText) {
-        const btn = document.getElementById(btnId);
-        if (!btn) return;
-        const labelEl = labelId ? document.getElementById(labelId) : btn;
-
-        btn.addEventListener("click", () => {
+      const heroCopyBtn = document.getElementById("heroCopyEmailBtn");
+      const heroCopyLabel = document.getElementById("heroCopyEmailLabel");
+      if (heroCopyBtn && heroCopyLabel) {
+        heroCopyBtn.addEventListener("click", () => {
           navigator.clipboard?.writeText("2026330181@stu.hit.edu.cn").catch(() => {});
-          labelEl.textContent = "Copied to clipboard";
-          setTimeout(() => {
-            labelEl.textContent = defaultText;
-          }, 1800);
+          heroCopyLabel.textContent = "Copied to clipboard";
+          setTimeout(() => { heroCopyLabel.textContent = "2026330181@stu.hit.edu.cn"; }, 1800);
         });
       }
 
-      bindCopyEmail("heroCopyEmailBtn", "heroCopyEmailLabel", "2026330181@stu.hit.edu.cn");
-      bindCopyEmail("contactCopyBtn", null, "Copy");
+      document.querySelectorAll("[data-copy]").forEach((btn) => {
+        const orig = btn.textContent;
+        btn.addEventListener("click", () => {
+          navigator.clipboard?.writeText(btn.dataset.copy).catch(() => {});
+          btn.textContent = "Copied";
+          setTimeout(() => { btn.textContent = orig; }, 1600);
+        });
+      });
 
       // ==========================================
       // 7. LIVE SHENZHEN (UTC+8) FOOTER CLOCK
@@ -3094,7 +3133,7 @@
       const termInput = document.getElementById("termInput");
       const cmdHistory = [];
       let historyCursor = -1;
-      const validCommands = ["help", "geoshift", "projects", "stack", "whoami", "contact", "open github", "open projects", "clear"];
+      const validCommands = ["help", "geoshift", "notes", "projects", "stack", "whoami", "contact", "open geoshift", "open notes", "open github", "open projects", "clear"];
 
       function runCommand(raw) {
         const clean = raw.trim();
@@ -3111,20 +3150,24 @@
         let out = "";
         if (cmd === "help") {
           out = [
-            `<span style="color:var(--accent-text);">geoshift</span>       — architecture &amp; binary links for GeoShift v1.0.0`,
+            `<span style="color:var(--accent-text);">geoshift</span>       — GeoShift v1.0.0 product page &amp; verified binaries`,
+            `<span style="color:var(--accent-text);">notes</span>          — engineering write-ups &amp; protocol notes`,
             `<span style="color:var(--accent-text);">projects</span>       — list synced repositories (${allProjects.length} indexed)`,
             `<span style="color:var(--accent-text);">stack</span>          — languages, POSIX systems &amp; AI runtime stack`,
             `<span style="color:var(--accent-text);">whoami</span>         — academic affiliation &amp; research focus`,
-            `<span style="color:var(--accent-text);">contact</span>        — university email &amp; GitHub profile`,
+            `<span style="color:var(--accent-text);">contact</span>        — email, Telegram, WeChat, Discord &amp; GitHub`,
             `<span style="color:var(--accent-text);">open projects</span>  — open the sliding Projects Hub drawer`,
             `<span style="color:var(--accent-text);">clear</span>          — clear terminal buffer`
           ].join("<br/>");
         } else if (cmd === "geoshift") {
           out = `GeoShift v1.0.0 — Native Rust + Tauri v2 iOS GPS simulation controller over Apple DVT/usbmuxd.<br/>` +
-                `Release: <a href="https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0" target="_blank" rel="noopener" style="color:var(--accent-text);text-decoration:underline;">github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0 ↗</a>`;
+                `Product page: <a href="/geoshift/" style="color:var(--accent-text);text-decoration:underline;">olzhas.app/geoshift/ →</a><br/>` +
+                `Write-up    : <a href="/notes/ios-gps-usbmuxd.html" style="color:var(--accent-text);text-decoration:underline;">Simulating iOS GPS over usbmuxd →</a>`;
+        } else if (cmd === "notes") {
+          out = `• <a href="/notes/ios-gps-usbmuxd.html" style="color:var(--accent-text);text-decoration:underline;">Simulating iOS GPS telemetry over usbmuxd without jailbreak</a> <span style="color:var(--text-muted);">[Nov 2026 · 5 min]</span>`;
         } else if (cmd === "projects" || cmd === "ls") {
           out = allProjects
-            .map((p) => `• <a href="${p.url}" target="_blank" rel="noopener" style="color:var(--text-primary);text-decoration:underline;">${p.name}</a> <span style="color:var(--text-muted);">[${p.language}]</span> — ${p.description}`)
+            .map((p) => `• <a href="${p.url}" target="_blank" rel="noopener" style="color:var(--text-primary);text-decoration:underline;">${escapeHtml(p.name)}</a> <span style="color:var(--text-muted);">[${escapeHtml(p.language)}]</span> — ${escapeHtml(p.description)}`)
             .join("<br/>");
         } else if (cmd === "stack" || cmd === "skills") {
           out = `Systems   : C (C11), C++20, Rust, Tauri v2, Linux / POSIX<br/>` +
@@ -3134,8 +3177,17 @@
           out = `Olzhas Huseynzade · Computer Science &amp; Technology @ Harbin Institute of Technology, Shenzhen (HITSZ)<br/>` +
                 `Focus: Systems architecture, hardware developer instrumentation, and autonomous AI.`;
         } else if (cmd === "contact") {
-          out = `Email  : <a href="mailto:2026330181@stu.hit.edu.cn" style="color:var(--accent-text);text-decoration:underline;">2026330181@stu.hit.edu.cn</a><br/>` +
-                `GitHub : <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" style="color:var(--accent-text);text-decoration:underline;">github.com/shushpaaaa ↗</a>`;
+          out = `Email    : <a href="mailto:2026330181@stu.hit.edu.cn" style="color:var(--accent-text);text-decoration:underline;">2026330181@stu.hit.edu.cn</a><br/>` +
+                `Telegram : <a href="https://t.me/depictionatitsfinest" target="_blank" rel="noopener" style="color:var(--accent-text);text-decoration:underline;">@depictionatitsfinest ↗</a><br/>` +
+                `WeChat   : <span style="color:var(--text-primary);">shushpaaaa</span><br/>` +
+                `Discord  : <span style="color:var(--text-primary);">shushpaa</span><br/>` +
+                `GitHub   : <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" style="color:var(--accent-text);text-decoration:underline;">github.com/shushpaaaa ↗</a>`;
+        } else if (cmd === "open geoshift") {
+          out = "Navigating to /geoshift/...";
+          window.location.href = "/geoshift/";
+        } else if (cmd === "open notes") {
+          out = "Navigating to /notes/...";
+          window.location.href = "/notes/";
         } else if (cmd === "open projects" || cmd === "open drawer") {
           out = "Opening Projects Hub drawer...";
           openDrawer();

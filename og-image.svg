@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <pattern id="ogDots" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="16" cy="16" r="1" fill="#ecf0f8" fill-opacity="0.065"/>
+    </pattern>
+  </defs>
+
+  <style>
+    .sans { font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif; }
+    .serif-it { font-family: Georgia, 'Times New Roman', serif; font-style: italic; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; }
+  </style>
+
+  <!-- Deep Obsidian Ground -->
+  <rect width="1200" height="630" fill="#08090c"/>
+  <rect width="1200" height="630" fill="url(#ogDots)"/>
+
+  <!-- Subtle Structural Hairline Frame -->
+  <rect x="28" y="28" width="1144" height="574" rx="16" fill="none" stroke="#ecf0f8" stroke-opacity="0.1" stroke-width="1"/>
+
+  <!-- Top Bar Inside Frame -->
+  <g transform="translate(76, 86)">
+    <circle cx="6" cy="-5" r="4.5" fill="#45b884"/>
+    <text x="22" y="0" class="mono" font-size="16" fill="#9ba3b4">Harbin Institute of Technology, Shenzhen (HITSZ) · CS &amp; Technology</text>
+    <text x="1048" y="0" text-anchor="end" class="mono" font-size="16" fill="#8bb8ff">olzhas.app</text>
+    <line x1="0" y1="26" x2="1048" y2="26" stroke="#ecf0f8" stroke-opacity="0.08" stroke-width="1"/>
+  </g>
+
+  <!-- Right-Side Architectural Topological Manifold -->
+  <g transform="translate(925, 326)">
+    <!-- Meridian orbits -->
+    <ellipse cx="0" cy="0" rx="168" ry="62" transform="rotate(-26)" fill="none" stroke="#4f8ff7" stroke-opacity="0.34" stroke-width="1.4"/>
+    <ellipse cx="0" cy="0" rx="188" ry="70" transform="rotate(32)" fill="none" stroke="#9ba3b4" stroke-opacity="0.22" stroke-width="1.2"/>
+    <circle cx="146" cy="-76" r="4.5" fill="#f0f2f7"/>
+    <circle cx="-154" cy="-98" r="4" fill="#8bb8ff"/>
+
+    <!-- Outer geodesic wireframe -->
+    <g stroke="#9ba3b4" stroke-opacity="0.24" stroke-width="1.3" fill="none">
+      <polygon points="0,-138 119,-69 119,69 0,138 -119,69 -119,-69"/>
+      <line x1="0" y1="-138" x2="0" y2="138"/>
+      <line x1="-119" y1="-69" x2="119" y2="69"/>
+      <line x1="119" y1="-69" x2="-119" y2="69"/>
+      <polygon points="0,-90 78,-45 78,45 0,90 -78,45 -78,-45" stroke="#4f8ff7" stroke-opacity="0.4"/>
+    </g>
+
+    <!-- Faceted obsidian crystal core -->
+    <g>
+      <polygon points="0,-66 58,-33 0,0" fill="#151b2a" stroke="#8bb8ff" stroke-opacity="0.6" stroke-width="1.4"/>
+      <polygon points="0,-66 -58,-33 0,0" fill="#0f131d" stroke="#8bb8ff" stroke-opacity="0.4" stroke-width="1.4"/>
+      <polygon points="58,-33 58,33 0,0" fill="#1e273d" stroke="#8bb8ff" stroke-opacity="0.68" stroke-width="1.4"/>
+      <polygon points="-58,-33 -58,33 0,0" fill="#0c0f17" stroke="#8bb8ff" stroke-opacity="0.35" stroke-width="1.4"/>
+      <polygon points="58,33 0,66 0,0" fill="#131826" stroke="#8bb8ff" stroke-opacity="0.48" stroke-width="1.4"/>
+      <polygon points="-58,33 0,66 0,0" fill="#0a0c12" stroke="#8bb8ff" stroke-opacity="0.3" stroke-width="1.4"/>
+    </g>
+
+    <!-- Geodesic vertex points -->
+    <g fill="#8bb8ff">
+      <circle cx="0" cy="-138" r="3.6"/>
+      <circle cx="119" cy="-69" r="3.6"/>
+      <circle cx="119" cy="69" r="3.6"/>
+      <circle cx="0" cy="138" r="3.6"/>
+      <circle cx="-119" cy="69" r="3.6"/>
+      <circle cx="-119" cy="-69" r="3.6"/>
+    </g>
+  </g>
+
+  <!-- Left Editorial Typography -->
+  <g transform="translate(76, 214)">
+    <text x="0" y="0" font-size="68" letter-spacing="-1.6">
+      <tspan class="serif-it" fill="#8bb8ff" font-size="74">Olzhas</tspan>
+      <tspan class="sans" fill="#f0f2f7" font-weight="500" dx="12">Huseynzade</tspan>
+    </text>
+
+    <text x="0" y="72" class="sans" font-size="30" font-weight="400" fill="#f0f2f7" letter-spacing="-0.5">
+      Systems architecture, <tspan class="serif-it" fill="#8bb8ff" font-size="34">autonomous AI,</tspan>
+    </text>
+    <text x="0" y="116" class="sans" font-size="30" font-weight="400" fill="#f0f2f7" letter-spacing="-0.5">
+      and <tspan class="serif-it" fill="#8bb8ff" font-size="34">low-level software.</tspan>
+    </text>
+
+    <text x="0" y="176" class="sans" font-size="19" fill="#9ba3b4">
+      Native instruments in Rust &amp; C++, Apple USB developer tooling (GeoShift),
+    </text>
+    <text x="0" y="206" class="sans" font-size="19" fill="#9ba3b4">
+      and deterministic multi-agent reasoning architectures.
+    </text>
+  </g>
+
+  <!-- Bottom Metadata Strip -->
+  <g transform="translate(76, 540)">
+    <line x1="0" y1="-28" x2="1048" y2="-28" stroke="#ecf0f8" stroke-opacity="0.08" stroke-width="1"/>
+    <text x="0" y="6" class="mono" font-size="15" fill="#9ba3b4">Rust · C/C++ · Tauri v2 · Python · Apple DVT</text>
+    <text x="1048" y="6" text-anchor="end" class="mono" font-size="15" fill="#767f94">github.com/shushpaaaa · @depictionatitsfinest</text>
+  </g>
+</svg>

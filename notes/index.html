@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Engineering Notes — Olzhas Huseynzade | olzhas.app</title>
+  <meta name="description" content="Technical notes on systems architecture, Apple USB developer protocols, Rust/Tauri native tooling, and autonomous multi-agent execution." />
+  <meta name="theme-color" content="#08090c" />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://olzhas.app/notes/" />
+  <meta property="og:title" content="Engineering Notes — Olzhas Huseynzade" />
+  <meta property="og:description" content="Deep-dive write-ups on iOS hardware instrumentation, Rust native tools, and autonomous AI systems." />
+  <meta property="og:image" content="https://olzhas.app/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://olzhas.app/og-image.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #08090c;
+      --surface-1: #0e1015;
+      --border: rgba(236, 240, 248, 0.08);
+      --border-strong: rgba(236, 240, 248, 0.16);
+      --text-primary: #f0f2f7;
+      --text-secondary: #9ba3b4;
+      --text-muted: #767f94;
+      --accent-text: #8bb8ff;
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    ::selection { background: rgba(79, 143, 247, 0.28); color: var(--text-primary); }
+
+    html {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body { background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; }
+    a { color: inherit; text-decoration: none; }
+    .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(8, 9, 12, 0.84);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+    .brand-first { font-family: var(--font-serif); font-style: italic; font-size: 22px; color: var(--accent-text); line-height: 1; }
+    .brand-last { font-weight: 500; letter-spacing: -0.02em; }
+    .brand-sep { font-family: var(--font-mono); color: var(--text-muted); font-size: 12px; }
+    .brand-page { font-family: var(--font-mono); color: var(--text-secondary); font-size: 12px; }
+
+    .nav-right { display: flex; gap: 20px; font-size: 13px; color: var(--text-secondary); }
+    .nav-right a:hover { color: var(--text-primary); }
+
+    main {
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 72px 24px 96px;
+      flex: 1;
+    }
+
+    h1 {
+      font-size: clamp(36px, 4.5vw, 52px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 16px;
+    }
+
+    h1 .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.12em;
+      color: var(--accent-text);
+    }
+
+    .intro {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 58ch;
+      line-height: 1.65;
+      margin-bottom: 48px;
+    }
+
+    .note-list { border-top: 1px solid var(--border); }
+
+    .note-row {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 24px;
+      align-items: baseline;
+      padding: 28px 12px;
+      border-bottom: 1px solid var(--border);
+      transition: background-color 160ms ease;
+    }
+
+    .note-row:hover { background: var(--surface-1); }
+    .note-row:hover .note-arrow { transform: translate(3px, -3px); color: var(--text-primary); }
+
+    .note-date { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+    .note-title { font-size: 18px; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -0.015em; }
+    .note-excerpt { font-size: 14px; line-height: 1.6; color: var(--text-secondary); max-width: 56ch; }
+    .note-meta { font-family: var(--font-mono); font-size: 12px; color: var(--accent-text); margin-top: 10px; }
+    .note-arrow { color: var(--text-muted); transition: transform 180ms var(--ease-out), color 160ms ease; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0 40px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer a { color: var(--text-secondary); }
+    footer a:hover { color: var(--text-primary); }
+
+    @media (max-width: 720px) {
+      .note-row { grid-template-columns: 1fr; gap: 8px; }
+      .note-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="brand">
+        <span class="brand-first">Olzhas</span>
+        <span class="brand-last">Huseynzade</span>
+        <span class="brand-sep">/</span>
+        <span class="brand-page">notes</span>
+      </a>
+      <nav class="nav-right">
+        <a href="/">Portfolio</a>
+        <a href="/geoshift/">GeoShift</a>
+        <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener">GitHub ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <h1>Engineering <span class="serif">notes</span></h1>
+    <p class="intro">
+      Field notes on systems engineering, Apple USB developer protocols, native cross-platform tooling, and multi-agent architectures.
+    </p>
+
+    <div class="note-list">
+      <a href="/notes/ios-gps-usbmuxd.html" class="note-row">
+        <span class="note-date">Nov 2026</span>
+        <div>
+          <div class="note-title">Simulating iOS GPS telemetry over usbmuxd without jailbreak</div>
+          <p class="note-excerpt">
+            How GeoShift pairs a 4.5 MB Rust + Tauri v2 native shell with Apple's DVT location simulation daemon over physical USB tunnels — and restores hardware satellite lock cleanly.
+          </p>
+          <div class="note-meta">Rust · Tauri v2 · Apple DVT · 5 min read</div>
+        </div>
+        <span class="note-arrow">↗</span>
+      </a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Olzhas Huseynzade · HITSZ</span>
+      <span><a href="/">olzhas.app</a> · <a href="mailto:2026330181@stu.hit.edu.cn">2026330181@stu.hit.edu.cn</a></span>
+    </div>
+  </footer>
+</body>
+</html>

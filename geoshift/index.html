@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoShift v1.0.0 — Native iOS GPS Simulation Controller | olzhas.app</title>
+  <meta name="description" content="Download GeoShift v1.0.0 for macOS and Windows. Native desktop iOS GPS simulation controller built with Rust, Tauri v2, and Apple DVT over usbmuxd." />
+  <meta name="theme-color" content="#08090c" />
+
+  <!-- Favicon & Social Cards -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://olzhas.app/geoshift/" />
+  <meta property="og:title" content="GeoShift v1.0.0 — Native iOS GPS Simulation Controller" />
+  <meta property="og:description" content="Cross-platform desktop instrument in Rust & Tauri v2 simulating iOS GPS telemetry over USB via Apple DVT without jailbreak." />
+  <meta property="og:image" content="https://olzhas.app/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="GeoShift v1.0.0 — Native iOS GPS Simulation Controller" />
+  <meta name="twitter:description" content="Download verified macOS Universal, Apple Silicon, and Windows installers with SHA-256 checksums." />
+  <meta name="twitter:image" content="https://olzhas.app/og-image.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #08090c;
+      --surface-1: #0e1015;
+      --surface-2: #14171f;
+      --border: rgba(236, 240, 248, 0.08);
+      --border-strong: rgba(236, 240, 248, 0.16);
+      --border-focus: rgba(79, 143, 247, 0.65);
+      --text-primary: #f0f2f7;
+      --text-secondary: #9ba3b4;
+      --text-muted: #767f94;
+      --accent: #4f8ff7;
+      --accent-tint: rgba(79, 143, 247, 0.1);
+      --accent-border: rgba(79, 143, 247, 0.28);
+      --accent-text: #8bb8ff;
+      --status-online: #45b884;
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    ::selection { background: rgba(79, 143, 247, 0.28); color: var(--text-primary); }
+
+    html {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body { background: var(--bg); color: var(--text-primary); min-height: 100vh; }
+    a { color: inherit; text-decoration: none; text-underline-offset: 4px; }
+    button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    code, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+    :focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; border-radius: 4px; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(8, 9, 12, 0.84);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .brand-first {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 22px;
+      color: var(--accent-text);
+      line-height: 1;
+    }
+
+    .brand-last { font-weight: 500; letter-spacing: -0.02em; }
+    .brand-sep { font-family: var(--font-mono); color: var(--text-muted); font-size: 12px; }
+    .brand-page { font-family: var(--font-mono); color: var(--text-secondary); font-size: 12px; }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .nav-right a:hover { color: var(--text-primary); }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .hero {
+      padding: 72px 0 64px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: start;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .pill.accent {
+      background: var(--accent-tint);
+      border-color: var(--accent-border);
+      color: var(--accent-text);
+      font-family: var(--font-mono);
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--status-online);
+    }
+
+    h1 {
+      font-size: clamp(36px, 4.4vw, 54px);
+      font-weight: 500;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+      margin-bottom: 20px;
+    }
+
+    h1 .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.12em;
+      color: var(--accent-text);
+    }
+
+    .lead {
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      max-width: 56ch;
+      text-wrap: pretty;
+      margin-bottom: 32px;
+    }
+
+    .lead strong { color: var(--text-primary); font-weight: 500; }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 150ms ease, border-color 150ms ease, transform 120ms var(--ease-out);
+    }
+
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--text-primary); color: var(--bg); border: 1px solid var(--text-primary); }
+    .btn-primary:hover { background: #dce3f2; }
+    .btn-secondary { background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border-strong); }
+    .btn-secondary:hover { background: var(--surface-2); border-color: var(--accent-border); }
+
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat-label { font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+    .stat-val { font-family: var(--font-mono); font-size: 15px; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
+    /* Interactive Telemetry Instrument */
+    .panel {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .sim-box {
+      position: relative;
+      height: 224px;
+      border-radius: var(--radius-md);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    .cross-x, .cross-y {
+      position: absolute;
+      background: rgba(79, 143, 247, 0.28);
+      pointer-events: none;
+      transition: transform 220ms var(--ease-out);
+    }
+
+    .cross-x { top: 0; left: 0; width: 100%; height: 1px; }
+    .cross-y { top: 0; left: 0; width: 1px; height: 100%; }
+
+    .pin {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      margin: -6px 0 0 -6px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--text-primary);
+      pointer-events: none;
+      transition: transform 220ms var(--ease-out);
+    }
+
+    .presets { display: flex; flex-wrap: wrap; gap: 8px; }
+    .preset {
+      height: 30px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: border-color 150ms ease, color 150ms ease;
+    }
+
+    .preset:hover { color: var(--text-primary); border-color: var(--border-strong); }
+    .preset.is-active { color: var(--accent-text); background: var(--accent-tint); border-color: var(--accent-border); }
+
+    .tele-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .tele-k { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 2px; }
+
+    /* Sections */
+    .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+    .section-title {
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      max-width: 64ch;
+    }
+
+    /* Verified Release Table */
+    .table-wrap {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+      background: var(--surface-1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    th { font-size: 12px; font-weight: 500; color: var(--text-muted); background: var(--bg); }
+
+    .sha-btn {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: border-color 150ms ease, color 150ms ease;
+    }
+
+    .sha-btn:hover { color: var(--text-primary); border-color: var(--accent-border); }
+
+    .dl-link {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-text);
+      white-space: nowrap;
+    }
+
+    .dl-link:hover { text-decoration: underline; }
+
+    /* Architecture Diagram Box */
+    .arch-box {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      overflow-x: auto;
+    }
+
+    /* Setup Steps Grid */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .step {
+      border-top: 1px solid var(--border-strong);
+      padding-top: 20px;
+    }
+
+    .step-num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-text);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .step h3 { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+    .step p { font-size: 14px; line-height: 1.6; color: var(--text-secondary); }
+    .step code {
+      font-size: 12px;
+      color: var(--accent-text);
+      background: var(--surface-1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    footer {
+      padding: 36px 0 48px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    footer a { color: var(--text-secondary); }
+    footer a:hover { color: var(--text-primary); }
+
+    @media (max-width: 900px) {
+      .hero, .steps-grid { grid-template-columns: 1fr; }
+      .stat-strip { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="brand">
+        <span class="brand-first">Olzhas</span>
+        <span class="brand-last">Huseynzade</span>
+        <span class="brand-sep">/</span>
+        <span class="brand-page">geoshift</span>
+      </a>
+      <nav class="nav-right">
+        <a href="/">Portfolio</a>
+        <a href="/notes/ios-gps-usbmuxd.html">Architecture note</a>
+        <a href="https://github.com/shushpaaaa/GeoShift" target="_blank" rel="noopener">GitHub ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="meta-row">
+          <span class="pill accent">v1.0.0 release</span>
+          <span class="pill"><span class="dot"></span><span>Rust + Tauri v2</span></span>
+          <span class="pill">Apple DVT over USB</span>
+        </div>
+
+        <h1>Native iOS GPS <span class="serif">simulation controller.</span></h1>
+
+        <p class="lead">
+          GeoShift is a lightweight desktop instrument built in <strong>Rust (Tauri v2)</strong> that dispatches ephemeral coordinates directly to Apple's developer instrumentation daemon over physical USB — no jailbreak, no browser bloat, and instant one-click satellite restoration.
+        </p>
+
+        <div class="cta-row">
+          <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift_1.0.0_universal.dmg" class="btn btn-primary">
+            <span>Download for macOS</span>
+            <span class="mono" style="font-size: 12px; opacity: 0.72;">.dmg</span>
+          </a>
+          <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift-Setup-1.0.0.exe" class="btn btn-secondary">
+            <span>Download for Windows</span>
+            <span class="mono" style="font-size: 12px; color: var(--text-muted);">.exe</span>
+          </a>
+          <a href="/notes/ios-gps-usbmuxd.html" class="btn btn-secondary">Read technical write-up</a>
+        </div>
+
+        <div class="stat-strip">
+          <div>
+            <span class="stat-label">Release downloads</span>
+            <span id="totalDownloads" class="stat-val">10+</span>
+          </div>
+          <div>
+            <span class="stat-label">Protocol target</span>
+            <span class="stat-val">usbmuxd / DVT</span>
+          </div>
+          <div>
+            <span class="stat-label">License &amp; source</span>
+            <span class="stat-val">Open source</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <span style="font-weight: 500;">Live coordinate dispatch preview</span>
+          <span id="simStatus" class="mono" style="font-size: 12px; color: var(--status-online);">Override active</span>
+        </div>
+        <div id="simBox" class="sim-box">
+          <svg width="100%" height="100%" viewBox="0 0 400 224" preserveAspectRatio="none" style="position:absolute;inset:0;pointer-events:none;">
+            <defs>
+              <pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(236,240,248,0.06)" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#g)"/>
+          </svg>
+          <div id="cx" class="cross-x"></div>
+          <div id="cy" class="cross-y"></div>
+          <div id="pin" class="pin"></div>
+        </div>
+        <div class="presets">
+          <button type="button" class="preset is-active" data-lat="22.5872" data-lng="113.9726" data-name="Shenzhen · HITSZ">Shenzhen</button>
+          <button type="button" class="preset" data-lat="35.6762" data-lng="139.6503" data-name="Tokyo">Tokyo</button>
+          <button type="button" class="preset" data-lat="37.7749" data-lng="-122.4194" data-name="San Francisco">San Francisco</button>
+          <button type="button" class="preset" data-lat="47.3769" data-lng="8.5417" data-name="Zurich">Zurich</button>
+        </div>
+        <div class="tele-grid">
+          <div><span class="tele-k">Latitude</span><span id="tLat">22.5872° N</span></div>
+          <div><span class="tele-k">Longitude</span><span id="tLng">113.9726° E</span></div>
+          <div><span class="tele-k">Packet</span><span id="tPkt">set(22.5872, 113.9726)</span></div>
+          <div><span class="tele-k">Target</span><span id="tName">Shenzhen · HITSZ</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="downloads">
+      <h2 class="section-title">Verified release binaries (v1.0.0)</h2>
+      <p class="section-desc">
+        Every installer is hosted directly on GitHub Releases. Click any SHA-256 digest to copy it for local verification with <code>shasum -a 256</code>.
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Artifact</th>
+              <th>Architecture</th>
+              <th>Size</th>
+              <th>Downloads</th>
+              <th>SHA-256</th>
+              <th>Download</th>
+            </tr>
+          </thead>
+          <tbody id="assetTableBody">
+            <tr data-asset="GeoShift_1.0.0_universal.dmg">
+              <td><strong>GeoShift_1.0.0_universal.dmg</strong></td>
+              <td class="mono">macOS Universal</td>
+              <td class="mono">4.45 MB</td>
+              <td class="mono dl-count">—</td>
+              <td><button class="sha-btn" data-sha="6233a55c473a28355a813e60065b15ad5c7b5851253cd13850411294800bcefd">6233a55c…0bcefd</button></td>
+              <td><a class="dl-link" href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift_1.0.0_universal.dmg">Download ↗</a></td>
+            </tr>
+            <tr data-asset="GeoShift_1.0.0_aarch64.dmg">
+              <td><strong>GeoShift_1.0.0_aarch64.dmg</strong></td>
+              <td class="mono">Apple Silicon</td>
+              <td class="mono">2.55 MB</td>
+              <td class="mono dl-count">—</td>
+              <td><button class="sha-btn" data-sha="1bd72abdce6673d0d7aadf6b39a20100f1807dab8f84f2aee16749eb19dd1637">1bd72abd…9dd1637</button></td>
+              <td><a class="dl-link" href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift_1.0.0_aarch64.dmg">Download ↗</a></td>
+            </tr>
+            <tr data-asset="GeoShift_1.0.0_x64.dmg">
+              <td><strong>GeoShift_1.0.0_x64.dmg</strong></td>
+              <td class="mono">macOS Intel</td>
+              <td class="mono">2.71 MB</td>
+              <td class="mono dl-count">—</td>
+              <td><button class="sha-btn" data-sha="f2a44a72e5314bc4fa77f9a9119d6cbae48ff22254217278f5415b4fba78eb6f">f2a44a72…78eb6f</button></td>
+              <td><a class="dl-link" href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift_1.0.0_x64.dmg">Download ↗</a></td>
+            </tr>
+            <tr data-asset="GeoShift-Setup-1.0.0.exe">
+              <td><strong>GeoShift-Setup-1.0.0.exe</strong></td>
+              <td class="mono">Windows Installer</td>
+              <td class="mono">1.55 MB</td>
+              <td class="mono dl-count">—</td>
+              <td><button class="sha-btn" data-sha="eeeff3c56822076af7d2e77c2f095b5881f3570a310f22ab70ac8abd4208ead4">eeeff3c5…08ead4</button></td>
+              <td><a class="dl-link" href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift-Setup-1.0.0.exe">Download ↗</a></td>
+            </tr>
+            <tr data-asset="GeoShift-Windows-Portable.zip">
+              <td><strong>GeoShift-Windows-Portable.zip</strong></td>
+              <td class="mono">Windows Portable</td>
+              <td class="mono">1.96 MB</td>
+              <td class="mono dl-count">—</td>
+              <td><button class="sha-btn" data-sha="2c8137798ae2affb51e4d4b57e5bee389ecf6f6dcbd3ff6224a8f247d0d9d050">2c813779…d9d050</button></td>
+              <td><a class="dl-link" href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift-Windows-Portable.zip">Download ↗</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Hardware transport architecture</h2>
+      <p class="section-desc">
+        How a coordinate click in GeoShift travels from the native Tauri webview into iOS CoreLocation without modifying any persistent system files.
+      </p>
+
+      <div class="arch-box">
+        <svg viewBox="0 0 980 120" width="100%" height="120" role="img" aria-label="GeoShift transport pipeline diagram">
+          <style>
+            .n-title { font-family: 'Geist', -apple-system, sans-serif; font-size: 13px; font-weight: 500; fill: #f0f2f7; }
+            .n-sub { font-family: 'Geist Mono', monospace; font-size: 11px; fill: #8bb8ff; }
+          </style>
+          <g transform="translate(8, 22)">
+            <rect width="176" height="76" rx="8" fill="#08090c" stroke="rgba(236,240,248,0.14)"/>
+            <text x="16" y="34" class="n-title">Tauri v2 Viewport</text>
+            <text x="16" y="54" class="n-sub">Leaflet · Rust IPC</text>
+          </g>
+          <path d="M188 60 H224" stroke="#4f8ff7" stroke-width="1.5"/>
+          <polygon points="224,56 232,60 224,64" fill="#4f8ff7"/>
+
+          <g transform="translate(236, 22)">
+            <rect width="196" height="76" rx="8" fill="#08090c" stroke="rgba(236,240,248,0.14)"/>
+            <text x="16" y="34" class="n-title">DVT Python Bridge</text>
+            <text x="16" y="54" class="n-sub">pymobiledevice3</text>
+          </g>
+          <path d="M436 60 H472" stroke="#4f8ff7" stroke-width="1.5"/>
+          <polygon points="472,56 480,60 472,64" fill="#4f8ff7"/>
+
+          <g transform="translate(484, 22)">
+            <rect width="204" height="76" rx="8" fill="#08090c" stroke="rgba(79,143,247,0.38)"/>
+            <text x="16" y="34" class="n-title">usbmuxd USB Tunnel</text>
+            <text x="16" y="54" class="n-sub">lockdownd · RSD</text>
+          </g>
+          <path d="M692 60 H728" stroke="#4f8ff7" stroke-width="1.5"/>
+          <polygon points="728,56 736,60 728,64" fill="#4f8ff7"/>
+
+          <g transform="translate(740, 22)">
+            <rect width="228" height="76" rx="8" fill="#08090c" stroke="rgba(236,240,248,0.14)"/>
+            <text x="16" y="34" class="n-title">iOS CoreLocation</text>
+            <text x="16" y="54" class="n-sub">dt.simulatelocation</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="section" style="border-bottom: none;">
+      <h2 class="section-title">iPhone setup in three steps</h2>
+      <p class="section-desc">Works with stock iOS devices over Lightning or USB-C.</p>
+
+      <div class="steps-grid">
+        <div class="step">
+          <span class="step-num">Step 1</span>
+          <h3>Pair device over USB</h3>
+          <p>Connect your iPhone via cable, unlock the screen, and confirm <strong>Trust This Computer</strong> with your device passcode.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">Step 2</span>
+          <h3>Enable Developer Mode</h3>
+          <p>On iOS 16+, toggle <code>Settings → Privacy &amp; Security → Developer Mode</code> once so Apple's DVT instrumentation daemon accepts local overrides.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">Step 3</span>
+          <h3>Dispatch or restore instantly</h3>
+          <p>Drop a pin anywhere on the map to update system-wide telemetry, or click <strong>Restore Hardware GPS</strong> to hand control straight back to native satellites.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>GeoShift by <a href="/">Olzhas Huseynzade</a></span>
+      <span><a href="/notes/ios-gps-usbmuxd.html">Technical write-up</a> · <a href="https://github.com/shushpaaaa/GeoShift" target="_blank" rel="noopener">Source repository ↗</a></span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // Live GitHub Release download counters
+      fetch("https://api.github.com/repos/shushpaaaa/GeoShift/releases/tags/v1.0.0")
+        .then((r) => r.json())
+        .then((rel) => {
+          if (!rel || !Array.isArray(rel.assets)) return;
+          let total = 0;
+          rel.assets.forEach((a) => {
+            total += a.download_count || 0;
+            const row = document.querySelector(`tr[data-asset="${a.name}"] .dl-count`);
+            if (row) row.textContent = String(a.download_count || 0);
+          });
+          const totalEl = document.getElementById("totalDownloads");
+          if (totalEl) totalEl.textContent = String(total);
+        })
+        .catch(() => {});
+
+      // Copy SHA-256 buttons
+      document.querySelectorAll(".sha-btn").forEach((btn) => {
+        const orig = btn.textContent;
+        btn.addEventListener("click", () => {
+          navigator.clipboard?.writeText(btn.dataset.sha).catch(() => {});
+          btn.textContent = "Copied SHA-256";
+          setTimeout(() => { btn.textContent = orig; }, 1600);
+        });
+      });
+
+      // Interactive Coordinate Preview
+      const box = document.getElementById("simBox");
+      const cx = document.getElementById("cx");
+      const cy = document.getElementById("cy");
+      const pin = document.getElementById("pin");
+      const tLat = document.getElementById("tLat");
+      const tLng = document.getElementById("tLng");
+      const tPkt = document.getElementById("tPkt");
+      const tName = document.getElementById("tName");
+      const presets = Array.from(document.querySelectorAll(".preset"));
+
+      function setPos(lat, lng, name) {
+        const w = box.clientWidth || 360;
+        const h = box.clientHeight || 224;
+        const px = Math.min(0.94, Math.max(0.06, (lng + 180) / 360)) * w;
+        const py = Math.min(0.9, Math.max(0.1, (75 - lat) / 135)) * h;
+        cx.style.transform = `translateY(${py.toFixed(1)}px)`;
+        cy.style.transform = `translateX(${px.toFixed(1)}px)`;
+        pin.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px)`;
+        tLat.textContent = `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? "N" : "S"}`;
+        tLng.textContent = `${Math.abs(lng).toFixed(4)}° ${lng >= 0 ? "E" : "W"}`;
+        tPkt.textContent = `set(${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+        tName.textContent = name;
+      }
+
+      presets.forEach((b) => b.addEventListener("click", () => {
+        presets.forEach((x) => x.classList.remove("is-active"));
+        b.classList.add("is-active");
+        setPos(parseFloat(b.dataset.lat), parseFloat(b.dataset.lng), b.dataset.name);
+      }));
+
+      box.addEventListener("click", (e) => {
+        const r = box.getBoundingClientRect();
+        const lng = ((e.clientX - r.left) / r.width) * 360 - 180;
+        const lat = 75 - ((e.clientY - r.top) / r.height) * 135;
+        presets.forEach((x) => x.classList.remove("is-active"));
+        setPos(lat, lng, "Custom point");
+      });
+
+      setTimeout(() => setPos(22.5872, 113.9726, "Shenzhen · HITSZ"), 40);
+    })();
+  </script>
+</body>
+</html>
