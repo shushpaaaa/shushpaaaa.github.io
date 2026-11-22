@@ -1518,167 +1518,15 @@
     }
 
     /* =========================================
-       PERSISTENT INTERACTIVE SIGNAL HUD (Always On Screen)
+       PERSISTENT MINIMAL AMBIENT & 3D MANIFOLD BAR
        ========================================= */
     .signal-hud {
       position: fixed;
       right: 20px;
       bottom: 20px;
       z-index: 80;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-    }
-
-    .hud-panel {
-      width: 304px;
-      background: rgba(14, 16, 21, 0.94);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--border-strong);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      transform-origin: bottom right;
-      transform: scale(0.95) translateY(6px);
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: transform 200ms var(--ease-out), opacity 180ms ease, visibility 180ms ease;
-    }
-
-    .signal-hud.is-open .hud-panel {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-
-    .hud-panel-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-primary);
-    }
-
-    .hud-freq-readout {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--accent-text);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .hud-scope-wrap {
-      position: relative;
-      width: 100%;
-      height: 64px;
-      border-radius: 8px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      cursor: ew-resize;
-      touch-action: none;
-    }
-
-    #hudFullWave {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    .hud-scope-hint {
-      position: absolute;
-      bottom: 4px;
-      right: 8px;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      color: var(--text-muted);
-      pointer-events: none;
-    }
-
-    .hud-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .hud-row-label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .hud-seg {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-    }
-
-    .hud-seg-btn {
-      height: 30px;
-      border-radius: 6px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      font-size: 12px;
-      color: var(--text-secondary);
-      transition: color 140ms ease, border-color 140ms ease, background-color 140ms ease, transform 100ms var(--ease-out);
-    }
-
-    .hud-seg-btn:hover {
-      color: var(--text-primary);
-      border-color: var(--border-strong);
-    }
-
-    .hud-seg-btn.is-active {
-      color: var(--accent-text);
-      background: var(--accent-tint);
-      border-color: var(--accent-border);
-    }
-
-    .hud-seg-btn:active {
-      transform: scale(0.97);
-    }
-
-    .hud-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 4px;
-      border-radius: 2px;
-      background: var(--surface-3);
-      outline: none;
-      cursor: pointer;
-    }
-
-    .hud-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--text-primary);
-      border: 2px solid var(--accent);
-      cursor: pointer;
-    }
-
-    .hud-quick-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border);
-    }
-
-    .hud-pill {
       height: 40px;
-      padding: 0 8px 0 12px;
+      padding: 4px 6px;
       border-radius: 10px;
       background: rgba(14, 16, 21, 0.88);
       backdrop-filter: blur(14px);
@@ -1686,81 +1534,94 @@
       border: 1px solid var(--border-strong);
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
       user-select: none;
+    }
+
+    .hud-audio-btn {
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 150ms ease, background-color 150ms ease, transform 100ms var(--ease-out);
+    }
+
+    .hud-audio-btn:hover {
+      color: var(--text-primary);
+      background: var(--surface-2);
+    }
+
+    .hud-audio-btn.is-active {
+      color: var(--accent-text);
+      background: var(--accent-tint);
+    }
+
+    .hud-audio-btn:active {
+      transform: scale(0.96);
     }
 
     #hudMiniWave {
       display: block;
-      width: 48px;
-      height: 18px;
-      cursor: pointer;
-    }
-
-    .hud-metrics {
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      color: var(--text-secondary);
-      font-variant-numeric: tabular-nums;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    .hud-metrics strong {
-      color: var(--text-primary);
-      font-weight: 500;
+      width: 28px;
+      height: 14px;
     }
 
     .hud-sep {
       width: 1px;
       height: 16px;
       background: var(--border);
+      flex-shrink: 0;
     }
 
-    .hud-icon-btn {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
+    .hud-topo-group {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      color: var(--text-secondary);
-      transition: color 140ms ease, background-color 140ms ease, transform 100ms var(--ease-out);
+      gap: 2px;
     }
 
-    .hud-icon-btn:hover {
+    .hud-topo-btn {
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      transition: color 150ms ease, background-color 150ms ease, transform 100ms var(--ease-out);
+    }
+
+    .hud-topo-btn:hover {
       color: var(--text-primary);
       background: var(--surface-2);
     }
 
-    .hud-icon-btn.is-active {
-      color: var(--accent-text);
-      background: var(--accent-tint);
+    .hud-topo-btn.is-active {
+      color: var(--text-primary);
+      background: var(--surface-3);
+      font-weight: 500;
     }
 
-    .hud-icon-btn:active {
-      transform: scale(0.94);
-    }
-
-    .hud-chevron {
-      transition: transform 200ms var(--ease-out);
-    }
-
-    .signal-hud.is-open .hud-chevron {
-      transform: rotate(180deg);
+    .hud-topo-btn:active {
+      transform: scale(0.96);
     }
 
     @media (max-width: 600px) {
       .signal-hud {
-        right: 12px;
-        bottom: 12px;
+        left: 50%;
+        right: auto;
+        bottom: 14px;
+        transform: translateX(-50%);
+        max-width: calc(100vw - 24px);
       }
-      .hud-panel {
-        width: calc(100vw - 24px);
-        max-width: 320px;
+
+      .hud-audio-btn,
+      .hud-topo-btn {
+        padding: 0 8px;
+        font-size: 11.5px;
       }
     }
 
@@ -2673,61 +2534,17 @@
     </div>
   </div>
 
-  <!-- Persistent Interactive Signal Instrument (Always On Screen) -->
-  <div id="signalHud" class="signal-hud" aria-label="Interactive systems signal instrument">
-    <div id="hudPanel" class="hud-panel" role="region" aria-label="Signal instrument controls">
-      <div class="hud-panel-head">
-        <span>Signal instrument</span>
-        <span id="hudFreqReadout" class="hud-freq-readout">Idle · 0.0 px/f</span>
-      </div>
-
-      <div id="hudScopeWrap" class="hud-scope-wrap" title="Drag across waveform to synthesize signal">
-        <canvas id="hudFullWave"></canvas>
-        <span class="hud-scope-hint">Drag to modulate</span>
-      </div>
-
-      <div class="hud-group">
-        <div class="hud-row-label">
-          <span>3D manifold topology</span>
-          <span id="hudTopoLabel" class="mono" style="color: var(--text-secondary);">Torus-knot</span>
-        </div>
-        <div class="hud-seg" role="group" aria-label="3D geometry mode">
-          <button type="button" class="hud-seg-btn is-active" data-topo="torus">Torus</button>
-          <button type="button" class="hud-seg-btn" data-topo="geodesic">Geodesic</button>
-          <button type="button" class="hud-seg-btn" data-topo="lorenz">Lorenz</button>
-        </div>
-      </div>
-
-      <div class="hud-group">
-        <div class="hud-row-label">
-          <span>Angular velocity</span>
-          <span id="hudSpeedLabel" class="mono" style="color: var(--text-secondary);">1.0×</span>
-        </div>
-        <input id="hudSpeedSlider" class="hud-slider" type="range" min="0.2" max="3.0" step="0.1" value="1.0" aria-label="3D spin speed" />
-      </div>
-
-      <div class="hud-quick-row">
-        <button type="button" class="hud-seg-btn" data-open-qr>WeChat QR</button>
-        <button type="button" class="hud-seg-btn" id="hudOpenDrawerBtn">Hub ⌘K</button>
-        <button type="button" class="hud-seg-btn" id="hudScrollTopBtn">Top ↑</button>
-      </div>
-    </div>
-
-    <div class="hud-pill">
-      <canvas id="hudMiniWave" title="Open signal instrument"></canvas>
-      <div id="hudMetricsToggle" class="hud-metrics" title="Toggle signal instrument">
-        <strong id="hudFps">60</strong><span>fps</span>
-        <span style="color: var(--text-muted);">·</span>
-        <strong id="hudScrollPct">0%</strong>
-      </div>
-      <span class="hud-sep" aria-hidden="true"></span>
-      <button id="hudAudioBtn" type="button" class="hud-icon-btn" aria-label="Toggle tactile acoustic UI" aria-pressed="false" title="Toggle tactile acoustic UI">
-        <svg id="hudAudioOffIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>
-        <svg id="hudAudioOnIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-      </button>
-      <button id="hudExpandBtn" type="button" class="hud-icon-btn" aria-label="Expand signal instrument" aria-expanded="false" title="Expand signal instrument">
-        <svg class="hud-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-      </button>
+  <!-- Persistent Minimal Ambient Sound & 3D Manifold Switcher -->
+  <div id="signalHud" class="signal-hud" role="region" aria-label="Ambient sound and 3D shape switcher">
+    <button id="hudAudioBtn" type="button" class="hud-audio-btn" aria-pressed="false" title="Toggle ambient background sound">
+      <canvas id="hudMiniWave" aria-hidden="true"></canvas>
+      <span id="hudAudioLabel">Ambient</span>
+    </button>
+    <span class="hud-sep" aria-hidden="true"></span>
+    <div class="hud-topo-group" role="group" aria-label="3D manifold topology">
+      <button type="button" class="hud-topo-btn is-active" data-topo="torus">Torus</button>
+      <button type="button" class="hud-topo-btn" data-topo="geodesic">Geodesic</button>
+      <button type="button" class="hud-topo-btn" data-topo="lorenz">Lorenz</button>
     </div>
   </div>
 
@@ -3829,278 +3646,203 @@
       });
 
       // ==========================================
-      // 10. PERSISTENT SIGNAL INSTRUMENT HUD & PROCEDURAL ACOUSTIC UI
+      // 10. MINIMAL AMBIENT SOUNDSCAPE & 3D MANIFOLD SWITCHER
       // ==========================================
-      (function initSignalHud() {
-        const hud = document.getElementById("signalHud");
-        const expandBtn = document.getElementById("hudExpandBtn");
-        const metricsToggle = document.getElementById("hudMetricsToggle");
-        const miniCanvas = document.getElementById("hudMiniWave");
-        const fullCanvas = document.getElementById("hudFullWave");
-        const scopeWrap = document.getElementById("hudScopeWrap");
-        const fpsEl = document.getElementById("hudFps");
-        const scrollPctEl = document.getElementById("hudScrollPct");
-        const freqReadout = document.getElementById("hudFreqReadout");
+      (function initAmbientBar() {
         const audioBtn = document.getElementById("hudAudioBtn");
-        const audioOffIcon = document.getElementById("hudAudioOffIcon");
-        const audioOnIcon = document.getElementById("hudAudioOnIcon");
+        const audioLabel = document.getElementById("hudAudioLabel");
+        const miniCanvas = document.getElementById("hudMiniWave");
         const topoBtns = Array.from(document.querySelectorAll("[data-topo]"));
-        const topoLabel = document.getElementById("hudTopoLabel");
-        const speedSlider = document.getElementById("hudSpeedSlider");
-        const speedLabel = document.getElementById("hudSpeedLabel");
-        const hudOpenDrawerBtn = document.getElementById("hudOpenDrawerBtn");
-        const hudScrollTopBtn = document.getElementById("hudScrollTopBtn");
-        if (!hud || !miniCanvas || !fullCanvas) return;
+        if (!audioBtn || !miniCanvas) return;
 
-        // Procedural Web Audio API Micro-Sound Engine (Zero External Files)
+        // Generative Obsidian Ambient Pad (Warm Cmaj9 Drone + Breathing Filter + Soft Air)
         let audioCtx = null;
-        let soundEnabled = false;
+        let masterGain = null;
+        let mainFilter = null;
+        let ambientBuilt = false;
+        let ambientOn = false;
 
-        function ensureAudio() {
-          if (!audioCtx) {
-            const Ctx = window.AudioContext || window.webkitAudioContext;
-            if (Ctx) audioCtx = new Ctx();
+        function buildAmbientGraph() {
+          if (ambientBuilt) return;
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (!Ctx) return;
+          audioCtx = new Ctx();
+
+          masterGain = audioCtx.createGain();
+          masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+          masterGain.connect(audioCtx.destination);
+
+          mainFilter = audioCtx.createBiquadFilter();
+          mainFilter.type = "lowpass";
+          mainFilter.frequency.setValueAtTime(340, audioCtx.currentTime);
+          mainFilter.Q.setValueAtTime(1.1, audioCtx.currentTime);
+          mainFilter.connect(masterGain);
+
+          // Slow breathing filter LFO (~14s cycle)
+          const filterLfo = audioCtx.createOscillator();
+          const filterLfoGain = audioCtx.createGain();
+          filterLfo.type = "sine";
+          filterLfo.frequency.setValueAtTime(0.07, audioCtx.currentTime);
+          filterLfoGain.gain.setValueAtTime(135, audioCtx.currentTime);
+          filterLfo.connect(filterLfoGain);
+          filterLfoGain.connect(mainFilter.frequency);
+          filterLfo.start();
+
+          // Warm Cmaj9 harmonic pad voices (C2, G2, D3, B3)
+          const voices = [
+            { freq: 65.41, type: "sine", detune: 0, gain: 0.22 },
+            { freq: 98.00, type: "triangle", detune: 4, gain: 0.085 },
+            { freq: 146.83, type: "sine", detune: -5, gain: 0.065 },
+            { freq: 246.94, type: "sine", detune: 6, gain: 0.032 }
+          ];
+
+          voices.forEach((v, idx) => {
+            const osc = audioCtx.createOscillator();
+            const vGain = audioCtx.createGain();
+            osc.type = v.type;
+            osc.frequency.setValueAtTime(v.freq, audioCtx.currentTime);
+            osc.detune.setValueAtTime(v.detune, audioCtx.currentTime);
+            vGain.gain.setValueAtTime(v.gain, audioCtx.currentTime);
+
+            // Subtle shimmer LFO on upper harmonic voices
+            if (idx >= 2) {
+              const ampLfo = audioCtx.createOscillator();
+              const ampLfoGain = audioCtx.createGain();
+              ampLfo.frequency.setValueAtTime(0.045 + idx * 0.015, audioCtx.currentTime);
+              ampLfoGain.gain.setValueAtTime(v.gain * 0.45, audioCtx.currentTime);
+              ampLfo.connect(ampLfoGain);
+              ampLfoGain.connect(vGain.gain);
+              ampLfo.start();
+            }
+
+            osc.connect(vGain);
+            vGain.connect(mainFilter);
+            osc.start();
+          });
+
+          // Whisper-quiet filtered pink-noise air layer
+          const bufLen = audioCtx.sampleRate * 4;
+          const noiseBuf = audioCtx.createBuffer(1, bufLen, audioCtx.sampleRate);
+          const data = noiseBuf.getChannelData(0);
+          let b0 = 0, b1 = 0, b2 = 0;
+          for (let i = 0; i < bufLen; i++) {
+            const white = Math.random() * 2 - 1;
+            b0 = 0.997 * b0 + white * 0.029;
+            b1 = 0.985 * b1 + white * 0.032;
+            b2 = 0.950 * b2 + white * 0.048;
+            data[i] = (b0 + b1 + b2) * 0.12;
           }
-          if (audioCtx && audioCtx.state === "suspended") {
-            audioCtx.resume().catch(() => {});
-          }
-          return audioCtx;
+          const noiseSrc = audioCtx.createBufferSource();
+          noiseSrc.buffer = noiseBuf;
+          noiseSrc.loop = true;
+          const airFilter = audioCtx.createBiquadFilter();
+          airFilter.type = "bandpass";
+          airFilter.frequency.setValueAtTime(420, audioCtx.currentTime);
+          airFilter.Q.setValueAtTime(0.7, audioCtx.currentTime);
+          const airGain = audioCtx.createGain();
+          airGain.gain.setValueAtTime(0.035, audioCtx.currentTime);
+          noiseSrc.connect(airFilter);
+          airFilter.connect(airGain);
+          airGain.connect(masterGain);
+          noiseSrc.start();
+
+          ambientBuilt = true;
         }
 
-        function playTone(freq = 440, duration = 0.028, gainPeak = 0.045, type = "sine") {
-          const ctx = ensureAudio();
-          if (!ctx) return;
-          const now = ctx.currentTime;
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = type;
+        function playSoftChime(freq) {
+          if (!ambientOn || !audioCtx || !masterGain) return;
+          const now = audioCtx.currentTime;
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = "sine";
           osc.frequency.setValueAtTime(freq, now);
-          osc.frequency.exponentialRampToValueAtTime(Math.max(80, freq * 0.65), now + duration);
-          gain.gain.setValueAtTime(0.0001, now);
-          gain.gain.linearRampToValueAtTime(gainPeak, now + 0.004);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
+          g.gain.setValueAtTime(0.0001, now);
+          g.gain.linearRampToValueAtTime(0.045, now + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+          osc.connect(g);
+          g.connect(audioCtx.destination);
           osc.start(now);
-          osc.stop(now + duration + 0.01);
+          osc.stop(now + 0.48);
         }
 
-        function triggerUiTick(pitch = 480) {
-          energy = Math.min(1.0, energy + 0.35);
-          if (soundEnabled) playTone(pitch, 0.022, 0.032, "sine");
-        }
-
-        // Subtle acoustic feedback across interactive controls when sound is enabled
-        document.addEventListener("click", (e) => {
-          const target = e.target.closest("button, a, .sim-viewport");
-          if (!target) return;
-          if (target === audioBtn) return;
-          triggerUiTick(target.classList.contains("sim-viewport") ? 620 : 460);
-        });
-
-        termInput.addEventListener("keydown", () => {
-          if (soundEnabled) playTone(320 + Math.random() * 60, 0.014, 0.018, "triangle");
-          energy = Math.min(1.0, energy + 0.22);
-        });
-
-        audioBtn.addEventListener("click", () => {
-          soundEnabled = !soundEnabled;
-          audioBtn.classList.toggle("is-active", soundEnabled);
-          audioBtn.setAttribute("aria-pressed", String(soundEnabled));
-          audioOffIcon.style.display = soundEnabled ? "none" : "block";
-          audioOnIcon.style.display = soundEnabled ? "block" : "none";
-          if (soundEnabled) {
-            ensureAudio();
-            playTone(520, 0.06, 0.045, "sine");
-            setTimeout(() => playTone(780, 0.08, 0.038, "sine"), 55);
-            energy = 0.85;
+        function setAmbient(on) {
+          buildAmbientGraph();
+          if (!audioCtx || !masterGain) return;
+          if (audioCtx.state === "suspended") audioCtx.resume().catch(() => {});
+          ambientOn = on;
+          const now = audioCtx.currentTime;
+          masterGain.gain.cancelScheduledValues(now);
+          masterGain.gain.setValueAtTime(Math.max(0.0001, masterGain.gain.value), now);
+          if (ambientOn) {
+            masterGain.gain.exponentialRampToValueAtTime(0.42, now + 1.3);
+          } else {
+            masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
           }
-        });
-
-        // Expand / Collapse HUD Panel
-        let hudOpen = false;
-        function toggleHud(force) {
-          hudOpen = typeof force === "boolean" ? force : !hudOpen;
-          hud.classList.toggle("is-open", hudOpen);
-          expandBtn.setAttribute("aria-expanded", String(hudOpen));
-          if (hudOpen) resizeScopes();
+          audioBtn.classList.toggle("is-active", ambientOn);
+          audioBtn.setAttribute("aria-pressed", String(ambientOn));
+          audioLabel.textContent = ambientOn ? "Sound on" : "Ambient";
         }
 
-        expandBtn.addEventListener("click", () => toggleHud());
-        metricsToggle.addEventListener("click", () => toggleHud());
-        miniCanvas.addEventListener("click", () => toggleHud());
+        audioBtn.addEventListener("click", () => setAmbient(!ambientOn));
 
-        // 3D Topology & Speed Controls
-        const topoNames = { torus: "Torus-knot", geodesic: "Geodesic lattice", lorenz: "Lorenz attractor" };
+        // Gently shift ambient tone brightness with scroll depth
+        window.addEventListener("scroll", () => {
+          if (!ambientOn || !mainFilter || !audioCtx) return;
+          const docH = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          const pct = Math.min(1, Math.max(0, window.scrollY / docH));
+          const cutoff = 380 - pct * 140;
+          mainFilter.frequency.setTargetAtTime(cutoff, audioCtx.currentTime, 0.3);
+        }, { passive: true });
+
+        // Simple Direct 3D Topology Switcher
         topoBtns.forEach((btn) => {
           btn.addEventListener("click", () => {
             const mode = btn.dataset.topo;
             topoBtns.forEach((b) => b.classList.remove("is-active"));
             btn.classList.add("is-active");
-            if (topoLabel) topoLabel.textContent = topoNames[mode] || mode;
             window.__hero3DControl?.setTopology(mode);
-            energy = 0.9;
-            if (soundEnabled) playTone(mode === "lorenz" ? 660 : mode === "geodesic" ? 540 : 440, 0.07, 0.04, "sine");
+            playSoftChime(mode === "lorenz" ? 392 : mode === "geodesic" ? 329.63 : 261.63);
+
+            // If user scrolled past the hero, glide back up so they immediately see the 3D change
+            if (window.scrollY > window.innerHeight * 0.65) {
+              if (lenis) lenis.scrollTo(0);
+              else window.scrollTo({ top: 0, behavior: "smooth" });
+            }
           });
         });
 
-        speedSlider.addEventListener("input", () => {
-          const val = parseFloat(speedSlider.value);
-          speedLabel.textContent = `${val.toFixed(1)}×`;
-          window.__hero3DControl?.setSpeed(val);
-          energy = Math.min(1, energy + 0.25);
-        });
+        // Subtle Mini Ambient Waveform
+        const ctx = miniCanvas.getContext("2d");
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = 28, h = 14;
+        miniCanvas.width = w * dpr;
+        miniCanvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        if (hudOpenDrawerBtn) {
-          hudOpenDrawerBtn.addEventListener("click", () => {
-            toggleHud(false);
-            openDrawer();
-          });
-        }
-
-        if (hudScrollTopBtn) {
-          hudScrollTopBtn.addEventListener("click", () => {
-            if (lenis) lenis.scrollTo(0);
-            else window.scrollTo({ top: 0, behavior: "smooth" });
-          });
-        }
-
-        // Live Kinetic & Scrubbable Oscilloscope Canvases
-        const miniCtx = miniCanvas.getContext("2d");
-        const fullCtx = fullCanvas.getContext("2d");
-        let miniW = 48, miniH = 18, fullW = 270, fullH = 64;
-
-        function resizeScopes() {
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
-          miniW = 48;
-          miniH = 18;
-          miniCanvas.width = miniW * dpr;
-          miniCanvas.height = miniH * dpr;
-          miniCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-          fullW = scopeWrap.clientWidth || 270;
-          fullH = scopeWrap.clientHeight || 64;
-          fullCanvas.width = fullW * dpr;
-          fullCanvas.height = fullH * dpr;
-          fullCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        }
-        resizeScopes();
-        window.addEventListener("resize", resizeScopes);
-
-        // Kinetic Telemetry Tracking (Mouse + Scroll + Interactive Scrubbing)
-        let energy = 0.14;
         let phase = 0;
-        let waveFreq = 1.6;
-        let lastPtrX = 0, lastPtrY = 0, lastScrollY = window.scrollY;
-        let scrubbing = false;
-        let scrubFreqHz = 440;
-        let scrubLastPing = 0;
+        let amp = 0.08;
 
-        window.addEventListener("pointermove", (e) => {
-          const dist = Math.hypot(e.clientX - lastPtrX, e.clientY - lastPtrY);
-          lastPtrX = e.clientX;
-          lastPtrY = e.clientY;
-          energy = Math.min(1.0, energy + Math.min(0.25, dist * 0.004));
-        }, { passive: true });
+        function drawMini() {
+          requestAnimationFrame(drawMini);
+          const targetAmp = ambientOn ? 0.85 : 0.06;
+          amp += (targetAmp - amp) * 0.08;
+          if (!reducedMotion) phase += ambientOn ? 0.09 : 0.02;
 
-        window.addEventListener("scroll", () => {
-          const delta = Math.abs(window.scrollY - lastScrollY);
-          lastScrollY = window.scrollY;
-          energy = Math.min(1.0, energy + Math.min(0.35, delta * 0.008));
-
-          const docH = document.documentElement.scrollHeight - window.innerHeight;
-          const pct = docH > 0 ? Math.round((window.scrollY / docH) * 100) : 0;
-          scrollPctEl.textContent = `${Math.min(100, Math.max(0, pct))}%`;
-        }, { passive: true });
-
-        function handleScopeScrub(e) {
-          const rect = scopeWrap.getBoundingClientRect();
-          const nx = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-          const ny = Math.min(1, Math.max(0, 1 - (e.clientY - rect.top) / rect.height));
-          waveFreq = 1.2 + nx * 5.5;
-          energy = Math.max(0.35, ny);
-          scrubFreqHz = Math.round(180 + nx * 640);
-          freqReadout.textContent = `Synth · ${scrubFreqHz} Hz`;
-
-          const now = performance.now();
-          if (now - scrubLastPing > 65) {
-            scrubLastPing = now;
-            playTone(scrubFreqHz, 0.06, 0.035, "sine");
-          }
-        }
-
-        scopeWrap.addEventListener("pointerdown", (e) => {
-          scrubbing = true;
-          scopeWrap.setPointerCapture(e.pointerId);
-          handleScopeScrub(e);
-        });
-        scopeWrap.addEventListener("pointermove", (e) => {
-          if (scrubbing) handleScopeScrub(e);
-        });
-        const stopScrub = () => { scrubbing = false; };
-        scopeWrap.addEventListener("pointerup", stopScrub);
-        scopeWrap.addEventListener("pointercancel", stopScrub);
-
-        // Live FPS Measurement + Waveform Render Loop
-        let frames = 0;
-        let lastFpsTick = performance.now();
-
-        function drawWave(ctx, w, h, ampScale, strokeColor, lineW) {
           ctx.clearRect(0, 0, w, h);
-          const mid = h / 2;
-          const amp = (h * 0.38) * Math.min(1, energy) * ampScale;
-
-          if (w > 100) {
-            ctx.strokeStyle = "rgba(236, 240, 248, 0.06)";
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(0, mid);
-            ctx.lineTo(w, mid);
-            ctx.stroke();
-          }
-
-          ctx.strokeStyle = strokeColor;
-          ctx.lineWidth = lineW;
+          ctx.strokeStyle = ambientOn ? "#8bb8ff" : "rgba(155, 163, 180, 0.55)";
+          ctx.lineWidth = 1.3;
           ctx.beginPath();
-          for (let x = 0; x <= w; x += 2) {
+          const mid = h / 2;
+          for (let x = 0; x <= w; x += 1.5) {
             const norm = x / w;
             const env = Math.sin(norm * Math.PI);
-            const y = mid + Math.sin(norm * Math.PI * 2 * waveFreq + phase) * amp * env
-                          + Math.sin(norm * Math.PI * 4 * waveFreq - phase * 1.4) * (amp * 0.25) * env;
+            const y = mid + Math.sin(norm * Math.PI * 3 + phase) * (h * 0.36) * amp * env;
             if (x === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
           }
           ctx.stroke();
         }
-
-        function hudLoop(now) {
-          requestAnimationFrame(hudLoop);
-          frames++;
-          if (now - lastFpsTick >= 500) {
-            const fps = Math.round((frames * 1000) / (now - lastFpsTick));
-            fpsEl.textContent = String(Math.min(120, fps));
-            if (!scrubbing) {
-              freqReadout.textContent = energy > 0.2 ? `Active · ${(energy * 100).toFixed(0)}% load` : `Idle · ${fps} fps`;
-            }
-            frames = 0;
-            lastFpsTick = now;
-          }
-
-          if (!reducedMotion) {
-            phase += 0.08 + energy * 0.14;
-            if (!scrubbing) {
-              energy = Math.max(0.12, energy * 0.94);
-              waveFreq += (1.7 - waveFreq) * 0.04;
-            }
-          }
-
-          drawWave(miniCtx, miniW, miniH, 1.0, soundEnabled ? "#4f8ff7" : "#8bb8ff", 1.35);
-          if (hudOpen) {
-            drawWave(fullCtx, fullW, fullH, 1.0, "#4f8ff7", 1.5);
-          }
-        }
-
-        requestAnimationFrame(hudLoop);
+        drawMini();
       })();
     })();
   </script>
