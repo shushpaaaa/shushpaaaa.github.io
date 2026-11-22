@@ -2541,9 +2541,9 @@
 
   <!-- Persistent Minimal Music & 3D Manifold Switcher -->
   <div id="signalHud" class="signal-hud" role="region" aria-label="Background music and 3D shape switcher">
-    <button id="hudAudioBtn" type="button" class="hud-audio-btn" aria-pressed="false" title="Mehdi Faraji — Seytan Olum · Click to play or pause">
+    <button id="hudAudioBtn" type="button" class="hud-audio-btn is-active" aria-pressed="true" title="Mehdi Faraji — Seytan Olum · Click to turn music off or on">
       <canvas id="hudMiniWave" aria-hidden="true"></canvas>
-      <span id="hudAudioLabel">Music</span>
+      <span id="hudAudioLabel">Sound on</span>
     </button>
     <span class="hud-sep" aria-hidden="true"></span>
     <div class="hud-topo-group" role="group" aria-label="3D manifold topology">
@@ -3664,8 +3664,10 @@
         let ytPlayer = null;
         let ytReady = false;
         let ytFailed = false;
-        let wantPlay = false;
+        // Start with music ON by default; user can toggle OFF or ON anytime
+        let wantPlay = true;
         let isPlaying = false;
+        let isAudible = false;
 
         // Built-in generative ambient fallback (activates automatically if YouTube is blocked/offline)
         let audioCtx = null;
@@ -3713,18 +3715,56 @@
           masterGain.gain.setValueAtTime(Math.max(0.0001, masterGain.gain.value), now);
           masterGain.gain.exponentialRampToValueAtTime(on ? 0.38 : 0.0001, now + (on ? 1.1 : 0.5));
           isPlaying = on;
+          isAudible = on;
           syncAudioUI();
         }
 
         function syncAudioUI(statusText) {
-          audioBtn.classList.toggle("is-active", isPlaying || wantPlay);
-          audioBtn.setAttribute("aria-pressed", String(isPlaying));
+          audioBtn.classList.toggle("is-active", wantPlay);
+          audioBtn.setAttribute("aria-pressed", String(wantPlay));
           if (statusText) {
             audioLabel.textContent = statusText;
           } else {
-            audioLabel.textContent = isPlaying ? "Playing" : "Music";
+            audioLabel.textContent = wantPlay ? "Sound on" : "Sound off";
           }
         }
+
+        function tryStartUnmuted() {
+          if (!wantPlay) return;
+          if (ytFailed) {
+            setFallback(true);
+            return;
+          }
+          if (ytReady && ytPlayer) {
+            try {
+              ytPlayer.setVolume(45);
+              ytPlayer.unMute();
+              ytPlayer.playVideo();
+              isAudible = !ytPlayer.isMuted();
+            } catch (_) {}
+          }
+        }
+
+        // Unlock unmuted audio on the first user gesture if browser autoplay policy paused/muted initial start
+        function onFirstInteraction(e) {
+          if (!wantPlay) return;
+          if (e.target && e.target.closest && e.target.closest("#hudAudioBtn")) return;
+          if (isPlaying && isAudible) {
+            cleanupUnlockListeners();
+            return;
+          }
+          tryStartUnmuted();
+        }
+
+        function cleanupUnlockListeners() {
+          window.removeEventListener("pointerdown", onFirstInteraction, true);
+          window.removeEventListener("keydown", onFirstInteraction, true);
+          window.removeEventListener("touchstart", onFirstInteraction, true);
+        }
+
+        window.addEventListener("pointerdown", onFirstInteraction, true);
+        window.addEventListener("keydown", onFirstInteraction, true);
+        window.addEventListener("touchstart", onFirstInteraction, true);
 
         // Load official YouTube IFrame Player API asynchronously
         const ytScript = document.createElement("script");
@@ -3743,7 +3783,7 @@
             height: "1",
             videoId: YT_VIDEO_ID,
             playerVars: {
-              autoplay: 0,
+              autoplay: 1,
               controls: 0,
               disablekb: 1,
               fs: 0,
@@ -3759,18 +3799,31 @@
                 ytReady = true;
                 e.target.setVolume(45);
                 if (wantPlay) {
-                  e.target.unMute();
-                  e.target.playVideo();
+                  // Attempt immediate unmuted playback first
+                  try {
+                    e.target.unMute();
+                    e.target.playVideo();
+                  } catch (_) {}
+                  // If browser blocks unmuted autoplay, pre-buffer muted so first gesture unlocks instantly
+                  setTimeout(() => {
+                    if (wantPlay && e.target.getPlayerState() !== YT.PlayerState.PLAYING) {
+                      try {
+                        e.target.mute();
+                        e.target.playVideo();
+                      } catch (_) {}
+                    }
+                  }, 600);
                 }
               },
               onStateChange: function (e) {
                 if (e.data === YT.PlayerState.PLAYING) {
                   isPlaying = true;
-                  syncAudioUI("Playing");
+                  isAudible = !e.target.isMuted();
+                  if (isAudible) cleanupUnlockListeners();
+                  syncAudioUI("Sound on");
                 } else if (e.data === YT.PlayerState.PAUSED) {
                   isPlaying = false;
-                  wantPlay = false;
-                  syncAudioUI("Music");
+                  if (!wantPlay) syncAudioUI("Sound off");
                 } else if (e.data === YT.PlayerState.ENDED) {
                   // Explicit cyclic loop guarantee
                   e.target.seekTo(0);
@@ -3779,56 +3832,39 @@
               },
               onError: function () {
                 ytFailed = true;
-                if (wantPlay) setFallback(true);
               }
             }
           });
         };
 
-        let fallbackTimer = null;
+        // Failover mark if YouTube API is unreachable in restricted networks
+        setTimeout(() => {
+          if (!ytReady) ytFailed = true;
+        }, 5500);
 
         function toggleMusic() {
-          if (isPlaying || wantPlay) {
+          if (wantPlay) {
+            // User explicitly turned music OFF
             wantPlay = false;
-            clearTimeout(fallbackTimer);
+            cleanupUnlockListeners();
             if (ytReady && ytPlayer) {
               try { ytPlayer.pauseVideo(); } catch (_) {}
             }
             if (fallbackBuilt) setFallback(false);
             isPlaying = false;
-            syncAudioUI("Music");
+            isAudible = false;
+            syncAudioUI("Sound off");
             return;
           }
 
+          // User explicitly turned music ON
           wantPlay = true;
-          if (ytFailed) {
-            setFallback(true);
-            return;
-          }
-
-          if (ytReady && ytPlayer) {
-            syncAudioUI("Loading…");
-            try {
-              ytPlayer.setVolume(45);
-              ytPlayer.unMute();
-              ytPlayer.playVideo();
-            } catch (_) {
-              setFallback(true);
-            }
-          } else {
-            syncAudioUI("Loading…");
-            // If YouTube API is unreachable within 4.5s (e.g. no VPN in China), smoothly engage ambient fallback
-            clearTimeout(fallbackTimer);
-            fallbackTimer = setTimeout(() => {
-              if (wantPlay && !isPlaying) {
-                ytFailed = true;
-                setFallback(true);
-              }
-            }, 4500);
-          }
+          syncAudioUI("Sound on");
+          tryStartUnmuted();
         }
 
         audioBtn.addEventListener("click", toggleMusic);
+        syncAudioUI("Sound on");
 
         // Simple Direct 3D Topology Switcher
         topoBtns.forEach((btn) => {
