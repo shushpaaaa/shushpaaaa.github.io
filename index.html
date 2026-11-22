@@ -3,756 +3,1419 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Olzhas Huseynzade — Computer Science & Systems</title>
-  <meta name="description" content="Olzhas Huseynzade — Computer Science & Technology at Harbin Institute of Technology, Shenzhen (HITSZ). Autonomous agent architectures and systems engineering." />
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <title>Olzhas Huseynzade — Systems Architecture & Autonomous AI</title>
+  <meta name="description" content="Olzhas Huseynzade — Computer Science & Technology at Harbin Institute of Technology, Shenzhen (HITSZ). Native tools in Rust & C++, Apple hardware instrumentation, and autonomous multi-agent systems." />
+  <meta name="theme-color" content="#08090c" />
 
-  <!-- GSAP & Lenis via CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <!-- Core Motion, Smooth Scroll & 3D Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-  <!-- Three.js for Hero 3D Systems Model -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <style>
     :root {
-      /* Palette: Ink Neutral Ramp (Unslop & Taste & Impeccable) */
-      --bg: #07080d;
-      --bg-alt: #0b0d14;
-      --surface: #11141c;
-      --surface-raised: #181d28;
-      --surface-subtle: #131722;
-      --border: rgba(238, 240, 245, 0.08);
-      --border-hover: rgba(238, 240, 245, 0.18);
-      --text-primary: #eef0f5;
-      --text-secondary: #a3a9b8;
-      --text-muted: #7a8296;
-      --accent: #3b82f6;
-      --accent-soft: rgba(59, 130, 246, 0.12);
-      --status-active: #4cc38a;
-      
-      /* Typography System (Impeccable & Taste Craft) */
-      --font-display: 'Instrument Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --font-serif: 'Instrument Serif', Georgia, serif;
-      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      /* Tinted Obsidian Ink Ramp (Single Neutral System) */
+      --bg: #08090c;
+      --surface-1: #0e1015;
+      --surface-2: #14171f;
+      --surface-3: #1b1f2a;
+      --border: rgba(236, 240, 248, 0.08);
+      --border-strong: rgba(236, 240, 248, 0.16);
+      --border-focus: rgba(79, 143, 247, 0.65);
 
-      /* Motion & Easing Constants */
-      --ease-out-quint: cubic-bezier(.23, 1, .32, 1);
-      --ease-in-cubic: cubic-bezier(.32, 0, .67, 0);
+      /* Foreground Hierarchy (>= 4.5:1 on #08090c) */
+      --text-primary: #f0f2f7;
+      --text-secondary: #9ba3b4;
+      --text-muted: #767f94;
+
+      /* Single Accent Color + Quiet Availability Dot */
+      --accent: #4f8ff7;
+      --accent-tint: rgba(79, 143, 247, 0.1);
+      --accent-border: rgba(79, 143, 247, 0.28);
+      --accent-text: #8bb8ff;
+      --status-online: #45b884;
+
+      /* Editorial Typography System */
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-serif: 'Instrument Serif', Georgia, "Times New Roman", serif;
+      --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+      /* Custom Motion Curves (Emil Kowalski / Apple Physics) */
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+      --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+      /* 4px Spacing Scale & Proportional Radii */
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    /* Browser Surface Craft */
+    ::selection {
+      background: rgba(79, 143, 247, 0.28);
+      color: var(--text-primary);
+    }
+
+    html {
+      background-color: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(236, 240, 248, 0.16) var(--bg);
     }
 
     html.lenis, html.lenis body {
       height: auto;
     }
 
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(236, 240, 248, 0.14);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(236, 240, 248, 0.24);
+    }
+
     body {
       background-color: var(--bg);
       color: var(--text-primary);
-      font-family: var(--font-sans);
-      min-height: 100vh;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-variant-numeric: tabular-nums;
       overflow-x: hidden;
       position: relative;
-    }
-
-    /* Ambient React-Bits Background Canvas (Interactive Dot Matrix + Deep Ink Sheen) */
-    #bgCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.85;
+      min-height: 100vh;
     }
 
     a {
       color: inherit;
       text-decoration: none;
+      text-underline-offset: 4px;
     }
 
-    /* Impeccable Typography Balance */
-    h1, h2, h3, h4 {
-      text-wrap: balance;
-      color: var(--text-primary);
+    button {
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      cursor: pointer;
     }
 
-    p {
-      text-wrap: pretty;
+    :focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+      border-radius: 4px;
     }
 
-    .shell {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 32px 24px 120px;
-      position: relative;
-      z-index: 1;
+    code, .mono {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
     }
 
-    /* Navigation */
-    nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 48px;
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Fixed Top Scroll Progress Hairline */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: transparent;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .scroll-progress-bar {
+      height: 100%;
+      width: 100%;
+      background: var(--accent);
+      transform-origin: left center;
+      transform: scaleX(0);
+      will-change: transform;
+    }
+
+    /* Ambient Quiet Dot Matrix Background Canvas */
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Sticky Top Navigation Chrome */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: rgba(8, 9, 12, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
 
-    .nav-brand {
+    .header-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 15px;
-      color: var(--text-primary);
+      justify-content: space-between;
+      gap: 24px;
     }
 
-    .brand-name-first {
+    .brand-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: opacity 160ms ease;
+    }
+
+    .brand-link:hover {
+      opacity: 0.88;
+    }
+
+    .brand-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--status-online);
+      flex-shrink: 0;
+      margin-right: 2px;
+    }
+
+    .brand-first {
       font-family: var(--font-serif);
       font-style: italic;
-      font-size: 21px;
+      font-weight: 400;
+      font-size: 22px;
       line-height: 1;
-      color: #93c5fd;
-      letter-spacing: 0.01em;
+      color: var(--accent-text);
+      letter-spacing: 0.005em;
     }
 
-    .brand-name-last {
+    .brand-last {
       font-family: var(--font-sans);
-      font-weight: 600;
+      font-weight: 500;
       font-size: 14px;
       letter-spacing: -0.02em;
       color: var(--text-primary);
     }
 
-    .brand-sep {
+    .brand-divider {
       font-family: var(--font-mono);
-      color: var(--text-muted);
-      font-weight: 400;
-      font-size: 13px;
-    }
-
-    .brand-affiliation {
-      font-family: var(--font-mono);
-      color: var(--text-secondary);
-      font-weight: 500;
       font-size: 12px;
-      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin: 0 2px;
     }
 
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      background-color: var(--status-active);
-      border-radius: 50%;
-      flex-shrink: 0;
-      box-shadow: 0 0 6px rgba(76, 195, 138, 0.4);
+    .brand-org {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
     }
 
-    .nav-meta {
+    .nav-links {
       display: flex;
       align-items: center;
-      gap: 16px;
-      font-family: var(--font-mono);
+      gap: 24px;
+    }
+
+    .nav-links a {
       font-size: 13px;
-      font-variant-numeric: tabular-nums;
-      color: var(--text-muted);
+      font-weight: 400;
+      color: var(--text-secondary);
+      transition: color 160ms ease;
+      position: relative;
+      padding: 4px 0;
     }
 
-    .nav-meta a {
-      transition: color 0.15s ease;
-    }
-
-    .nav-meta a:hover {
+    .nav-links a:hover,
+    .nav-links a.is-active {
       color: var(--text-primary);
     }
 
-    /* The Only Project Trigger Button (Top Nav) */
-    .nav-projects-trigger {
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Unified Top-Nav Projects Hub Trigger */
+    .projects-trigger {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 14px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-1);
+      border: 1px solid var(--border-strong);
+      font-size: 13px;
+      font-weight: 500;
       color: var(--text-primary);
-      font-family: var(--font-mono);
-      font-size: 12px;
-      cursor: pointer;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-      transition: background-color 0.15s ease, border-color 0.15s ease, transform 100ms ease-out;
+      transition: background-color 160ms ease, border-color 160ms ease, transform 120ms var(--ease-out);
     }
 
-    .nav-projects-trigger:hover {
-      background: var(--surface-raised);
-      border-color: var(--border-hover);
-      color: #ffffff;
-      transform: translateY(-1px);
+    .projects-trigger:hover {
+      background: var(--surface-2);
+      border-color: var(--accent-border);
     }
 
-    .nav-projects-trigger:active {
+    .projects-trigger:active {
       transform: scale(0.97);
     }
 
-    .nav-projects-dot {
+    .trigger-dot {
       width: 6px;
       height: 6px;
-      background: #60a5fa;
       border-radius: 50%;
+      background: var(--accent);
     }
 
-    .keycap {
-      padding: 1px 5px;
-      background: var(--surface-subtle);
-      border: 1px solid var(--border);
+    .trigger-count {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 6px;
       border-radius: 4px;
-      font-size: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1;
       color: var(--text-muted);
     }
 
-    /* Hero Section */
-    .hero {
-      padding: 72px 0 64px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 32px;
-      position: relative;
-    }
-
-    @media (min-width: 960px) {
-      .hero {
-        grid-template-columns: 1.15fr 0.85fr;
-        align-items: center;
-        gap: 40px;
-        max-width: 1080px;
-      }
-    }
-
-    .hero-text {
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-      position: relative;
-      z-index: 2;
-    }
-
-    /* Seamless Abstract 3D Model: No box, no borders, unboxed background integration */
-    .hero-3d-wrapper {
-      position: relative;
-      width: 100%;
-      height: 520px;
-      display: flex;
+    .icon-link {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      user-select: none;
-      touch-action: none;
-      cursor: grab;
-      background: transparent;
-      border: none;
-      outline: none;
-      overflow: visible;
-      pointer-events: auto;
+      color: var(--text-secondary);
+      border: 1px solid transparent;
+      transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, transform 120ms var(--ease-out);
     }
 
-    .hero-3d-wrapper:active {
+    .icon-link:hover {
+      color: var(--text-primary);
+      background: var(--surface-1);
+      border-color: var(--border);
+    }
+
+    .icon-link:active {
+      transform: scale(0.95);
+    }
+
+    /* Main Page Shell */
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* =========================================
+       HERO SECTION — Full-Bleed Seamless 3D + Editorial Type
+       ========================================= */
+    .hero-band {
+      position: relative;
+      min-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    /* Full-bleed Hero 3D Canvas — Zero Clipping, Zero Box */
+    #hero3dCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+      outline: none;
+      cursor: grab;
+      touch-action: pan-y;
+    }
+
+    #hero3dCanvas:active {
       cursor: grabbing;
     }
 
-    #hero3dCanvas {
-      width: 100% !important;
-      height: 100% !important;
-      display: block;
-      outline: none;
-      background: transparent;
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1180px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 88px 24px 48px;
+      pointer-events: none;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-copy {
+      max-width: 660px;
       pointer-events: auto;
     }
 
-    .badge-status {
+    .hero-affiliation {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 5px 12px;
-      background: var(--surface-subtle);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-secondary);
-      letter-spacing: 0.01em;
-      width: fit-content;
+      margin-bottom: 24px;
     }
 
-    h1 {
-      font-size: 54px;
-      font-weight: 400;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
+    .hero-affiliation .sep {
+      color: var(--text-muted);
+    }
+
+    .hero-title {
+      font-size: clamp(40px, 5.4vw, 66px);
+      font-weight: 500;
+      line-height: 1.06;
+      letter-spacing: -0.03em;
       color: var(--text-primary);
       text-wrap: balance;
+      margin-bottom: 28px;
     }
 
-    .font-sans-title {
+    .hero-title .t-sans {
       font-family: var(--font-sans);
       font-weight: 500;
       letter-spacing: -0.035em;
       color: var(--text-primary);
     }
 
-    .font-serif-title {
+    .hero-title .t-serif {
       font-family: var(--font-serif);
       font-style: italic;
       font-weight: 400;
-      font-size: 1.14em;
-      line-height: 1.02;
+      font-size: 1.13em;
       letter-spacing: -0.005em;
-      color: #93c5fd;
-      text-shadow: 0 0 30px rgba(59, 130, 246, 0.16);
+      color: var(--accent-text);
     }
 
-    .hero-bio {
-      font-family: var(--font-sans);
+    .hero-lead {
       font-size: 17px;
-      font-weight: 400;
+      line-height: 1.65;
       color: var(--text-secondary);
-      line-height: 1.68;
-      letter-spacing: -0.01em;
-      max-width: 720px;
+      max-width: 58ch;
       text-wrap: pretty;
+      margin-bottom: 36px;
     }
 
-    .hero-bio strong {
+    .hero-lead strong {
       color: var(--text-primary);
       font-weight: 500;
     }
 
-    .hero-tags {
+    .hero-cta-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .meta-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-variant-numeric: tabular-nums;
-      color: var(--text-muted);
-    }
-
-    .status-badge-active {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 12px;
-      background: rgba(76, 195, 138, 0.08);
-      border: 1px solid rgba(76, 195, 138, 0.22);
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 500;
-      font-variant-numeric: tabular-nums;
-      color: #6ee7b7;
-      width: fit-content;
-    }
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: #86efac;
-    }
-
-    .status-badge-active .dot {
-      width: 6px;
-      height: 6px;
-      background: #4cc38a;
-      border-radius: 50%;
-    }
-
-    .hero-actions {
-      display: flex;
       align-items: center;
       gap: 12px;
-      margin-top: 16px;
-      flex-wrap: wrap;
     }
 
+    /* Buttons (Calm, High-Contrast, Crisp Press Feedback) */
     .btn {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-      height: 42px;
-      padding: 0 18px;
-      border-radius: 8px;
+      height: 44px;
+      padding: 0 20px;
+      border-radius: var(--radius-sm);
       font-size: 14px;
       font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.15s ease, border-color 0.15s ease, transform 100ms ease-out;
+      letter-spacing: -0.01em;
+      transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out);
+      white-space: nowrap;
     }
 
     .btn:active {
       transform: scale(0.97);
     }
 
-    .btn-primary {
-      background-color: var(--text-primary);
-      color: var(--bg);
-      border: 1px solid transparent;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    }
-
-    .btn-primary:hover {
-      background-color: #ffffff;
-      transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-      background-color: var(--surface);
-      color: var(--text-primary);
-      border: 1px solid var(--border);
-    }
-
-    .btn-secondary:hover {
-      background-color: var(--surface-raised);
-      border-color: var(--border-hover);
-      transform: translateY(-1px);
-    }
-
     .btn svg {
       width: 16px;
       height: 16px;
-      stroke: currentColor;
       stroke-width: 1.5;
-      fill: none;
-    }
-
-    /* Section Headers */
-    .section-wrap {
-      margin-top: 80px;
-    }
-
-    .section-title {
-      font-size: 13px;
-      font-weight: 500;
-      font-family: var(--font-mono);
-      color: var(--text-muted);
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      letter-spacing: 0.05em;
-    }
-
-    .section-title::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ========================================================
-       INTERACTIVE TERMINAL / CONSOLE BOX
-       Fully interactive with working shell commands
-    ======================================================== */
-    .interactive-terminal {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      font-family: var(--font-mono);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
-      transition: border-color 0.2s ease;
-    }
-
-    .interactive-terminal:focus-within {
-      border-color: var(--border-hover);
-    }
-
-    .terminal-topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      background: var(--surface-subtle);
-      border-bottom: 1px solid var(--border);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .terminal-controls {
-      display: flex;
-      gap: 6px;
-    }
-
-    .terminal-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: rgba(238, 240, 245, 0.15);
-    }
-
-    .terminal-screen {
-      padding: 18px 20px;
-      font-size: 13px;
-      line-height: 1.6;
-      max-height: 320px;
-      overflow-y: auto;
-      color: var(--text-secondary);
-    }
-
-    .term-output-block {
-      margin-bottom: 10px;
-    }
-
-    .term-prompt-line {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 6px;
-    }
-
-    .term-prompt-label {
-      color: #60a5fa;
       flex-shrink: 0;
     }
 
-    .term-input {
+    .btn-primary {
+      background: var(--text-primary);
+      color: var(--bg);
+      border: 1px solid var(--text-primary);
+    }
+
+    .btn-primary:hover {
+      background: #dce3f2;
+      border-color: #dce3f2;
+    }
+
+    .btn-secondary {
+      background: rgba(14, 16, 21, 0.84);
+      color: var(--text-primary);
+      border: 1px solid var(--border-strong);
+      backdrop-filter: blur(8px);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-2);
+      border-color: rgba(236, 240, 248, 0.28);
+    }
+
+    .btn-ghost {
       background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text-primary);
-      font-family: var(--font-mono);
-      font-size: 13px;
-      flex: 1;
-      caret-color: #60a5fa;
-    }
-
-    .term-quick-chips {
-      padding: 10px 16px;
-      border-top: 1px solid var(--border);
-      background: var(--surface-subtle);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-    }
-
-    .term-chip {
-      padding: 2px 8px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
       color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.15s ease;
+      border: 1px solid var(--border);
+      height: 36px;
+      padding: 0 12px;
+      font-size: 13px;
     }
 
-    .term-chip:hover {
-      background: var(--surface-raised);
-      border-color: var(--border-hover);
+    .btn-ghost:hover {
       color: var(--text-primary);
+      background: var(--surface-1);
+      border-color: var(--border-strong);
     }
 
-    /* ========================================================
-       IN-PAGE FULL PROJECT CASE STUDIES
-       Substantial depth and detailed specifications
-    ======================================================== */
-    .case-studies-grid {
-      display: flex;
-      flex-direction: column;
+    /* Hero Bottom Metadata Ledger Strip */
+    .hero-ledger-wrap {
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid var(--border);
+      background: rgba(8, 9, 12, 0.65);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-ledger {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 24px;
     }
 
-    .case-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 32px;
+    .ledger-cell {
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+      gap: 4px;
     }
 
-    .case-card:hover {
-      border-color: var(--border-hover);
-      background: var(--surface-raised);
-      transform: translateY(-2px);
+    .ledger-label {
+      font-size: 12px;
+      color: var(--text-muted);
     }
 
-    .case-card-header {
+    .ledger-value {
+      font-size: 14px;
+      color: var(--text-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* =========================================
+       EDITORIAL SECTIONS
+       ========================================= */
+    .section {
+      padding: 112px 0 0;
+    }
+
+    .section-header {
       display: flex;
+      align-items: flex-end;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
+      gap: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 48px;
       flex-wrap: wrap;
     }
 
-    .case-badge-row {
+    .section-heading {
+      font-size: clamp(28px, 3.2vw, 40px);
+      font-weight: 500;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      text-wrap: balance;
+    }
+
+    .section-heading .serif-accent {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 1.12em;
+      color: var(--accent-text);
+    }
+
+    .section-sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      max-width: 44ch;
+    }
+
+    /* =========================================
+       FLAGSHIP SPREAD — GEOSHIFT + LIVE SIMULATOR
+       ========================================= */
+    .flagship-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: start;
+      padding-bottom: 64px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-meta-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .tag-pill.accent {
+      background: var(--accent-tint);
+      border-color: var(--accent-border);
+      color: var(--accent-text);
+      font-family: var(--font-mono);
+    }
+
+    .flagship-title {
+      font-size: clamp(24px, 2.6vw, 32px);
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      line-height: 1.18;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .flagship-desc {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      max-width: 60ch;
+      text-wrap: pretty;
+      margin-bottom: 32px;
+    }
+
+    .flagship-desc strong {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .flagship-desc code {
+      font-size: 13px;
+      color: var(--accent-text);
+      background: var(--surface-1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    /* Clean Hairline Spec Ledger (No Nested Boxes) */
+    .spec-ledger {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-top: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .spec-row {
+      padding: 16px 16px 16px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .spec-key {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .spec-val {
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 400;
+    }
+
+    /* Verified Binary Downloads */
+    .download-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .download-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .download-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-1);
+      border: 1px solid var(--border-strong);
+      font-size: 13px;
+      color: var(--text-primary);
+      transition: background-color 160ms ease, border-color 160ms ease, transform 120ms var(--ease-out);
+    }
+
+    .dl-btn:hover {
+      background: var(--surface-2);
+      border-color: var(--accent-border);
+    }
+
+    .dl-btn:active {
+      transform: scale(0.97);
+    }
+
+    .dl-size {
       font-family: var(--font-mono);
       font-size: 11px;
       color: var(--text-muted);
     }
 
-    .case-pill-version {
-      padding: 2px 8px;
-      background: rgba(59, 130, 246, 0.12);
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: 4px;
-      color: #93c5fd;
+    /* Interactive GeoShift Telemetry Instrument Panel */
+    .instrument-panel {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    .case-title {
-      font-size: 24px;
+    .instrument-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .instrument-title {
+      font-size: 13px;
       font-weight: 500;
       color: var(--text-primary);
-      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .case-desc {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.65;
-      max-width: 800px;
+    .instrument-state {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--status-online);
     }
 
-    .case-specs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      padding: 16px;
-      background: var(--surface-subtle);
+    .sim-viewport {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      border-radius: var(--radius-md);
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      overflow: hidden;
+      cursor: crosshair;
+      user-select: none;
+    }
+
+    .sim-grid-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .sim-crosshair-x,
+    .sim-crosshair-y {
+      position: absolute;
+      background: rgba(79, 143, 247, 0.28);
+      pointer-events: none;
+      transition: transform 240ms var(--ease-out);
+    }
+
+    .sim-crosshair-x {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+    }
+
+    .sim-crosshair-y {
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 100%;
+    }
+
+    .sim-pin {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      margin-left: -6px;
+      margin-top: -6px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--text-primary);
+      pointer-events: none;
+      transition: transform 240ms var(--ease-out);
+    }
+
+    .sim-hint {
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .sim-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preset-btn {
+      height: 32px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease, transform 120ms var(--ease-out);
+    }
+
+    .preset-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+
+    .preset-btn.is-active {
+      color: var(--accent-text);
+      background: var(--accent-tint);
+      border-color: var(--accent-border);
+    }
+
+    .preset-btn:active {
+      transform: scale(0.97);
+    }
+
+    .telemetry-readout {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
       font-family: var(--font-mono);
       font-size: 12px;
     }
 
-    .spec-item {
+    .tele-item {
       display: flex;
       flex-direction: column;
       gap: 2px;
     }
 
-    .spec-label {
-      color: var(--text-muted);
+    .tele-label {
       font-size: 11px;
+      color: var(--text-muted);
     }
 
-    .spec-value {
+    .tele-val {
       color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
     }
 
-    .case-downloads {
+    .sim-footer {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
       align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
     }
 
-    .btn-download {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      height: 36px;
-      padding: 0 14px;
-      background: var(--surface-subtle);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+    .sim-packet {
       font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--text-primary);
-      transition: all 0.15s ease;
+      font-size: 11px;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    .btn-download:hover {
-      background: var(--surface-raised);
-      border-color: var(--border-hover);
-      color: #ffffff;
-      transform: translateY(-1px);
-    }
-
-    /* Systems Toolkit Grid */
-    .toolkit-grid {
+    /* =========================================
+       SECONDARY ARCHITECTURAL WORK — AGENT ENGINE
+       ========================================= */
+    .secondary-spread {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      padding: 64px 0;
+      border-bottom: 1px solid var(--border);
     }
 
-    .toolkit-card {
-      background: var(--surface);
+    .pipeline-board {
+      background: var(--surface-1);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-lg);
       padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
 
-    .toolkit-card h3 {
+    .pipeline-steps {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .pipe-node {
+      text-align: left;
+      padding: 16px;
+      border-radius: var(--radius-md);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: border-color 160ms ease, background-color 160ms ease, transform 120ms var(--ease-out);
+    }
+
+    .pipe-node:hover,
+    .pipe-node.is-active {
+      background: var(--surface-2);
+      border-color: var(--accent-border);
+    }
+
+    .pipe-node:active {
+      transform: scale(0.98);
+    }
+
+    .pipe-step-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-text);
+    }
+
+    .pipe-step-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .pipe-detail {
+      padding: 16px;
+      border-radius: var(--radius-md);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      min-height: 84px;
+    }
+
+    .pipe-detail strong {
+      color: var(--text-primary);
+      font-weight: 500;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* =========================================
+       OPEN-SOURCE ARCHIVE LEDGER (Clean Hairline Rows)
+       ========================================= */
+    .archive-ledger {
+      padding-top: 48px;
+    }
+
+    .archive-ledger-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 16px;
+    }
+
+    .archive-ledger-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .repo-list {
+      border-top: 1px solid var(--border);
+    }
+
+    .repo-row {
+      display: grid;
+      grid-template-columns: 220px 1fr 110px 32px;
+      align-items: center;
+      gap: 24px;
+      padding: 20px 12px;
+      border-bottom: 1px solid var(--border);
+      transition: background-color 160ms ease;
+    }
+
+    .repo-row:hover {
+      background: var(--surface-1);
+    }
+
+    .repo-row:hover .repo-arrow {
+      transform: translate(3px, -3px);
+      color: var(--text-primary);
+    }
+
+    .repo-name {
       font-size: 15px;
       font-weight: 500;
       color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
-    .toolkit-items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+    .repo-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
     }
 
-    .toolkit-tag {
+    .repo-lang {
       font-family: var(--font-mono);
       font-size: 12px;
-      padding: 4px 10px;
-      background: var(--surface-subtle);
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .repo-arrow {
+      color: var(--text-muted);
+      display: inline-flex;
+      justify-content: flex-end;
+      transition: transform 180ms var(--ease-out), color 160ms ease;
+    }
+
+    /* =========================================
+       INTERACTIVE SYSTEMS CONSOLE
+       ========================================= */
+    .console-shell {
+      background: var(--surface-1);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .console-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .console-host {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       color: var(--text-secondary);
     }
 
-    /* SLIDING PROJECTS DRAWER */
+    .console-body {
+      padding: 20px;
+      min-height: 216px;
+      max-height: 320px;
+      overflow-y: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-secondary);
+    }
+
+    .console-entry {
+      margin-bottom: 12px;
+    }
+
+    .console-entry:last-child {
+      margin-bottom: 0;
+    }
+
+    .console-cmd-echo {
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .console-prompt-prefix {
+      color: var(--accent-text);
+      margin-right: 8px;
+    }
+
+    .console-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+
+    .console-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      outline: none;
+      caret-color: var(--accent);
+    }
+
+    .console-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .console-chips {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-1);
+    }
+
+    .console-chips-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+
+    .cmd-chip {
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: color 150ms ease, border-color 150ms ease, transform 120ms var(--ease-out);
+    }
+
+    .cmd-chip:hover {
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+
+    .cmd-chip:active {
+      transform: scale(0.96);
+    }
+
+    /* =========================================
+       CAPABILITIES LEDGER (3-Column Architectural Rules)
+       ========================================= */
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .cap-col {
+      border-top: 1px solid var(--border-strong);
+      padding-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cap-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .cap-head svg {
+      width: 18px;
+      height: 18px;
+      color: var(--accent-text);
+      stroke-width: 1.5;
+      flex-shrink: 0;
+    }
+
+    .cap-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cap-list li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cap-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .cap-note {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* =========================================
+       ACADEMIC CONTEXT & CONTACT BAND
+       ========================================= */
+    .closing-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .academic-block h3 {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .academic-meta {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .academic-desc {
+      font-size: 15px;
+      line-height: 1.68;
+      color: var(--text-secondary);
+      max-width: 58ch;
+      text-wrap: pretty;
+    }
+
+    .contact-panel {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contact-panel h3 {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .contact-email-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+
+    .contact-email-text {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .copy-btn {
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 4px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-primary);
+      flex-shrink: 0;
+      transition: background-color 150ms ease, border-color 150ms ease, transform 120ms var(--ease-out);
+    }
+
+    .copy-btn:hover {
+      border-color: var(--accent-border);
+    }
+
+    .copy-btn:active {
+      transform: scale(0.96);
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* =========================================
+       FOOTER
+       ========================================= */
+    .site-footer {
+      margin-top: 112px;
+      border-top: 1px solid var(--border);
+      padding: 32px 0 48px;
+    }
+
+    .footer-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-right {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .footer-inner a {
+      color: var(--text-secondary);
+      transition: color 150ms ease;
+    }
+
+    .footer-inner a:hover {
+      color: var(--text-primary);
+    }
+
+    /* =========================================
+       SLIDING PROJECTS HUB DRAWER (GSAP + Emil Curve)
+       ========================================= */
     .drawer-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(7, 8, 13, 0.72);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 1000;
+      z-index: 90;
+      background: rgba(4, 5, 8, 0.72);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
-      transition: opacity 220ms ease;
-    }
-
-    .drawer-backdrop.active {
-      opacity: 1;
-      pointer-events: auto;
     }
 
     .projects-drawer {
@@ -760,907 +1423,1020 @@
       top: 0;
       right: 0;
       bottom: 0;
-      width: 580px;
-      max-width: 94vw;
-      background: var(--surface);
-      border-left: 1px solid var(--border-hover);
-      z-index: 1001;
-      box-shadow: -16px 0 48px rgba(0, 0, 0, 0.7);
+      width: min(540px, 100vw);
+      z-index: 100;
+      background: var(--surface-1);
+      border-left: 1px solid var(--border-strong);
       display: flex;
       flex-direction: column;
       transform: translateX(100%);
+      visibility: hidden;
       will-change: transform;
     }
 
-    .drawer-header {
-      padding: 24px;
+    .drawer-head {
+      padding: 20px 24px;
       border-bottom: 1px solid var(--border);
-      background: var(--surface-subtle);
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
 
-    .drawer-title-group {
+    .drawer-heading {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 2px;
     }
 
     .drawer-title {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 500;
       color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
-    .drawer-subtitle {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .drawer-close-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      border-radius: 8px;
-      padding: 6px 12px;
+    .drawer-sub {
       font-family: var(--font-mono);
       font-size: 12px;
-      display: flex;
+      color: var(--text-muted);
+    }
+
+    .drawer-close {
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+      gap: 8px;
+      height: 32px;
+      padding: 0 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: color 150ms ease, border-color 150ms ease, transform 120ms var(--ease-out);
     }
 
-    .drawer-close-btn:hover {
+    .drawer-close:hover {
       color: var(--text-primary);
-      border-color: var(--border-hover);
-      background: var(--surface-raised);
+      border-color: var(--border-strong);
     }
 
-    .drawer-search-area {
+    .drawer-close:active {
+      transform: scale(0.96);
+    }
+
+    .drawer-controls {
       padding: 16px 24px;
       border-bottom: 1px solid var(--border);
-      background: var(--surface);
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .drawer-search-box {
+    .drawer-search {
       width: 100%;
       height: 40px;
-      background: var(--surface-subtle);
-      border: 1px solid var(--border);
-      border-radius: 8px;
       padding: 0 14px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      border: 1px solid var(--border);
       color: var(--text-primary);
       font-family: var(--font-sans);
       font-size: 14px;
       outline: none;
-      transition: border-color 0.15s ease;
+      transition: border-color 150ms ease;
     }
 
-    .drawer-search-box:focus {
-      border-color: rgba(59, 130, 246, 0.45);
+    .drawer-search:focus {
+      border-color: var(--border-focus);
     }
 
-    .drawer-body {
-      padding: 20px 24px;
-      overflow-y: auto;
+    .drawer-search::placeholder {
+      color: var(--text-muted);
+    }
+
+    .drawer-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .filter-chip {
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease;
+    }
+
+    .filter-chip:hover {
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+
+    .filter-chip.is-active {
+      color: var(--accent-text);
+      background: var(--accent-tint);
+      border-color: var(--accent-border);
+    }
+
+    .drawer-list {
       flex: 1;
+      overflow-y: auto;
+      padding: 16px 24px;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .project-drawer-card {
-      padding: 18px;
-      background: var(--surface-subtle);
+    .drawer-item {
+      padding: 16px;
+      border-radius: var(--radius-md);
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 10px;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      cursor: pointer;
-      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+      transition: border-color 160ms ease, background-color 160ms ease;
     }
 
-    .project-drawer-card:hover {
-      background: var(--surface-raised);
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
+    .drawer-item:hover,
+    .drawer-item.is-selected {
+      background: var(--surface-2);
+      border-color: var(--accent-border);
     }
 
-    .pdc-header {
+    .drawer-item-top {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
 
-    .pdc-title {
+    .drawer-item-name {
       font-size: 15px;
       font-weight: 500;
       color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
-    .pdc-desc {
+    .drawer-item-lang {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .drawer-item-desc {
       font-size: 13px;
+      line-height: 1.55;
       color: var(--text-secondary);
-      line-height: 1.5;
     }
 
-    .pdc-footer {
+    .drawer-item-actions {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-top: 4px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
+      gap: 12px;
+      padding-top: 6px;
     }
 
-    .drawer-footer {
-      padding: 14px 24px;
-      border-top: 1px solid var(--border);
-      background: var(--surface-subtle);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    /* Footer */
-    footer {
-      padding-top: 48px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .drawer-link {
       font-family: var(--font-mono);
       font-size: 12px;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 100px;
-    }
-
-    footer a {
-      color: var(--text-secondary);
-      transition: color 0.15s ease;
-    }
-
-    footer a:hover {
       color: var(--text-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
-    @media (max-width: 820px) {
-      h1 {
-        font-size: 38px;
+    .drawer-link:hover {
+      color: var(--accent-text);
+    }
+
+    .drawer-link.secondary {
+      color: var(--accent-text);
+    }
+
+    .drawer-foot {
+      padding: 14px 24px;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* =========================================
+       RESPONSIVE BREAKPOINTS
+       ========================================= */
+    @media (max-width: 980px) {
+      .nav-links {
+        display: none;
       }
-      .case-card {
-        padding: 24px;
+
+      .hero-band {
+        min-height: auto;
       }
-      .projects-drawer {
-        width: 100vw;
+
+      .hero-inner {
+        padding: 72px 24px 48px;
       }
-      nav {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
+
+      .hero-copy {
+        max-width: 100%;
+      }
+
+      .hero-ledger {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .flagship-grid,
+      .secondary-spread,
+      .capabilities-grid,
+      .closing-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .repo-row {
+        grid-template-columns: 1fr auto;
+        gap: 8px 16px;
+      }
+
+      .repo-desc {
+        grid-column: 1 / -1;
+        order: 3;
+      }
+
+      .repo-lang {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        padding: 0 16px;
+      }
+
+      .brand-divider,
+      .brand-org,
+      .kbd {
+        display: none;
+      }
+
+      .container,
+      .hero-inner,
+      .hero-ledger,
+      .footer-inner {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .section {
+        padding-top: 80px;
+      }
+
+      .spec-ledger,
+      .pipeline-steps {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Ambient React-Bits Background Canvas -->
-  <canvas id="bgCanvas"></canvas>
+  <!-- Top Scroll Progress Hairline -->
+  <div class="scroll-progress" aria-hidden="true">
+    <div id="scrollProgressBar" class="scroll-progress-bar"></div>
+  </div>
 
-  <div class="shell">
-    <nav>
-      <div class="nav-brand">
-        <span class="status-dot"></span>
-        <span class="brand-name-first">Olzhas</span>
-        <span class="brand-name-last">Huseynzade</span>
-        <span class="brand-sep">//</span>
-        <span class="brand-affiliation">HITSZ</span>
-      </div>
-      <div class="nav-meta">
-        <!-- The Only Unified Projects Trigger Button -->
-        <button id="navProjectsBtn" class="nav-projects-trigger" type="button">
-          <span class="nav-projects-dot"></span>
-          <span>Projects Hub</span>
-          <span id="navCountBadge" style="color: #93c5fd;">(5)</span>
-          <kbd class="keycap">⌘K</kbd>
+  <!-- Quiet Ambient Dot Matrix Canvas -->
+  <canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+  <!-- Sticky Navigation Chrome -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#top" class="brand-link" aria-label="Olzhas Huseynzade home">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span class="brand-first">Olzhas</span>
+        <span class="brand-last">Huseynzade</span>
+        <span class="brand-divider">/</span>
+        <span class="brand-org">HITSZ</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary sections">
+        <a href="#work" data-nav="work">Work</a>
+        <a href="#console" data-nav="console">Console</a>
+        <a href="#capabilities" data-nav="capabilities">Architecture</a>
+        <a href="#background" data-nav="background">Background</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="navProjectsBtn" class="projects-trigger" type="button" aria-haspopup="dialog" aria-controls="projectsDrawer">
+          <span class="trigger-dot" aria-hidden="true"></span>
+          <span>Projects</span>
+          <span id="navCountBadge" class="trigger-count">(5)</span>
+          <kbd class="kbd">⌘K</kbd>
         </button>
-        <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener">GitHub ↗</a>
-        <a href="mailto:2026330181@stu.hit.edu.cn">Email ↗</a>
+
+        <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" class="icon-link" aria-label="GitHub profile">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        </a>
+
+        <a href="mailto:2026330181@stu.hit.edu.cn" class="icon-link" aria-label="Send email">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </a>
       </div>
-    </nav>
+    </div>
+  </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="hero-text">
-        <div class="badge-status">
-          <span>Harbin Institute of Technology, Shenzhen</span>
-          <span style="color: var(--text-muted);">•</span>
-          <span>CS & Technology</span>
-        </div>
-        
-        <h1>
-          <span class="font-sans-title">Systems architecture,</span>
-          <span class="font-serif-title">autonomous agent frameworks,</span>
-          <span class="font-sans-title">and</span> <span class="font-serif-title">low-level software.</span>
-        </h1>
-        
-        <p class="hero-bio">
-          Undergraduate researcher and software builder at <strong>Harbin Institute of Technology, Shenzhen (HITSZ)</strong>. Developing cross-platform native tools in <strong>C/C++ & Rust</strong>, Apple hardware developer instrumentation services, and resilient autonomous multi-agent loops.
-        </p>
+  <main id="top">
+    <!-- =========================================
+         HERO — Full-Viewport Editorial + Unboxed Seamless 3D Manifold
+         ========================================= -->
+    <section class="hero-band" id="heroSection">
+      <!-- Full-bleed WebGL canvas: impossible to clip against an invisible box -->
+      <canvas id="hero3dCanvas" aria-label="Interactive 3D topological systems manifold"></canvas>
 
-        <div class="hero-tags">
-          <!-- Status badge replacing the coordinates as chosen -->
-          <div class="status-badge-active">
-            <span class="dot"></span>
-            <span>Available for Systems Research & Autonomous AI</span>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <div class="hero-affiliation hero-stagger">
+            <span>Harbin Institute of Technology, Shenzhen</span>
+            <span class="sep">·</span>
+            <span>Computer Science &amp; Technology</span>
           </div>
-          <span class="meta-tag">Linux / POSIX</span>
-          <span class="meta-tag">C & C++</span>
-          <span class="meta-tag">Rust / Tauri v2</span>
-          <span class="meta-tag">Python Swarms</span>
-        </div>
 
-        <div class="hero-actions">
-          <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" class="btn btn-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            <span>GitHub Profile</span>
-          </a>
-          <a href="mailto:2026330181@stu.hit.edu.cn" class="btn btn-secondary">
-            <svg viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-            <span>Contact via University Mail</span>
-          </a>
+          <h1 class="hero-title hero-stagger">
+            <span class="t-sans">Systems architecture,</span>
+            <span class="t-serif">autonomous agent frameworks,</span>
+            <span class="t-sans">and</span>
+            <span class="t-serif">low-level software.</span>
+          </h1>
+
+          <p class="hero-lead hero-stagger">
+            Undergraduate researcher and software builder at <strong>HITSZ</strong>.
+            Engineering native cross-platform instruments in <strong>Rust &amp; C/C++</strong>,
+            Apple hardware developer instrumentation over USB, and deterministic multi-agent execution loops.
+          </p>
+
+          <div class="hero-cta-row hero-stagger">
+            <a href="#work" class="btn btn-primary">
+              <span>Inspect selected work</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+            </a>
+
+            <button id="heroCopyEmailBtn" type="button" class="btn btn-secondary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              <span id="heroCopyEmailLabel">2026330181@stu.hit.edu.cn</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Hero 3D Abstract Architecture Model (Seamless Background Integration) -->
-      <div class="hero-3d-wrapper" id="hero3dWrapper">
-        <canvas id="hero3dCanvas"></canvas>
+      <!-- Quiet Bottom Engineering Ledger -->
+      <div class="hero-ledger-wrap">
+        <div class="hero-ledger">
+          <div class="ledger-cell">
+            <span class="ledger-label">Current status</span>
+            <span class="ledger-value">
+              <span class="brand-dot" aria-hidden="true"></span>
+              <span>Available for systems research &amp; autonomous AI</span>
+            </span>
+          </div>
+          <div class="ledger-cell">
+            <span class="ledger-label">Primary stack</span>
+            <span class="ledger-value mono" style="font-size: 13px;">C/C++ · Rust · Tauri v2 · Python · POSIX</span>
+          </div>
+          <div class="ledger-cell">
+            <span class="ledger-label">Latest release</span>
+            <span class="ledger-value">
+              <a href="https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0" target="_blank" rel="noopener" style="text-decoration: underline; text-decoration-color: var(--border-strong);">GeoShift v1.0.0</a>
+              <span class="mono" style="font-size: 12px; color: var(--text-muted);">macOS / Win</span>
+            </span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- SECTION 1: INTERACTIVE TERMINAL CONSOLE -->
-    <div class="section-wrap">
-      <div class="section-title">SYSTEM CONSOLE & CLI</div>
-      <div class="interactive-terminal">
-        <div class="terminal-topbar">
-          <div class="terminal-controls">
-            <div class="terminal-dot"></div>
-            <div class="terminal-dot"></div>
-            <div class="terminal-dot"></div>
-          </div>
-          <span>olzhas@hitsz-node-01: ~ (zsh)</span>
-          <span>v2026.11</span>
-        </div>
-        <div id="termScreen" class="terminal-screen">
-          <div class="term-output-block">
-            <span style="color: var(--text-muted);">// Harbin Institute of Technology, Shenzhen — Node Terminal</span><br/>
-            Type <span style="color: #93c5fd;">help</span> for commands, or tap the quick action chips below:
-          </div>
-        </div>
-        <div class="term-prompt-line" style="padding: 0 20px 14px;">
-          <span class="term-prompt-label">olzhas@hitsz:~$</span>
-          <input id="termInput" type="text" class="term-input" placeholder="try typing 'projects', 'geoshift', or 'skills'..." autocomplete="off" spellcheck="false" />
-        </div>
-        <div class="term-quick-chips">
-          <span>Quick Commands:</span>
-          <button class="term-chip" onclick="executeTermCommand('help')">help</button>
-          <button class="term-chip" onclick="executeTermCommand('geoshift')">geoshift</button>
-          <button class="term-chip" onclick="executeTermCommand('projects')">projects</button>
-          <button class="term-chip" onclick="executeTermCommand('skills')">skills</button>
-          <button class="term-chip" onclick="executeTermCommand('about')">about</button>
-          <button class="term-chip" onclick="executeTermCommand('clear')">clear</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION 2: IN-PAGE FULL PROJECT CASE STUDIES -->
-    <div class="section-wrap">
-      <div class="section-title">ENGINEERING & CASE STUDIES</div>
-      <div class="case-studies-grid">
-        
-        <!-- CASE STUDY 1: GEOSHIFT -->
-        <div class="case-card">
-          <div class="case-card-header">
-            <div>
-              <div class="case-badge-row">
-                <span>RUST & TAURI V2 • HARDWARE DVT</span>
-                <span>•</span>
-                <span class="case-pill-version">v1.0.0 Release</span>
-              </div>
-              <h2 class="case-title">GeoShift — Native iOS GPS Simulation Controller</h2>
-            </div>
-            <a href="https://github.com/shushpaaaa/GeoShift" target="_blank" rel="noopener" class="btn btn-secondary" style="height: 34px; font-size: 12px; font-family: var(--font-mono);">
-              GitHub Repo ↗
-            </a>
-          </div>
-          
-          <p class="case-desc">
-            A native cross-platform desktop instrument built in <strong>Rust (Tauri v2)</strong> to simulate and test iOS GPS telemetry over physical USB Lightning connections. Interacts directly with Apple's Developer Instrumentation services (<code>com.apple.dt.simulatelocation</code>) without requiring jailbreak or permanent operating system changes. Features high-precision Leaflet OpenStreetMap navigation and one-click instant hardware satellite restoration.
-          </p>
-
-          <div class="case-specs">
-            <div class="spec-item">
-              <span class="spec-label">Shell Architecture</span>
-              <span class="spec-value">Rust + Tauri v2 (Standalone Native Window)</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Hardware Protocol</span>
-              <span class="spec-value">Apple DVT Location Simulation over usbmuxd</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Cartography</span>
-              <span class="spec-value">High-Precision OpenStreetMap with Dark Viewport</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Safety & Recovery</span>
-              <span class="spec-value">Ephemeral in-memory override; Instant Reversion</span>
-            </div>
-          </div>
-
-          <div class="case-downloads">
-            <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); margin-right: 4px;">Download Binaries:</span>
-            <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift_1.0.0_universal.dmg" target="_blank" rel="noopener" class="btn-download">
-              macOS Universal .dmg
-            </a>
-            <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift_1.0.0_aarch64.dmg" target="_blank" rel="noopener" class="btn-download">
-              Apple Silicon (M1/M2/M3)
-            </a>
-            <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift-Setup-1.0.0.exe" target="_blank" rel="noopener" class="btn-download">
-              Windows Setup .exe
-            </a>
-            <a href="https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0" target="_blank" rel="noopener" class="btn-download" style="color: #93c5fd;">
-              All Release Assets ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- CASE STUDY 2: AUTONOMOUS AI AGENT ORCHESTRATION -->
-        <div class="case-card">
-          <div class="case-card-header">
-            <div>
-              <div class="case-badge-row">
-                <span>MULTI-AGENT ORCHESTRATION • RESEARCH</span>
-                <span>•</span>
-                <span class="case-pill-version">Active</span>
-              </div>
-              <h2 class="case-title">Autonomous AI Multi-Agent Reasoning Engine</h2>
-            </div>
-            <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" class="btn btn-secondary" style="height: 34px; font-size: 12px; font-family: var(--font-mono);">
-              Research Notes ↗
-            </a>
-          </div>
-          
-          <p class="case-desc">
-            Research and architecture implementation exploring dynamic execution graphs, structured tool dispatch, recursive self-correction loops, and context budgeting governors. Simulating multi-agent swarm collaboration protocols for autonomous code migration and verification.
-          </p>
-
-          <div class="case-specs">
-            <div class="spec-item">
-              <span class="spec-label">Execution Loop</span>
-              <span class="spec-value">Structured Tool Dispatch & Self-Correction</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Context Management</span>
-              <span class="spec-value">Dynamic Token Budgeting & Progressive Disclosure</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Verification</span>
-              <span class="spec-value">Automated Sandboxed Execution & Static Checks</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label">Core Runtime</span>
-              <span class="spec-value">Python / LLM Architecture / Swarm Protocols</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- CASE STUDY 3: CLOUDJUKEBOX -->
-        <div class="case-card">
-          <div class="case-card-header">
-            <div>
-              <div class="case-badge-row">
-                <span>FULL-STACK AUDIO • NETWORK INFRASTRUCTURE</span>
-                <span>•</span>
-                <span class="case-pill-version">Published</span>
-              </div>
-              <h2 class="case-title">CloudJukebox — Streaming Spatial Audio Architecture</h2>
-            </div>
-            <a href="https://github.com/shushpaaaa/CloudJukebox" target="_blank" rel="noopener" class="btn btn-secondary" style="height: 34px; font-size: 12px; font-family: var(--font-mono);">
-              GitHub Repo ↗
-            </a>
-          </div>
-          
-          <p class="case-desc">
-            Networked music streaming system resolving external streaming APIs into low-latency in-memory audio buffers with spatial sound attenuation logic and persistent client playback synchronisation.
-          </p>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- SECTION 3: SYSTEMS TOOLKIT MATRIX -->
-    <div class="section-wrap">
-      <div class="section-title">SYSTEMS & TECHNICAL PROFICIENCY</div>
-      <div class="toolkit-grid">
-        <div class="toolkit-card">
-          <h3>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
-            <span>Systems & Languages</span>
-          </h3>
-          <div class="toolkit-items">
-            <span class="toolkit-tag">C (C99 / C11)</span>
-            <span class="toolkit-tag">C++ (Modern C++17/20)</span>
-            <span class="toolkit-tag">Rust</span>
-            <span class="toolkit-tag">Python</span>
-            <span class="toolkit-tag">TypeScript / JavaScript</span>
-            <span class="toolkit-tag">Java</span>
-          </div>
-        </div>
-
-        <div class="toolkit-card">
-          <h3>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>
-            <span>Platforms & Low-Level</span>
-          </h3>
-          <div class="toolkit-items">
-            <span class="toolkit-tag">Linux / POSIX</span>
-            <span class="toolkit-tag">Apple usbmuxd / DVT</span>
-            <span class="toolkit-tag">Tauri v2 Native</span>
-            <span class="toolkit-tag">Memory Layout Optimization</span>
-            <span class="toolkit-tag">Git / GitHub Actions CI</span>
-          </div>
-        </div>
-
-        <div class="toolkit-card">
-          <h3>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20M2 12h20"/></svg>
-            <span>Autonomous AI & Web</span>
-          </h3>
-          <div class="toolkit-items">
-            <span class="toolkit-tag">Agentic Loops</span>
-            <span class="toolkit-tag">Tool Calling Dispatch</span>
-            <span class="toolkit-tag">Context Budget Governors</span>
-            <span class="toolkit-tag">WebSocket Streaming</span>
-            <span class="toolkit-tag">OpenStreetMap Leaflet</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION 4: ACADEMIC CONTEXT -->
-    <div class="section-wrap">
-      <div class="section-title">ACADEMIC PROFILE & LABORATORY</div>
-      <div class="case-card" style="padding: 24px;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+    <!-- =========================================
+         SECTION 1 — SELECTED WORK (Editorial Asymmetric Spread)
+         ========================================= -->
+    <section class="section" id="work">
+      <div class="container">
+        <div class="section-header reveal">
           <div>
-            <h3 style="font-size: 18px; font-weight: 500;">Harbin Institute of Technology, Shenzhen (HITSZ)</h3>
-            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">
-              School of Computer Science & Technology • Undergraduate Student (ID: <code>2026330181</code>)
+            <h2 class="section-heading">Selected <span class="serif-accent">engineering</span> work</h2>
+          </div>
+          <p class="section-sub">
+            Native developer instruments, protocol bridges, and autonomous reasoning systems built from first principles.
+          </p>
+        </div>
+
+        <!-- Flagship Spread: GeoShift -->
+        <article class="flagship-grid reveal">
+          <div>
+            <div class="project-meta-row">
+              <span class="tag-pill accent">v1.0.0 release</span>
+              <span class="tag-pill">Rust &amp; Tauri v2</span>
+              <span class="tag-pill">Apple DVT over USB</span>
+            </div>
+
+            <h3 class="flagship-title">GeoShift — Native iOS GPS Simulation Controller</h3>
+
+            <p class="flagship-desc">
+              A lightweight cross-platform desktop instrument engineered in <strong>Rust (Tauri v2)</strong> with a Python DVT protocol bridge to simulate iOS GPS telemetry over physical USB connections. Communicates directly with Apple's developer instrumentation daemon (<code>com.apple.dt.simulatelocation</code>) without jailbreak or persistent OS modifications, with instant one-click satellite restoration.
+            </p>
+
+            <div class="spec-ledger">
+              <div class="spec-row">
+                <span class="spec-key">Desktop runtime</span>
+                <span class="spec-val">Rust + Tauri v2 native webview</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-key">Device transport</span>
+                <span class="spec-val">Apple DVT over usbmuxd tunnel</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-key">Cartography engine</span>
+                <span class="spec-val">Leaflet OpenStreetMap dark viewport</span>
+              </div>
+              <div class="spec-row">
+                <span class="spec-key">State recovery</span>
+                <span class="spec-val">Ephemeral override with instant reset</span>
+              </div>
+            </div>
+
+            <div class="download-group">
+              <span class="download-label">Verified binaries from GitHub Releases</span>
+              <div class="download-links">
+                <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift_1.0.0_universal.dmg" target="_blank" rel="noopener" class="dl-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                  <span>macOS Universal .dmg</span>
+                  <span class="dl-size">4.5 MB</span>
+                </a>
+                <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift_1.0.0_aarch64.dmg" target="_blank" rel="noopener" class="dl-btn">
+                  <span>Apple Silicon .dmg</span>
+                  <span class="dl-size">2.5 MB</span>
+                </a>
+                <a href="https://github.com/shushpaaaa/GeoShift/releases/download/v1.0.0/GeoShift-Setup-1.0.0.exe" target="_blank" rel="noopener" class="dl-btn">
+                  <span>Windows Setup .exe</span>
+                  <span class="dl-size">1.5 MB</span>
+                </a>
+                <a href="https://github.com/shushpaaaa/GeoShift" target="_blank" rel="noopener" class="dl-btn" style="color: var(--accent-text);">
+                  <span>Source on GitHub ↗</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Interactive GeoShift Coordinate Simulator -->
+          <div class="instrument-panel" aria-label="Interactive GeoShift telemetry preview">
+            <div class="instrument-head">
+              <span class="instrument-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></svg>
+                <span>GeoShift telemetry preview</span>
+              </span>
+              <span id="simStateBadge" class="instrument-state">Override active</span>
+            </div>
+
+            <div id="simViewport" class="sim-viewport" role="application" aria-label="Click anywhere to simulate GPS coordinates">
+              <svg class="sim-grid-svg" viewBox="0 0 400 220" preserveAspectRatio="none">
+                <defs>
+                  <pattern id="geoGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(236,240,248,0.06)" stroke-width="1"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#geoGrid)" />
+                <line x1="0" y1="110" x2="400" y2="110" stroke="rgba(236,240,248,0.1)" stroke-dasharray="3 3" />
+                <line x1="200" y1="0" x2="200" y2="220" stroke="rgba(236,240,248,0.1)" stroke-dasharray="3 3" />
+              </svg>
+              <div id="simCrossX" class="sim-crosshair-x"></div>
+              <div id="simCrossY" class="sim-crosshair-y"></div>
+              <div id="simPin" class="sim-pin"></div>
+              <span class="sim-hint">Click viewport to dispatch coordinates</span>
+            </div>
+
+            <div class="sim-presets" role="group" aria-label="Location presets">
+              <button type="button" class="preset-btn is-active" data-lat="22.5872" data-lng="113.9726" data-name="Shenzhen · HITSZ">Shenzhen</button>
+              <button type="button" class="preset-btn" data-lat="35.6762" data-lng="139.6503" data-name="Tokyo">Tokyo</button>
+              <button type="button" class="preset-btn" data-lat="37.7749" data-lng="-122.4194" data-name="San Francisco">San Francisco</button>
+              <button type="button" class="preset-btn" data-lat="47.3769" data-lng="8.5417" data-name="Zurich">Zurich</button>
+            </div>
+
+            <div class="telemetry-readout">
+              <div class="tele-item">
+                <span class="tele-label">Latitude</span>
+                <span id="teleLat" class="tele-val">22.5872° N</span>
+              </div>
+              <div class="tele-item">
+                <span class="tele-label">Longitude</span>
+                <span id="teleLng" class="tele-val">113.9726° E</span>
+              </div>
+              <div class="tele-item">
+                <span class="tele-label">Service</span>
+                <span class="tele-val">dt.simulatelocation</span>
+              </div>
+              <div class="tele-item">
+                <span class="tele-label">Active target</span>
+                <span id="teleTarget" class="tele-val">Shenzhen · HITSZ</span>
+              </div>
+            </div>
+
+            <div class="sim-footer">
+              <span id="simPacket" class="sim-packet">usbmuxd → set(22.5872, 113.9726)</span>
+              <button id="simResetBtn" type="button" class="btn btn-ghost">Restore GPS</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Secondary Architectural Feature: Autonomous Multi-Agent Reasoning Engine -->
+        <article class="secondary-spread reveal">
+          <div>
+            <div class="project-meta-row">
+              <span class="tag-pill accent">Active research</span>
+              <span class="tag-pill">Multi-agent systems</span>
+              <span class="tag-pill">Python</span>
+            </div>
+
+            <h3 class="flagship-title">Autonomous Multi-Agent Reasoning Engine</h3>
+
+            <p class="flagship-desc">
+              Architectural research exploring deterministic execution graphs, structured tool dispatch, recursive self-correction loops, and token context budgeting governors. Designed to verify complex code migrations across isolated sandboxes before landing changes.
+            </p>
+
+            <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" class="btn btn-ghost">
+              <span>Inspect GitHub repositories</span>
+              <span>↗</span>
+            </a>
+          </div>
+
+          <div class="pipeline-board" aria-label="Multi-agent execution loop inspector">
+            <div class="instrument-head" style="padding-bottom: 12px;">
+              <span class="instrument-title">Execution architecture</span>
+              <span class="mono" style="font-size: 11px; color: var(--text-muted);">Select stage to inspect</span>
+            </div>
+
+            <div class="pipeline-steps">
+              <button type="button" class="pipe-node is-active" data-stage="0">
+                <span class="pipe-step-num">Stage 1</span>
+                <span class="pipe-step-name">Task decomposition</span>
+              </button>
+              <button type="button" class="pipe-node" data-stage="1">
+                <span class="pipe-step-num">Stage 2</span>
+                <span class="pipe-step-name">Structured dispatch</span>
+              </button>
+              <button type="button" class="pipe-node" data-stage="2">
+                <span class="pipe-step-num">Stage 3</span>
+                <span class="pipe-step-name">Sandbox verification</span>
+              </button>
+              <button type="button" class="pipe-node" data-stage="3">
+                <span class="pipe-step-num">Stage 4</span>
+                <span class="pipe-step-name">Context governor</span>
+              </button>
+            </div>
+
+            <div id="pipeDetail" class="pipe-detail">
+              <strong>Task decomposition</strong>
+              Breaks multi-file engineering objectives into bounded dependency graphs so parallel worker contexts operate without colliding on shared state.
+            </div>
+          </div>
+        </article>
+
+        <!-- Open-Source Repository Ledger -->
+        <div class="archive-ledger reveal">
+          <div class="archive-ledger-head">
+            <h3 class="archive-ledger-title">Open-source index</h3>
+            <button id="inlineDrawerBtn" type="button" class="btn btn-ghost">
+              <span>Search all repositories</span>
+              <kbd class="kbd">⌘K</kbd>
+            </button>
+          </div>
+
+          <div id="inlineRepoList" class="repo-list">
+            <a href="https://github.com/shushpaaaa/CloudJukebox" target="_blank" rel="noopener" class="repo-row">
+              <span class="repo-name">CloudJukebox</span>
+              <span class="repo-desc">Stream SoundCloud music directly from in-game Minecraft jukeboxes with 3D spatial audio attenuation and low-latency buffering.</span>
+              <span class="repo-lang">Java</span>
+              <span class="repo-arrow">↗</span>
+            </a>
+            <a href="https://github.com/shushpaaaa/spotify_downloader" target="_blank" rel="noopener" class="repo-row">
+              <span class="repo-name">spotify_downloader</span>
+              <span class="repo-desc">Automated track metadata resolution and local audio fetch pipeline for playlists and albums.</span>
+              <span class="repo-lang">Python</span>
+              <span class="repo-arrow">↗</span>
+            </a>
+            <a href="https://github.com/shushpaaaa/Survey" target="_blank" rel="noopener" class="repo-row">
+              <span class="repo-name">Survey</span>
+              <span class="repo-desc">Full-stack survey collection and structured form submission backend with server-side validation.</span>
+              <span class="repo-lang">PHP</span>
+              <span class="repo-arrow">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         SECTION 2 — INTERACTIVE SYSTEMS CONSOLE
+         ========================================= -->
+    <section class="section" id="console">
+      <div class="container">
+        <div class="section-header reveal">
+          <h2 class="section-heading">Interactive <span class="serif-accent">node</span> console</h2>
+          <p class="section-sub">
+            Query projects, architecture stack, and direct contact info. Supports command history with arrow keys and Tab completion.
+          </p>
+        </div>
+
+        <div class="console-shell reveal">
+          <div class="console-bar">
+            <span class="console-host">
+              <span class="brand-dot" aria-hidden="true"></span>
+              <span>olzhas@hitsz-node-01 ~ zsh</span>
+            </span>
+            <span class="tabular">session live</span>
+          </div>
+
+          <div id="termScreen" class="console-body" aria-live="polite">
+            <div class="console-entry">
+              <div style="color: var(--text-muted);"># Harbin Institute of Technology, Shenzhen — Interactive shell</div>
+              <div>Type <span style="color: var(--accent-text);">help</span> to list commands, or use the quick triggers below.</div>
+            </div>
+          </div>
+
+          <div class="console-input-row">
+            <span class="console-prompt-prefix">olzhas@hitsz:~$</span>
+            <input
+              id="termInput"
+              type="text"
+              class="console-input"
+              placeholder="help, geoshift, projects, stack, contact..."
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Terminal command input"
+            />
+          </div>
+
+          <div class="console-chips">
+            <span class="console-chips-label">Commands:</span>
+            <button type="button" class="cmd-chip" data-cmd="help">help</button>
+            <button type="button" class="cmd-chip" data-cmd="geoshift">geoshift</button>
+            <button type="button" class="cmd-chip" data-cmd="projects">projects</button>
+            <button type="button" class="cmd-chip" data-cmd="stack">stack</button>
+            <button type="button" class="cmd-chip" data-cmd="whoami">whoami</button>
+            <button type="button" class="cmd-chip" data-cmd="contact">contact</button>
+            <button type="button" class="cmd-chip" data-cmd="clear">clear</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         SECTION 3 — TECHNICAL ARCHITECTURE LEDGER
+         ========================================= -->
+    <section class="section" id="capabilities">
+      <div class="container">
+        <div class="section-header reveal">
+          <h2 class="section-heading">Technical <span class="serif-accent">foundations</span></h2>
+          <p class="section-sub">
+            Core languages, systems primitives, and infrastructure domains across native and AI work.
+          </p>
+        </div>
+
+        <div class="capabilities-grid reveal">
+          <div class="cap-col">
+            <div class="cap-head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <span>Systems &amp; languages</span>
+            </div>
+            <ul class="cap-list">
+              <li><span>C / C++</span><span class="cap-note">C11 · C++20</span></li>
+              <li><span>Rust</span><span class="cap-note">Native · Tauri v2</span></li>
+              <li><span>Python</span><span class="cap-note">Agents · Tooling</span></li>
+              <li><span>TypeScript / JS</span><span class="cap-note">WebGL · UI</span></li>
+              <li><span>Java</span><span class="cap-note">Audio · Plugins</span></li>
+            </ul>
+          </div>
+
+          <div class="cap-col">
+            <div class="cap-head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+              <span>Low-level &amp; hardware</span>
+            </div>
+            <ul class="cap-list">
+              <li><span>Linux &amp; POSIX</span><span class="cap-note">IPC · Scheduling</span></li>
+              <li><span>Apple usbmuxd / DVT</span><span class="cap-note">iOS over USB</span></li>
+              <li><span>Memory layout</span><span class="cap-note">Zero-copy I/O</span></li>
+              <li><span>Cross-platform builds</span><span class="cap-note">arm64 · x86_64</span></li>
+              <li><span>Release automation</span><span class="cap-note">GitHub Actions</span></li>
+            </ul>
+          </div>
+
+          <div class="cap-col">
+            <div class="cap-head">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+              <span>Autonomous AI &amp; network</span>
+            </div>
+            <ul class="cap-list">
+              <li><span>Multi-agent loops</span><span class="cap-note">Self-correction</span></li>
+              <li><span>Tool dispatch</span><span class="cap-note">Typed schemas</span></li>
+              <li><span>Context governors</span><span class="cap-note">Token budgets</span></li>
+              <li><span>Real-time audio</span><span class="cap-note">Spatial buffers</span></li>
+              <li><span>Interactive graphics</span><span class="cap-note">Three.js · Canvas</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         SECTION 4 — ACADEMIC BACKGROUND & CONTACT
+         ========================================= -->
+    <section class="section" id="background">
+      <div class="container">
+        <div class="section-header reveal">
+          <h2 class="section-heading">Academic <span class="serif-accent">background</span> &amp; contact</h2>
+        </div>
+
+        <div class="closing-grid reveal">
+          <div class="academic-block">
+            <h3>Harbin Institute of Technology, Shenzhen (HITSZ)</h3>
+            <p class="academic-meta">School of Computer Science &amp; Technology · Greater Bay Area, Shenzhen</p>
+            <p class="academic-desc">
+              Focused on rigorous computational foundations: hardware–software co-design, linear algebra decompositions for high-dimensional spaces, operating system concurrency, and low-overhead networked protocols. Actively interested in research collaborations around systems tooling and autonomous agent architectures.
             </p>
           </div>
-          <span style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted);">Greater Bay Area, Shenzhen</span>
-        </div>
-        <p style="color: var(--text-muted); font-size: 13px; line-height: 1.6; margin-top: 12px;">
-          Focusing on rigorous foundations of computation: hardware-software co-design, linear algebra decomposition for multi-dimensional data, discrete systems, operating system scheduling, and low-overhead network protocols.
-        </p>
-      </div>
-    </div>
 
-    <footer>
+          <div class="contact-panel">
+            <h3>Direct correspondence</h3>
+            <div class="contact-email-box">
+              <span class="contact-email-text">2026330181@stu.hit.edu.cn</span>
+              <button id="contactCopyBtn" type="button" class="copy-btn">Copy</button>
+            </div>
+            <div class="contact-links">
+              <a href="mailto:2026330181@stu.hit.edu.cn" class="btn btn-primary" style="height: 38px; padding: 0 16px; font-size: 13px;">
+                <span>Compose email</span>
+              </a>
+              <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" class="btn btn-secondary" style="height: 38px; padding: 0 16px; font-size: 13px;">
+                <span>GitHub @shushpaaaa ↗</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Minimalist Footer with Live Shenzhen Clock -->
+  <footer class="site-footer">
+    <div class="footer-inner">
       <div>
         <span>Olzhas Huseynzade</span>
-        <span style="margin: 0 6px;">•</span>
+        <span style="margin: 0 8px;">·</span>
         <span>Harbin Institute of Technology, Shenzhen</span>
       </div>
-      <div>
-        <span>Custom Domain: <a href="https://olzhas.app">olzhas.app</a></span>
-        <span style="margin: 0 6px;">•</span>
-        <span>SSL Enforced via GitHub Pages</span>
+      <div class="footer-right">
+        <span id="szClock">Shenzhen --:--:--</span>
+        <span>·</span>
+        <a href="https://olzhas.app">olzhas.app</a>
       </div>
-    </footer>
-  </div>
+    </div>
+  </footer>
 
-  <!-- SLIDING DRAWER BACKDROP -->
+  <!-- Sliding Projects Drawer Backdrop -->
   <div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
 
-  <!-- SLIDING PROJECTS DRAWER (Slides left from right edge) -->
-  <aside id="projectsDrawer" class="projects-drawer" role="dialog" aria-modal="true" aria-label="Projects Drawer">
-    <div class="drawer-header">
-      <div class="drawer-title-group">
-        <span class="drawer-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
-          <span>Projects & Repositories</span>
-        </span>
-        <span id="drawerSyncStatus" class="drawer-subtitle">Auto-sync with @shushpaaaa • Live</span>
+  <!-- Sliding Projects Hub Drawer -->
+  <aside id="projectsDrawer" class="projects-drawer" role="dialog" aria-modal="true" aria-label="Projects Hub">
+    <div class="drawer-head">
+      <div class="drawer-heading">
+        <span class="drawer-title">Projects &amp; repositories</span>
+        <span id="drawerSyncStatus" class="drawer-sub">Synced with @shushpaaaa</span>
       </div>
-      <button id="drawerCloseBtn" class="drawer-close-btn" type="button">
+      <button id="drawerCloseBtn" type="button" class="drawer-close">
         <span>Close</span>
-        <kbd class="keycap">ESC</kbd>
+        <kbd class="kbd">ESC</kbd>
       </button>
     </div>
 
-    <div class="drawer-search-area">
-      <input id="drawerSearchInput" type="text" class="drawer-search-box" placeholder="Filter repositories by title or stack..." />
+    <div class="drawer-controls">
+      <input
+        id="drawerSearchInput"
+        type="text"
+        class="drawer-search"
+        placeholder="Filter repositories by name, language, or stack..."
+        aria-label="Filter repositories"
+      />
+      <div id="drawerFilters" class="drawer-filters" role="group" aria-label="Language filter">
+        <button type="button" class="filter-chip is-active" data-filter="all">All</button>
+        <button type="button" class="filter-chip" data-filter="rust">Rust / JS</button>
+        <button type="button" class="filter-chip" data-filter="java">Java</button>
+        <button type="button" class="filter-chip" data-filter="python">Python</button>
+        <button type="button" class="filter-chip" data-filter="php">PHP</button>
+      </div>
     </div>
 
-    <div id="drawerList" class="drawer-body">
-      <!-- Dynamically Rendered -->
-    </div>
+    <div id="drawerList" class="drawer-list" role="listbox" aria-label="Repository results"></div>
 
-    <div class="drawer-footer">
-      <span>Auto-syncs on push via GitHub API</span>
-      <span>Shortcut: <kbd class="keycap">⌘K</kbd></span>
+    <div class="drawer-foot">
+      <span>↑↓ navigate · Enter open</span>
+      <span>Toggle <kbd class="kbd">⌘K</kbd></span>
     </div>
   </aside>
 
   <script>
     (function () {
-      // 1. Lenis Smooth Scrolling (@darkroomengineering/lenis)
-      let lenis;
-      try {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // ==========================================
+      // 1. LENIS SMOOTH SCROLL + GSAP SCROLLTRIGGER
+      // ==========================================
+      let lenis = null;
+      if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+        gsap.registerPlugin(ScrollTrigger);
+      }
+
+      if (!reducedMotion && typeof Lenis !== "undefined") {
         lenis = new Lenis({
-          duration: 1.15,
+          duration: 1.05,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           smoothWheel: true
         });
+
+        if (typeof ScrollTrigger !== "undefined") {
+          lenis.on("scroll", ScrollTrigger.update);
+        }
+
         function raf(time) {
           lenis.raf(time);
           requestAnimationFrame(raf);
         }
         requestAnimationFrame(raf);
-      } catch (e) {
-        console.warn("Lenis skipped", e);
       }
 
-      // 2. React-Bits Ambient Background Canvas (Subtle Dot Matrix + Deep Ink Sheen)
-      const canvas = document.getElementById("bgCanvas");
-      const ctx = canvas.getContext("2d");
-      let width, height;
-      let mouseX = -1000, mouseY = -1000;
-
-      function resizeCanvas() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      }
-      window.addEventListener("resize", resizeCanvas);
-      resizeCanvas();
-
-      window.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+      // Smooth anchor navigation
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", (e) => {
+          const id = anchor.getAttribute("href");
+          if (!id || id === "#") return;
+          const target = document.querySelector(id);
+          if (!target) return;
+          e.preventDefault();
+          if (lenis) {
+            lenis.scrollTo(target, { offset: -64 });
+          } else {
+            target.scrollIntoView({ behavior: "smooth" });
+          }
+        });
       });
 
-      const dotSpacing = 36;
-      let tick = 0;
+      // Top Scroll Progress Hairline & Active Section Nav
+      const progressBar = document.getElementById("scrollProgressBar");
+      const navItems = Array.from(document.querySelectorAll(".nav-links a[data-nav]"));
+      const sections = navItems.map((a) => document.getElementById(a.dataset.nav)).filter(Boolean);
 
-      function renderBg() {
-        ctx.clearRect(0, 0, width, height);
-
-        // Subtle slow ambient gradient sheen
-        tick += 0.003;
-        const gradX = width * 0.5 + Math.sin(tick) * 120;
-        const gradY = height * 0.4 + Math.cos(tick) * 80;
-        const gradient = ctx.createRadialGradient(gradX, gradY, 40, gradX, gradY, width * 0.85);
-        gradient.addColorStop(0, "rgba(22, 28, 44, 0.45)");
-        gradient.addColorStop(0.5, "rgba(11, 13, 20, 0.7)");
-        gradient.addColorStop(1, "rgba(7, 8, 13, 0.95)");
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, width, height);
-
-        // Technical Dot-Matrix
-        const cols = Math.ceil(width / dotSpacing);
-        const rows = Math.ceil(height / dotSpacing);
-
-        for (let i = 0; i <= cols; i++) {
-          for (let j = 0; j <= rows; j++) {
-            const x = i * dotSpacing;
-            const y = j * dotSpacing;
-
-            // Distance to mouse cursor
-            const dx = x - mouseX;
-            const dy = y - mouseY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            let alpha = 0.055;
-            let radius = 1;
-
-            if (dist < 140) {
-              const proximity = 1 - (dist / 140);
-              alpha = 0.055 + (proximity * 0.28);
-              radius = 1 + (proximity * 0.8);
-            }
-
-            ctx.fillStyle = `rgba(238, 240, 245, ${alpha})`;
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fill();
-          }
+      function updateScrollUI() {
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docH > 0 ? Math.min(1, Math.max(0, window.scrollY / docH)) : 0;
+        if (progressBar) {
+          progressBar.style.transform = `scaleX(${pct})`;
         }
 
-        requestAnimationFrame(renderBg);
-      }
-      renderBg();
-
-      // 3. Curated Repository Data
-      const curatedProjects = [
-        {
-          name: "GeoShift",
-          url: "https://github.com/shushpaaaa/GeoShift",
-          releaseUrl: "https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0",
-          description: "Native desktop GPS simulation controller for iOS over USB. Built with Rust and Tauri v2, implementing ephemeral developer instrumentation overrides.",
-          language: "Rust / Tauri v2",
-          tags: ["Rust", "Tauri v2", "iOS DVT", "Universal DMG", "Windows"]
-        },
-        {
-          name: "Autonomous AI Agents",
-          url: "https://github.com/shushpaaaa",
-          description: "Experimental multi-agent execution frameworks with structured tool calls, context budget governors, and recursive reasoning loops.",
-          language: "Python",
-          tags: ["Python", "LLMs", "Swarm", "Tool Calling"]
-        },
-        {
-          name: "CloudJukebox",
-          url: "https://github.com/shushpaaaa/CloudJukebox",
-          description: "Stream SoundCloud music directly with 3D spatial audio player logic, REST backend integration, and rich metadata indexing.",
-          language: "Java",
-          tags: ["Java", "SoundCloud API", "Audio Engine"]
-        },
-        {
-          name: "spotify_downloader",
-          url: "https://github.com/shushpaaaa/spotify_downloader",
-          description: "Automated music metadata resolution and local audio fetch pipeline for tracks and playlists.",
-          language: "Python",
-          tags: ["Python", "Audio", "API Integration"]
-        },
-        {
-          name: "Survey",
-          url: "https://github.com/shushpaaaa/Survey",
-          description: "Full-stack survey collection and automated data submission engine with input verification.",
-          language: "PHP",
-          tags: ["PHP", "Full-Stack", "Backend"]
-        }
-      ];
-
-      let allProjects = [...curatedProjects];
-
-      // 4. Sliding Projects Drawer Logic (GSAP)
-      const backdrop = document.getElementById("drawerBackdrop");
-      const drawer = document.getElementById("projectsDrawer");
-      const drawerList = document.getElementById("drawerList");
-      const searchInput = document.getElementById("drawerSearchInput");
-      const closeBtn = document.getElementById("drawerCloseBtn");
-      const navBtn = document.getElementById("navProjectsBtn");
-      const navCount = document.getElementById("navCountBadge");
-
-      function updateNavCount() {
-        if (navCount) navCount.textContent = `(${allProjects.length})`;
+        const scrollMid = window.scrollY + window.innerHeight * 0.32;
+        let currentId = "";
+        sections.forEach((sec) => {
+          if (sec.offsetTop <= scrollMid) currentId = sec.id;
+        });
+        navItems.forEach((link) => {
+          link.classList.toggle("is-active", link.dataset.nav === currentId);
+        });
       }
 
-      function renderDrawerItems() {
-        const query = searchInput.value.trim().toLowerCase();
-        const filtered = allProjects.filter(p => {
-          if (!query) return true;
-          return p.name.toLowerCase().includes(query) ||
-            (p.description || "").toLowerCase().includes(query) ||
-            (p.language || "").toLowerCase().includes(query);
+      window.addEventListener("scroll", updateScrollUI, { passive: true });
+      updateScrollUI();
+
+      // Subtle Entrance Choreography (Already-visible graceful settle)
+      if (!reducedMotion && typeof gsap !== "undefined") {
+        gsap.from(".hero-stagger", {
+          y: 16,
+          opacity: 0,
+          duration: 0.75,
+          stagger: 0.08,
+          ease: "power3.out",
+          clearProps: "transform,opacity"
         });
 
-        if (filtered.length === 0) {
-          drawerList.innerHTML = `<div style="padding: 40px 16px; text-align: center; color: var(--text-muted); font-size: 13px;">No projects match your query.</div>`;
-          return;
-        }
-
-        drawerList.innerHTML = filtered.map(proj => {
-          const releaseBtn = proj.releaseUrl 
-            ? `<a href="${proj.releaseUrl}" target="_blank" rel="noopener" style="color: #93c5fd; font-weight: 500;">Download v1.0.0 ↗</a>` 
-            : "";
-          return `
-            <div class="project-drawer-card" onclick="window.open('${proj.url}', '_blank')">
-              <div class="pdc-header">
-                <span class="pdc-title">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/></svg>
-                  ${proj.name}
-                </span>
-                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">${proj.language || "Code"}</span>
-              </div>
-              <p class="pdc-desc">${proj.description || "Public repository by Olzhas Huseynzade."}</p>
-              <div class="pdc-footer">
-                <span style="color: var(--text-muted);">${(proj.tags || [])[0] || ""}</span>
-                <div style="display: flex; gap: 10px; align-items: center;" onclick="event.stopPropagation()">
-                  ${releaseBtn}
-                  <a href="${proj.url}" target="_blank" rel="noopener">Repo ↗</a>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join("");
-
-        if (window.gsap) {
-          gsap.fromTo(".project-drawer-card", 
-            { opacity: 0, x: 20 }, 
-            { opacity: 1, x: 0, duration: 0.3, stagger: 0.04, ease: "power3.out" }
-          );
-        }
-      }
-
-      let drawerOpen = false;
-
-      function openDrawer() {
-        if (drawerOpen) return;
-        drawerOpen = true;
-        if (lenis) lenis.stop();
-        backdrop.classList.add("active");
-        renderDrawerItems();
-
-        if (window.gsap) {
-          gsap.to(backdrop, { opacity: 1, duration: 0.3, ease: "power2.out" });
-          gsap.to(drawer, {
-            x: 0,
-            duration: 0.42,
-            ease: "power4.out",
-            onComplete: () => searchInput.focus()
-          });
-        } else {
-          drawer.style.transform = "translateX(0)";
-          searchInput.focus();
-        }
-      }
-
-      function closeDrawer() {
-        if (!drawerOpen) return;
-        drawerOpen = false;
-        if (lenis) lenis.start();
-
-        if (window.gsap) {
-          gsap.to(backdrop, {
-            opacity: 0,
-            duration: 0.2,
-            ease: "power2.in",
-            onComplete: () => backdrop.classList.remove("active")
-          });
-          gsap.to(drawer, {
-            x: "100%",
-            duration: 0.28,
-            ease: "power3.in"
-          });
-        } else {
-          drawer.style.transform = "translateX(100%)";
-          backdrop.classList.remove("active");
-        }
-      }
-
-      navBtn.addEventListener("click", openDrawer);
-      closeBtn.addEventListener("click", closeDrawer);
-      backdrop.addEventListener("click", closeDrawer);
-      searchInput.addEventListener("input", renderDrawerItems);
-
-      window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeDrawer();
-        if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-          e.preventDefault();
-          openDrawer();
-        }
-      });
-
-      // 5. Interactive Terminal Execution Logic
-      const termScreen = document.getElementById("termScreen");
-      const termInput = document.getElementById("termInput");
-
-      window.executeTermCommand = function (cmd) {
-        if (!cmd) return;
-        const cleanCmd = cmd.trim().toLowerCase();
-        
-        let output = "";
-        if (cleanCmd === "help") {
-          output = `Available Commands:
-  • <span style="color: #93c5fd;">projects</span>  : Open projects drawer & list repositories
-  • <span style="color: #93c5fd;">geoshift</span>  : View GeoShift specs & download binaries
-  • <span style="color: #93c5fd;">skills</span>    : Display technical architecture matrix
-  • <span style="color: #93c5fd;">about</span>     : Summary of research & academic credentials
-  • <span style="color: #93c5fd;">contact</span>   : University email & GitHub coordinates
-  • <span style="color: #93c5fd;">clear</span>     : Clear terminal history`;
-        } else if (cleanCmd === "projects") {
-          openDrawer();
-          output = `Opening sliding projects drawer... (Total ${allProjects.length} repositories loaded)`;
-        } else if (cleanCmd === "geoshift") {
-          output = `<span style="color: #60a5fa; font-weight: 500;">GeoShift v1.0.0</span>
-Hardware iOS GPS Simulation Controller over USB (Rust + Tauri v2).
-Direct Download: <a href="https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0" target="_blank" style="color: #93c5fd; text-decoration: underline;">GitHub Release v1.0.0</a>`;
-        } else if (cleanCmd === "skills") {
-          output = `Languages : C (C99/C11), C++ (C++17/20), Rust, Python, TypeScript
-Platforms : Linux/POSIX, Apple usbmuxd / DVT, Tauri v2
-Focus     : Low-Level Memory Optimization, Agentic Reasoning Loops`;
-        } else if (cleanCmd === "about") {
-          output = `Olzhas Huseynzade — Computer Science & Technology
-Harbin Institute of Technology, Shenzhen (HITSZ) • Student ID: 2026330181
-Research: Systems programming, low-level OS primitives & autonomous agent workflows.`;
-        } else if (cleanCmd === "contact") {
-          output = `Email  : <a href="mailto:2026330181@stu.hit.edu.cn" style="color: #93c5fd;">2026330181@stu.hit.edu.cn</a>
-GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #93c5fd;">https://github.com/shushpaaaa</a>`;
-        } else if (cleanCmd === "clear") {
-          termScreen.innerHTML = "";
-          return;
-        } else {
-          output = `zsh: command not found: ${cleanCmd}. Type '<span style="color: #93c5fd;">help</span>' for a list of valid commands.`;
-        }
-
-        const block = document.createElement("div");
-        block.className = "term-output-block";
-        block.innerHTML = `
-          <div style="color: var(--text-muted);"><span style="color: #60a5fa;">olzhas@hitsz:~$</span> ${cmd}</div>
-          <div style="margin-top: 4px; color: var(--text-secondary);">${output}</div>
-        `;
-        termScreen.appendChild(block);
-        termScreen.scrollTop = termScreen.scrollHeight;
-      };
-
-      termInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          const val = termInput.value;
-          termInput.value = "";
-          executeTermCommand(val);
-        }
-      });
-
-      // 6. Dynamic GitHub Repositories Sync
-      fetch("https://api.github.com/users/shushpaaaa/repos?sort=updated&per_page=30")
-        .then(res => res.json())
-        .then(repos => {
-          if (!Array.isArray(repos)) return;
-          const remoteProjects = repos
-            .filter(r => r.name !== "shushpaaaa" && r.name !== "shushpaaaa.github.io")
-            .map(r => {
-              const existing = curatedProjects.find(c => c.name.toLowerCase() === r.name.toLowerCase());
-              return {
-                name: r.name,
-                url: r.html_url,
-                releaseUrl: existing ? existing.releaseUrl : (r.has_pages ? r.homepage : null),
-                description: r.description || (existing ? existing.description : "Public project repository on GitHub."),
-                language: r.language || (existing ? existing.language : "Code"),
-                tags: existing ? existing.tags : [r.language].filter(Boolean)
-              };
+        if (typeof ScrollTrigger !== "undefined") {
+          document.querySelectorAll(".reveal").forEach((el) => {
+            gsap.from(el, {
+              y: 22,
+              opacity: 0,
+              duration: 0.7,
+              ease: "power3.out",
+              clearProps: "transform,opacity",
+              scrollTrigger: {
+                trigger: el,
+                start: "top 86%",
+                once: true
+              }
             });
-
-          const extraCurated = curatedProjects.filter(c => !remoteProjects.some(r => r.name.toLowerCase() === c.name.toLowerCase()));
-          allProjects = [...remoteProjects, ...extraCurated];
-          updateNavCount();
-          if (drawerOpen) renderDrawerItems();
-        })
-        .catch(() => updateNavCount());
-
-      updateNavCount();
+          });
+        }
+      }
 
       // ==========================================
-      // 7. HERO 3D ABSTRACT SYSTEMS LATTICE (Three.js)
+      // 2. QUIET AMBIENT DOT MATRIX CANVAS
+      // ==========================================
+      const bgCanvas = document.getElementById("bgCanvas");
+      if (bgCanvas && !reducedMotion) {
+        const ctx = bgCanvas.getContext("2d");
+        let w = 0, h = 0;
+        let mx = -9999, my = -9999;
+        const spacing = 36;
+        let needsDraw = true;
+
+        function resizeBg() {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          w = window.innerWidth;
+          h = window.innerHeight;
+          bgCanvas.width = w * dpr;
+          bgCanvas.height = h * dpr;
+          bgCanvas.style.width = w + "px";
+          bgCanvas.style.height = h + "px";
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          needsDraw = true;
+        }
+
+        window.addEventListener("resize", resizeBg);
+        resizeBg();
+
+        window.addEventListener("pointermove", (e) => {
+          mx = e.clientX;
+          my = e.clientY;
+          needsDraw = true;
+        }, { passive: true });
+
+        window.addEventListener("pointerleave", () => {
+          mx = -9999;
+          my = -9999;
+          needsDraw = true;
+        });
+
+        function renderBg() {
+          if (needsDraw) {
+            ctx.clearRect(0, 0, w, h);
+            const radius = 180;
+            const rSq = radius * radius;
+
+            for (let x = spacing / 2; x < w; x += spacing) {
+              for (let y = spacing / 2; y < h; y += spacing) {
+                const dx = x - mx;
+                const dy = y - my;
+                const distSq = dx * dx + dy * dy;
+
+                if (distSq < rSq) {
+                  const factor = 1 - Math.sqrt(distSq) / radius;
+                  const alpha = 0.055 + factor * 0.24;
+                  ctx.fillStyle = `rgba(139, 184, 255, ${alpha.toFixed(3)})`;
+                  ctx.fillRect(x - 0.75, y - 0.75, 1.5, 1.5);
+                } else {
+                  ctx.fillStyle = "rgba(236, 240, 248, 0.045)";
+                  ctx.fillRect(x - 0.5, y - 0.5, 1, 1);
+                }
+              }
+            }
+            needsDraw = false;
+          }
+          requestAnimationFrame(renderBg);
+        }
+        renderBg();
+      }
+
+      // ==========================================
+      // 3. FULL-BLEED HERO 3D TOPOLOGICAL SCULPTURE (Zero Clipping)
       // ==========================================
       (function initHero3D() {
-        const container = document.getElementById("hero3dWrapper");
+        const heroSection = document.getElementById("heroSection");
         const canvas = document.getElementById("hero3dCanvas");
-        if (!container || !canvas || typeof THREE === "undefined") return;
+        if (!heroSection || !canvas || typeof THREE === "undefined") return;
 
         const scene = new THREE.Scene();
+        // Atmospheric fog melts the back half seamlessly into obsidian ink
+        scene.fog = new THREE.FogExp2(0x08090c, 0.085);
 
-        const camera = new THREE.PerspectiveCamera(45, (container.clientWidth || 400) / (container.clientHeight || 520), 0.1, 100);
-        camera.position.z = 6.8;
+        const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+        camera.position.set(0, 0, 7.6);
 
         const renderer = new THREE.WebGLRenderer({
           canvas: canvas,
@@ -1669,245 +2445,746 @@ GitHub : <a href="https://github.com/shushpaaaa" target="_blank" style="color: #
           powerPreference: "high-performance"
         });
         renderer.setClearColor(0x000000, 0);
-        renderer.setSize(container.clientWidth || 400, container.clientHeight || 520);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
-        // Lighting: Subtle key and rim lights
-        const ambientLight = new THREE.AmbientLight(0x1e293b, 1.4);
-        scene.add(ambientLight);
+        // Architectural Neutral + Cobalt Key Lighting
+        const ambient = new THREE.AmbientLight(0x1f2636, 1.6);
+        scene.add(ambient);
 
-        const keyLight = new THREE.DirectionalLight(0x60a5fa, 2.0);
-        keyLight.position.set(5, 6, 6);
+        const keyLight = new THREE.DirectionalLight(0x8bb8ff, 1.9);
+        keyLight.position.set(5, 6, 7);
         scene.add(keyLight);
 
-        const rimLight = new THREE.DirectionalLight(0x94a3b8, 1.0);
-        rimLight.position.set(-6, -4, -4);
+        const rimLight = new THREE.DirectionalLight(0xcbd5e1, 0.85);
+        rimLight.position.set(-6, -4, -3);
         scene.add(rimLight);
 
-        // Root group for all coordinated transformations
-        const rootGroup = new THREE.Group();
-        scene.add(rootGroup);
+        const pivot = new THREE.Group();
+        scene.add(pivot);
 
-        // 1. Central Faceted Crystal Core (Kernel)
-        const coreGeo = new THREE.IcosahedronGeometry(0.82, 0);
+        // Soft circular particle sprite texture
+        const spriteCanvas = document.createElement("canvas");
+        spriteCanvas.width = 32;
+        spriteCanvas.height = 32;
+        const sCtx = spriteCanvas.getContext("2d");
+        const rad = sCtx.createRadialGradient(16, 16, 0, 16, 16, 16);
+        rad.addColorStop(0, "rgba(240, 244, 255, 1)");
+        rad.addColorStop(0.4, "rgba(139, 184, 255, 0.7)");
+        rad.addColorStop(1, "rgba(0, 0, 0, 0)");
+        sCtx.fillStyle = rad;
+        sCtx.beginPath();
+        sCtx.arc(16, 16, 16, 0, Math.PI * 2);
+        sCtx.fill();
+        const dotTex = new THREE.CanvasTexture(spriteCanvas);
+
+        // 1. Inner Faceted Obsidian Core
+        const coreGeo = new THREE.IcosahedronGeometry(0.64, 0);
         const coreMat = new THREE.MeshStandardMaterial({
-          color: 0x0f172a,
-          metalness: 0.85,
-          roughness: 0.28,
+          color: 0x0e111a,
+          metalness: 0.86,
+          roughness: 0.26,
           flatShading: true
         });
         const coreMesh = new THREE.Mesh(coreGeo, coreMat);
-        rootGroup.add(coreMesh);
+        pivot.add(coreMesh);
 
-        // Core Edge Accents
-        const coreEdgesGeo = new THREE.EdgesGeometry(coreGeo);
-        const coreEdgesMat = new THREE.LineBasicMaterial({
-          color: 0x60a5fa,
-          transparent: true,
-          opacity: 0.45
-        });
-        const coreEdges = new THREE.LineSegments(coreEdgesGeo, coreEdgesMat);
-        coreMesh.add(coreEdges);
+        const coreEdgeMesh = new THREE.LineSegments(
+          new THREE.EdgesGeometry(coreGeo),
+          new THREE.LineBasicMaterial({ color: 0x8bb8ff, transparent: true, opacity: 0.42 })
+        );
+        coreMesh.add(coreEdgeMesh);
 
-        // 2. Outer Geodesic Sphere Frame
-        const outerGeo = new THREE.IcosahedronGeometry(1.42, 1);
-        const outerWireGeo = new THREE.WireframeGeometry(outerGeo);
-        const outerWireMat = new THREE.LineBasicMaterial({
-          color: 0x38bdf8,
-          transparent: true,
-          opacity: 0.18
-        });
-        const outerWire = new THREE.LineSegments(outerWireGeo, outerWireMat);
-        rootGroup.add(outerWire);
+        // 2. Sculptural Parametric Torus-Knot Manifold (Wireframe + Vertex Nodes)
+        const knotGeo = new THREE.TorusKnotGeometry(1.12, 0.28, 128, 18, 2, 3);
+        const knotWire = new THREE.LineSegments(
+          new THREE.WireframeGeometry(knotGeo),
+          new THREE.LineBasicMaterial({ color: 0x9ba3b4, transparent: true, opacity: 0.14 })
+        );
+        pivot.add(knotWire);
 
-        // 3. Glowing Point Nodes Texture
-        const dotCanvas = document.createElement("canvas");
-        dotCanvas.width = 32;
-        dotCanvas.height = 32;
-        const dotCtx = dotCanvas.getContext("2d");
-        const grad = dotCtx.createRadialGradient(16, 16, 0, 16, 16, 16);
-        grad.addColorStop(0, "rgba(255, 255, 255, 1)");
-        grad.addColorStop(0.35, "rgba(147, 197, 253, 0.85)");
-        grad.addColorStop(0.7, "rgba(59, 130, 246, 0.25)");
-        grad.addColorStop(1, "rgba(0, 0, 0, 0)");
-        dotCtx.fillStyle = grad;
-        dotCtx.beginPath();
-        dotCtx.arc(16, 16, 16, 0, Math.PI * 2);
-        dotCtx.fill();
-        const dotTex = new THREE.CanvasTexture(dotCanvas);
-
-        const pointsMat = new THREE.PointsMaterial({
-          size: 0.13,
-          map: dotTex,
-          transparent: true,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-          opacity: 0.85
-        });
-        const outerPoints = new THREE.Points(outerGeo, pointsMat);
-        rootGroup.add(outerPoints);
-
-        // 4. Gyroscopic Coordinate Rings & Orbiting Agents
-        const ringsGroup = new THREE.Group();
-        rootGroup.add(ringsGroup);
-
-        function createOrbitRing(radius, tubeRadius, color, tiltX, tiltY) {
-          const ringGeo = new THREE.TorusGeometry(radius, tubeRadius, 16, 80);
-          const ringMat = new THREE.MeshBasicMaterial({
-            color: color,
+        const knotPoints = new THREE.Points(
+          knotGeo,
+          new THREE.PointsMaterial({
+            size: 0.065,
+            map: dotTex,
             transparent: true,
-            opacity: 0.32
+            opacity: 0.65,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending
+          })
+        );
+        pivot.add(knotPoints);
+
+        // 3. Precision Equatorial Meridian Rings + Orbiting Telemetry Satellites
+        function buildMeridian(radius, tiltX, tiltY, opacity, speed) {
+          const ringGeo = new THREE.TorusGeometry(radius, 0.006, 12, 120);
+          const ringMat = new THREE.MeshBasicMaterial({
+            color: 0x8bb8ff,
+            transparent: true,
+            opacity: opacity
           });
-          const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-          ringMesh.rotation.x = tiltX;
-          ringMesh.rotation.y = tiltY;
-          ringsGroup.add(ringMesh);
+          const ring = new THREE.Mesh(ringGeo, ringMat);
+          ring.rotation.x = tiltX;
+          ring.rotation.y = tiltY;
+          pivot.add(ring);
 
-          const satGeo = new THREE.SphereGeometry(0.035, 12, 12);
-          const satMat = new THREE.MeshBasicMaterial({ color: 0x93c5fd });
-          const satMesh = new THREE.Mesh(satGeo, satMat);
-          ringMesh.add(satMesh);
-
-          return { ringMesh, satMesh, radius, speed: 0.012 + Math.random() * 0.008 };
+          const sat = new THREE.Mesh(
+            new THREE.SphereGeometry(0.032, 12, 12),
+            new THREE.MeshBasicMaterial({ color: 0xf0f2f7 })
+          );
+          ring.add(sat);
+          return { ring, sat, radius, speed };
         }
 
-        const ring1 = createOrbitRing(1.15, 0.009, 0x60a5fa, Math.PI / 4, 0);
-        const ring2 = createOrbitRing(1.36, 0.008, 0x38bdf8, -Math.PI / 3, Math.PI / 6);
-        const ring3 = createOrbitRing(1.65, 0.008, 0x94a3b8, Math.PI / 6, Math.PI / 3);
+        const rings = [
+          buildMeridian(1.68, Math.PI * 0.34, Math.PI * 0.12, 0.24, 0.45),
+          buildMeridian(1.94, -Math.PI * 0.28, Math.PI * 0.42, 0.14, -0.32)
+        ];
 
-        // 5. Floating Ambient Micro-Nodes
-        const particleCount = 45;
-        const pGeo = new THREE.BufferGeometry();
-        const pPos = new Float32Array(particleCount * 3);
-        for (let i = 0; i < particleCount; i++) {
-          const r = 1.55 + Math.random() * 0.35;
+        // 4. Subtle Field Micro-Nodes
+        const nodeCount = 56;
+        const nodeGeo = new THREE.BufferGeometry();
+        const nodePos = new Float32Array(nodeCount * 3);
+        for (let i = 0; i < nodeCount; i++) {
+          const r = 1.7 + Math.random() * 0.9;
           const theta = Math.random() * Math.PI * 2;
           const phi = Math.acos(Math.random() * 2 - 1);
-          pPos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-          pPos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-          pPos[i * 3 + 2] = r * Math.cos(phi);
+          nodePos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+          nodePos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          nodePos[i * 3 + 2] = r * Math.cos(phi);
         }
-        pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
-        const particleMat = new THREE.PointsMaterial({
-          size: 0.07,
-          map: dotTex,
-          transparent: true,
-          opacity: 0.5,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false
-        });
-        const particleSystem = new THREE.Points(pGeo, particleMat);
-        rootGroup.add(particleSystem);
+        nodeGeo.setAttribute("position", new THREE.BufferAttribute(nodePos, 3));
+        const nodeCloud = new THREE.Points(
+          nodeGeo,
+          new THREE.PointsMaterial({
+            size: 0.055,
+            map: dotTex,
+            transparent: true,
+            opacity: 0.38,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending
+          })
+        );
+        pivot.add(nodeCloud);
 
-        // Interaction State
+        // Responsive Placement in Full-Bleed Hero Space (Never Clips)
+        function layout3D() {
+          const w = heroSection.clientWidth || window.innerWidth;
+          const h = heroSection.clientHeight || window.innerHeight;
+          camera.aspect = w / h;
+          camera.updateProjectionMatrix();
+          renderer.setSize(w, h, false);
+
+          if (w >= 980) {
+            // Place cleanly in the right negative space beside hero typography
+            const worldHalfW = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z * camera.aspect;
+            pivot.position.set(Math.min(2.35, worldHalfW * 0.44), 0.15, 0);
+            pivot.scale.setScalar(1.0);
+            canvas.style.opacity = "1";
+          } else {
+            // On mobile/tablet, soften slightly behind content so typography remains crisp
+            pivot.position.set(0.4, 0.4, -1.2);
+            pivot.scale.setScalar(0.85);
+            canvas.style.opacity = "0.35";
+          }
+        }
+
+        window.addEventListener("resize", layout3D);
+        layout3D();
+
+        // Semi-Interactive Physics: Gentle Parallax + Direct Drag Orbit + Scroll Coupling
         let isDragging = false;
-        let prevPointerX = 0;
-        let prevPointerY = 0;
-        let velX = 0;
-        let velY = 0;
-        let targetTiltX = 0;
-        let targetTiltY = 0;
-        let currentTiltX = 0;
-        let currentTiltY = 0;
+        let lastX = 0, lastY = 0;
+        let velX = 0, velY = 0;
+        let targetMouseX = 0, targetMouseY = 0;
+        let curMouseX = 0, curMouseY = 0;
         let isVisible = true;
 
-        // Window mouse parallax
         window.addEventListener("pointermove", (e) => {
           if (isDragging) return;
-          const rect = container.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          const dx = (e.clientX - cx) / (window.innerWidth / 2);
-          const dy = (e.clientY - cy) / (window.innerHeight / 2);
-          targetTiltY = dx * 0.25;
-          targetTiltX = dy * 0.25;
+          targetMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+          targetMouseY = (e.clientY / window.innerHeight - 0.5) * 2;
         }, { passive: true });
 
-        // Direct Drag Interaction
-        container.addEventListener("pointerdown", (e) => {
+        canvas.addEventListener("pointerdown", (e) => {
           isDragging = true;
-          prevPointerX = e.clientX;
-          prevPointerY = e.clientY;
+          lastX = e.clientX;
+          lastY = e.clientY;
           velX = 0;
           velY = 0;
-          container.setPointerCapture(e.pointerId);
+          canvas.setPointerCapture(e.pointerId);
         });
 
         window.addEventListener("pointermove", (e) => {
           if (!isDragging) return;
-          const deltaX = e.clientX - prevPointerX;
-          const deltaY = e.clientY - prevPointerY;
-          prevPointerX = e.clientX;
-          prevPointerY = e.clientY;
-
-          velY = deltaX * 0.006;
-          velX = deltaY * 0.006;
-
-          rootGroup.rotation.y += velY;
-          rootGroup.rotation.x += velX;
+          const dx = e.clientX - lastX;
+          const dy = e.clientY - lastY;
+          lastX = e.clientX;
+          lastY = e.clientY;
+          velY = dx * 0.0055;
+          velX = dy * 0.0055;
+          pivot.rotation.y += velY;
+          pivot.rotation.x += velX;
         });
 
-        const stopDrag = () => {
-          isDragging = false;
-        };
-        window.addEventListener("pointerup", stopDrag);
-        window.addEventListener("pointercancel", stopDrag);
+        const releaseDrag = () => { isDragging = false; };
+        window.addEventListener("pointerup", releaseDrag);
+        window.addEventListener("pointercancel", releaseDrag);
 
-        // Auto Resize
-        function onResize() {
-          const w = container.clientWidth;
-          const h = container.clientHeight;
-          if (w === 0 || h === 0) return;
-          camera.aspect = w / h;
-          camera.updateProjectionMatrix();
-          renderer.setSize(w, h);
-        }
-        window.addEventListener("resize", onResize);
-        setTimeout(onResize, 100);
-
-        // Viewport Visibility Observer (Power Saver)
-        const observer = new IntersectionObserver((entries) => {
+        const io = new IntersectionObserver((entries) => {
           isVisible = entries[0].isIntersecting;
-        }, { threshold: 0.05 });
-        observer.observe(container);
+        }, { threshold: 0.02 });
+        io.observe(heroSection);
 
-        // Animation Loop
-        let orbitAngle = 0;
-        function animate() {
-          requestAnimationFrame(animate);
+        const clock = new THREE.Clock();
+
+        function tick() {
+          requestAnimationFrame(tick);
           if (!isVisible) return;
 
-          orbitAngle += 0.015;
+          const t = clock.getElapsedTime();
+          const scrollFactor = Math.min(1, window.scrollY / (window.innerHeight || 800));
 
-          if (!isDragging) {
-            rootGroup.rotation.y += 0.0025 + velY;
-            rootGroup.rotation.x += 0.0010 + velX;
-            velX *= 0.94;
-            velY *= 0.94;
-
-            currentTiltX += (targetTiltX - currentTiltX) * 0.05;
-            currentTiltY += (targetTiltY - currentTiltY) * 0.05;
-            camera.position.x = currentTiltY * 0.45;
-            camera.position.y = -currentTiltX * 0.45;
-            camera.lookAt(0, 0, 0);
+          if (!isDragging && !reducedMotion) {
+            pivot.rotation.y += 0.002 + velY;
+            pivot.rotation.x += 0.0008 + velX;
+            velX *= 0.93;
+            velY *= 0.93;
           }
 
-          coreMesh.rotation.y -= 0.0035;
-          coreMesh.rotation.z += 0.0018;
+          curMouseX += (targetMouseX - curMouseX) * 0.045;
+          curMouseY += (targetMouseY - curMouseY) * 0.045;
 
-          outerWire.rotation.y += 0.0014;
-          outerPoints.rotation.y += 0.0014;
+          camera.position.x = curMouseX * 0.35;
+          camera.position.y = -curMouseY * 0.25 - scrollFactor * 0.55;
+          camera.lookAt(0, 0, 0);
 
-          [ring1, ring2, ring3].forEach((r, idx) => {
-            const a = orbitAngle * r.speed * 60 + idx * 2.1;
-            r.satMesh.position.set(Math.cos(a) * r.radius, Math.sin(a) * r.radius, 0);
-          });
+          if (!reducedMotion) {
+            coreMesh.rotation.y = -t * 0.3;
+            coreMesh.rotation.x = t * 0.18;
+            knotWire.rotation.z = t * 0.06;
+            knotPoints.rotation.z = t * 0.06;
+
+            rings.forEach((r, i) => {
+              const angle = t * r.speed + i * 2.4;
+              r.sat.position.set(Math.cos(angle) * r.radius, Math.sin(angle) * r.radius, 0);
+            });
+          }
 
           renderer.render(scene, camera);
         }
 
-        animate();
+        tick();
       })();
+
+      // ==========================================
+      // 4. INTERACTIVE GEOSHIFT TELEMETRY SIMULATOR
+      // ==========================================
+      (function initGeoSim() {
+        const viewport = document.getElementById("simViewport");
+        const crossX = document.getElementById("simCrossX");
+        const crossY = document.getElementById("simCrossY");
+        const pin = document.getElementById("simPin");
+        const teleLat = document.getElementById("teleLat");
+        const teleLng = document.getElementById("teleLng");
+        const teleTarget = document.getElementById("teleTarget");
+        const simPacket = document.getElementById("simPacket");
+        const simStateBadge = document.getElementById("simStateBadge");
+        const resetBtn = document.getElementById("simResetBtn");
+        const presetBtns = Array.from(document.querySelectorAll(".preset-btn"));
+
+        if (!viewport) return;
+
+        function formatCoord(val, pos, neg) {
+          return `${Math.abs(val).toFixed(4)}° ${val >= 0 ? pos : neg}`;
+        }
+
+        function setSimulation(lat, lng, label, isHardwareReset = false) {
+          // Project lat (-60..75) and lng (-180..180) onto viewport %
+          const xPct = Math.min(94, Math.max(6, ((lng + 180) / 360) * 100));
+          const yPct = Math.min(90, Math.max(10, ((75 - lat) / 135) * 100));
+          const w = viewport.clientWidth || 360;
+          const h = viewport.clientHeight || 220;
+          const px = (xPct / 100) * w;
+          const py = (yPct / 100) * h;
+
+          crossX.style.transform = `translateY(${py.toFixed(1)}px)`;
+          crossY.style.transform = `translateX(${px.toFixed(1)}px)`;
+          pin.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px)`;
+
+          teleLat.textContent = formatCoord(lat, "N", "S");
+          teleLng.textContent = formatCoord(lng, "E", "W");
+          teleTarget.textContent = label;
+
+          if (isHardwareReset) {
+            simStateBadge.textContent = "Hardware GPS";
+            simStateBadge.style.color = "var(--text-secondary)";
+            simPacket.textContent = "usbmuxd → clear_simulated_location()";
+          } else {
+            simStateBadge.textContent = "Override active";
+            simStateBadge.style.color = "var(--status-online)";
+            simPacket.textContent = `usbmuxd → set(${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+          }
+        }
+
+        presetBtns.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            presetBtns.forEach((b) => b.classList.remove("is-active"));
+            btn.classList.add("is-active");
+            setSimulation(parseFloat(btn.dataset.lat), parseFloat(btn.dataset.lng), btn.dataset.name);
+          });
+        });
+
+        viewport.addEventListener("click", (e) => {
+          const rect = viewport.getBoundingClientRect();
+          const xNorm = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+          const yNorm = Math.min(1, Math.max(0, (e.clientY - rect.top) / rect.height));
+          const lng = xNorm * 360 - 180;
+          const lat = 75 - yNorm * 135;
+          presetBtns.forEach((b) => b.classList.remove("is-active"));
+          setSimulation(lat, lng, "Custom point");
+        });
+
+        resetBtn.addEventListener("click", () => {
+          presetBtns.forEach((b) => b.classList.remove("is-active"));
+          setSimulation(22.5872, 113.9726, "Native satellite lock", true);
+        });
+
+        // Initial render after layout
+        setTimeout(() => setSimulation(22.5872, 113.9726, "Shenzhen · HITSZ"), 50);
+        window.addEventListener("resize", () => {
+          const active = document.querySelector(".preset-btn.is-active");
+          if (active) {
+            setSimulation(parseFloat(active.dataset.lat), parseFloat(active.dataset.lng), active.dataset.name);
+          }
+        });
+      })();
+
+      // ==========================================
+      // 5. MULTI-AGENT EXECUTION PIPELINE INSPECTOR
+      // ==========================================
+      (function initPipelineInspector() {
+        const stages = [
+          {
+            title: "Task decomposition",
+            body: "Breaks multi-file engineering objectives into bounded dependency graphs so parallel worker contexts operate without colliding on shared state."
+          },
+          {
+            title: "Structured dispatch",
+            body: "Routes typed tool invocations with strict JSON schema validation, explicit timeouts, and deterministic retry boundaries."
+          },
+          {
+            title: "Sandbox verification",
+            body: "Executes static analysis, test suites, and diff invariants inside isolated environments before proposing patches upstream."
+          },
+          {
+            title: "Context governor",
+            body: "Tracks live token budgets across sub-agent trajectories, compacting verbose tool logs while preserving key architectural invariants."
+          }
+        ];
+
+        const nodes = Array.from(document.querySelectorAll(".pipe-node"));
+        const detail = document.getElementById("pipeDetail");
+        if (!detail || !nodes.length) return;
+
+        nodes.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const idx = parseInt(btn.dataset.stage, 10) || 0;
+            nodes.forEach((n) => n.classList.remove("is-active"));
+            btn.classList.add("is-active");
+            const s = stages[idx];
+            detail.innerHTML = `<strong>${s.title}</strong>${s.body}`;
+          });
+        });
+      })();
+
+      // ==========================================
+      // 6. ONE-CLICK COPY EMAIL FEEDBACK
+      // ==========================================
+      function bindCopyEmail(btnId, labelId, defaultText) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        const labelEl = labelId ? document.getElementById(labelId) : btn;
+
+        btn.addEventListener("click", () => {
+          navigator.clipboard?.writeText("2026330181@stu.hit.edu.cn").catch(() => {});
+          labelEl.textContent = "Copied to clipboard";
+          setTimeout(() => {
+            labelEl.textContent = defaultText;
+          }, 1800);
+        });
+      }
+
+      bindCopyEmail("heroCopyEmailBtn", "heroCopyEmailLabel", "2026330181@stu.hit.edu.cn");
+      bindCopyEmail("contactCopyBtn", null, "Copy");
+
+      // ==========================================
+      // 7. LIVE SHENZHEN (UTC+8) FOOTER CLOCK
+      // ==========================================
+      const szClock = document.getElementById("szClock");
+      function updateClock() {
+        if (!szClock) return;
+        try {
+          const now = new Date();
+          const fmt = new Intl.DateTimeFormat("en-GB", {
+            timeZone: "Asia/Shanghai",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false
+          }).format(now);
+          szClock.textContent = `Shenzhen ${fmt} UTC+8`;
+        } catch (e) {
+          szClock.textContent = "Shenzhen UTC+8";
+        }
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      // ==========================================
+      // 8. PROJECTS HUB DRAWER + LIVE GITHUB SYNC
+      // ==========================================
+      const curatedProjects = [
+        {
+          name: "GeoShift",
+          url: "https://github.com/shushpaaaa/GeoShift",
+          releaseUrl: "https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0",
+          description: "Native desktop GPS simulation controller for iOS over USB. Built with Rust + Tauri v2 and Python DVT instrumentation bridge.",
+          language: "Rust / JS",
+          filterKey: "rust"
+        },
+        {
+          name: "Autonomous Agent Architecture",
+          url: "https://github.com/shushpaaaa",
+          releaseUrl: null,
+          description: "Multi-agent execution loops with structured tool dispatch, context budget governors, and sandboxed verification.",
+          language: "Python",
+          filterKey: "python"
+        },
+        {
+          name: "CloudJukebox",
+          url: "https://github.com/shushpaaaa/CloudJukebox",
+          releaseUrl: null,
+          description: "Stream SoundCloud music directly from in-game Minecraft jukeboxes with 3D spatial audio attenuation.",
+          language: "Java",
+          filterKey: "java"
+        },
+        {
+          name: "spotify_downloader",
+          url: "https://github.com/shushpaaaa/spotify_downloader",
+          releaseUrl: null,
+          description: "Automated music metadata resolution and local audio fetch pipeline for tracks and playlists.",
+          language: "Python",
+          filterKey: "python"
+        },
+        {
+          name: "Survey",
+          url: "https://github.com/shushpaaaa/Survey",
+          releaseUrl: null,
+          description: "Full-stack survey collection and structured form submission engine with server-side validation.",
+          language: "PHP",
+          filterKey: "php"
+        }
+      ];
+
+      let allProjects = [...curatedProjects];
+      let activeFilter = "all";
+      let selectedIndex = 0;
+      let drawerOpen = false;
+
+      const drawer = document.getElementById("projectsDrawer");
+      const backdrop = document.getElementById("drawerBackdrop");
+      const navProjectsBtn = document.getElementById("navProjectsBtn");
+      const inlineDrawerBtn = document.getElementById("inlineDrawerBtn");
+      const drawerCloseBtn = document.getElementById("drawerCloseBtn");
+      const drawerSearchInput = document.getElementById("drawerSearchInput");
+      const drawerList = document.getElementById("drawerList");
+      const navCountBadge = document.getElementById("navCountBadge");
+      const filterChips = Array.from(document.querySelectorAll(".filter-chip"));
+
+      function getFilteredProjects() {
+        const q = (drawerSearchInput.value || "").trim().toLowerCase();
+        return allProjects.filter((p) => {
+          const matchesFilter = activeFilter === "all" || p.filterKey === activeFilter;
+          const matchesQuery =
+            !q ||
+            p.name.toLowerCase().includes(q) ||
+            (p.description || "").toLowerCase().includes(q) ||
+            (p.language || "").toLowerCase().includes(q);
+          return matchesFilter && matchesQuery;
+        });
+      }
+
+      function escapeHtml(str) {
+        return String(str || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function renderDrawer() {
+        const items = getFilteredProjects();
+        if (selectedIndex >= items.length) selectedIndex = Math.max(0, items.length - 1);
+
+        if (!items.length) {
+          drawerList.innerHTML = `<div style="padding: 32px 0; text-align: center; font-size: 13px; color: var(--text-muted);">No matching repositories found.</div>`;
+          return;
+        }
+
+        drawerList.innerHTML = items.map((proj, idx) => `
+          <div class="drawer-item ${idx === selectedIndex ? "is-selected" : ""}" data-idx="${idx}" role="option" aria-selected="${idx === selectedIndex}">
+            <div class="drawer-item-top">
+              <span class="drawer-item-name">${escapeHtml(proj.name)}</span>
+              <span class="drawer-item-lang">${escapeHtml(proj.language)}</span>
+            </div>
+            <p class="drawer-item-desc">${escapeHtml(proj.description)}</p>
+            <div class="drawer-item-actions">
+              <a href="${proj.url}" target="_blank" rel="noopener" class="drawer-link">Repository ↗</a>
+              ${proj.releaseUrl ? `<a href="${proj.releaseUrl}" target="_blank" rel="noopener" class="drawer-link secondary">Release binaries ↗</a>` : ""}
+            </div>
+          </div>
+        `).join("");
+      }
+
+      function openDrawer() {
+        if (drawerOpen) return;
+        drawerOpen = true;
+        selectedIndex = 0;
+        if (lenis) lenis.stop();
+        document.body.style.overflow = "hidden";
+        renderDrawer();
+
+        if (typeof gsap !== "undefined" && !reducedMotion) {
+          gsap.set(backdrop, { visibility: "visible", pointerEvents: "auto" });
+          gsap.set(drawer, { visibility: "visible" });
+          gsap.to(backdrop, { opacity: 1, duration: 0.25, ease: "power2.out" });
+          gsap.to(drawer, { x: "0%", duration: 0.36, ease: "power3.out" });
+        } else {
+          backdrop.style.visibility = "visible";
+          backdrop.style.pointerEvents = "auto";
+          backdrop.style.opacity = "1";
+          drawer.style.visibility = "visible";
+          drawer.style.transform = "translateX(0%)";
+        }
+
+        setTimeout(() => drawerSearchInput.focus(), 60);
+      }
+
+      function closeDrawer() {
+        if (!drawerOpen) return;
+        drawerOpen = false;
+        if (lenis) lenis.start();
+        document.body.style.overflow = "";
+
+        if (typeof gsap !== "undefined" && !reducedMotion) {
+          gsap.to(backdrop, {
+            opacity: 0,
+            duration: 0.2,
+            ease: "power2.in",
+            onComplete: () => gsap.set(backdrop, { visibility: "hidden", pointerEvents: "none" })
+          });
+          gsap.to(drawer, {
+            x: "100%",
+            duration: 0.28,
+            ease: "power3.in",
+            onComplete: () => gsap.set(drawer, { visibility: "hidden" })
+          });
+        } else {
+          backdrop.style.opacity = "0";
+          backdrop.style.visibility = "hidden";
+          backdrop.style.pointerEvents = "none";
+          drawer.style.transform = "translateX(100%)";
+          drawer.style.visibility = "hidden";
+        }
+      }
+
+      navProjectsBtn.addEventListener("click", openDrawer);
+      if (inlineDrawerBtn) inlineDrawerBtn.addEventListener("click", openDrawer);
+      drawerCloseBtn.addEventListener("click", closeDrawer);
+      backdrop.addEventListener("click", closeDrawer);
+
+      drawerSearchInput.addEventListener("input", () => {
+        selectedIndex = 0;
+        renderDrawer();
+      });
+
+      filterChips.forEach((chip) => {
+        chip.addEventListener("click", () => {
+          activeFilter = chip.dataset.filter;
+          selectedIndex = 0;
+          filterChips.forEach((c) => c.classList.remove("is-active"));
+          chip.classList.add("is-active");
+          renderDrawer();
+        });
+      });
+
+      window.addEventListener("keydown", (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+          e.preventDefault();
+          drawerOpen ? closeDrawer() : openDrawer();
+          return;
+        }
+        if (!drawerOpen) return;
+        if (e.key === "Escape") {
+          e.preventDefault();
+          closeDrawer();
+        } else if (e.key === "ArrowDown") {
+          e.preventDefault();
+          const items = getFilteredProjects();
+          if (items.length) {
+            selectedIndex = (selectedIndex + 1) % items.length;
+            renderDrawer();
+          }
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          const items = getFilteredProjects();
+          if (items.length) {
+            selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+            renderDrawer();
+          }
+        } else if (e.key === "Enter") {
+          const items = getFilteredProjects();
+          if (items[selectedIndex]) {
+            window.open(items[selectedIndex].url, "_blank", "noopener");
+          }
+        }
+      });
+
+      // Sync Live Public Repositories from GitHub API
+      fetch("https://api.github.com/users/shushpaaaa/repos?sort=updated&per_page=30")
+        .then((res) => res.json())
+        .then((repos) => {
+          if (!Array.isArray(repos)) return;
+          const mapped = repos
+            .filter((r) => r.name !== "shushpaaaa" && r.name !== "shushpaaaa.github.io")
+            .map((r) => {
+              const existing = curatedProjects.find((c) => c.name.toLowerCase() === r.name.toLowerCase());
+              const lang = existing ? existing.language : (r.language || "Code");
+              const lower = lang.toLowerCase();
+              let filterKey = "other";
+              if (lower.includes("rust") || lower.includes("js") || lower.includes("javascript")) filterKey = "rust";
+              else if (lower.includes("java")) filterKey = "java";
+              else if (lower.includes("python")) filterKey = "python";
+              else if (lower.includes("php")) filterKey = "php";
+
+              return {
+                name: r.name,
+                url: r.html_url,
+                releaseUrl: existing ? existing.releaseUrl : null,
+                description: r.description || (existing ? existing.description : "Public repository by Olzhas Huseynzade."),
+                language: lang,
+                filterKey
+              };
+            });
+
+          const extra = curatedProjects.filter((c) => !mapped.some((m) => m.name.toLowerCase() === c.name.toLowerCase()));
+          allProjects = [...mapped, ...extra];
+          navCountBadge.textContent = `(${allProjects.length})`;
+          if (drawerOpen) renderDrawer();
+        })
+        .catch(() => {
+          navCountBadge.textContent = `(${allProjects.length})`;
+        });
+
+      // ==========================================
+      // 9. INTERACTIVE NODE CONSOLE (History + Tab Complete)
+      // ==========================================
+      const termScreen = document.getElementById("termScreen");
+      const termInput = document.getElementById("termInput");
+      const cmdHistory = [];
+      let historyCursor = -1;
+      const validCommands = ["help", "geoshift", "projects", "stack", "whoami", "contact", "open github", "open projects", "clear"];
+
+      function runCommand(raw) {
+        const clean = raw.trim();
+        if (!clean) return;
+        const cmd = clean.toLowerCase();
+        cmdHistory.push(clean);
+        historyCursor = cmdHistory.length;
+
+        if (cmd === "clear") {
+          termScreen.innerHTML = "";
+          return;
+        }
+
+        let out = "";
+        if (cmd === "help") {
+          out = [
+            `<span style="color:var(--accent-text);">geoshift</span>       — architecture &amp; binary links for GeoShift v1.0.0`,
+            `<span style="color:var(--accent-text);">projects</span>       — list synced repositories (${allProjects.length} indexed)`,
+            `<span style="color:var(--accent-text);">stack</span>          — languages, POSIX systems &amp; AI runtime stack`,
+            `<span style="color:var(--accent-text);">whoami</span>         — academic affiliation &amp; research focus`,
+            `<span style="color:var(--accent-text);">contact</span>        — university email &amp; GitHub profile`,
+            `<span style="color:var(--accent-text);">open projects</span>  — open the sliding Projects Hub drawer`,
+            `<span style="color:var(--accent-text);">clear</span>          — clear terminal buffer`
+          ].join("<br/>");
+        } else if (cmd === "geoshift") {
+          out = `GeoShift v1.0.0 — Native Rust + Tauri v2 iOS GPS simulation controller over Apple DVT/usbmuxd.<br/>` +
+                `Release: <a href="https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0" target="_blank" rel="noopener" style="color:var(--accent-text);text-decoration:underline;">github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0 ↗</a>`;
+        } else if (cmd === "projects" || cmd === "ls") {
+          out = allProjects
+            .map((p) => `• <a href="${p.url}" target="_blank" rel="noopener" style="color:var(--text-primary);text-decoration:underline;">${p.name}</a> <span style="color:var(--text-muted);">[${p.language}]</span> — ${p.description}`)
+            .join("<br/>");
+        } else if (cmd === "stack" || cmd === "skills") {
+          out = `Systems   : C (C11), C++20, Rust, Tauri v2, Linux / POSIX<br/>` +
+                `Hardware  : Apple usbmuxd / DVT location services, cross-platform builds<br/>` +
+                `AI &amp; Web  : Python multi-agent loops, tool dispatch, context governors, Three.js`;
+        } else if (cmd === "whoami" || cmd === "about") {
+          out = `Olzhas Huseynzade · Computer Science &amp; Technology @ Harbin Institute of Technology, Shenzhen (HITSZ)<br/>` +
+                `Focus: Systems architecture, hardware developer instrumentation, and autonomous AI.`;
+        } else if (cmd === "contact") {
+          out = `Email  : <a href="mailto:2026330181@stu.hit.edu.cn" style="color:var(--accent-text);text-decoration:underline;">2026330181@stu.hit.edu.cn</a><br/>` +
+                `GitHub : <a href="https://github.com/shushpaaaa" target="_blank" rel="noopener" style="color:var(--accent-text);text-decoration:underline;">github.com/shushpaaaa ↗</a>`;
+        } else if (cmd === "open projects" || cmd === "open drawer") {
+          out = "Opening Projects Hub drawer...";
+          openDrawer();
+        } else if (cmd === "open github") {
+          out = "Opening github.com/shushpaaaa...";
+          window.open("https://github.com/shushpaaaa", "_blank", "noopener");
+        } else {
+          out = `zsh: command not found: ${escapeHtml(clean)}. Type <span style="color:var(--accent-text);">help</span> for available commands.`;
+        }
+
+        const entry = document.createElement("div");
+        entry.className = "console-entry";
+        entry.innerHTML = `<div class="console-cmd-echo"><span class="console-prompt-prefix">olzhas@hitsz:~$</span>${escapeHtml(clean)}</div><div>${out}</div>`;
+        termScreen.appendChild(entry);
+        termScreen.scrollTop = termScreen.scrollHeight;
+      }
+
+      termInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const val = termInput.value;
+          termInput.value = "";
+          runCommand(val);
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          if (historyCursor > 0) {
+            historyCursor--;
+            termInput.value = cmdHistory[historyCursor];
+          }
+        } else if (e.key === "ArrowDown") {
+          e.preventDefault();
+          if (historyCursor < cmdHistory.length - 1) {
+            historyCursor++;
+            termInput.value = cmdHistory[historyCursor];
+          } else {
+            historyCursor = cmdHistory.length;
+            termInput.value = "";
+          }
+        } else if (e.key === "Tab") {
+          e.preventDefault();
+          const v = termInput.value.trim().toLowerCase();
+          if (!v) return;
+          const match = validCommands.find((c) => c.startsWith(v));
+          if (match) termInput.value = match;
+        }
+      });
+
+      document.querySelectorAll(".cmd-chip").forEach((chip) => {
+        chip.addEventListener("click", () => runCommand(chip.dataset.cmd));
+      });
     })();
   </script>
 </body>
