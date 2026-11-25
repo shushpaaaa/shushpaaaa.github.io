@@ -1999,6 +1999,7 @@
 
       <nav class="nav-links" aria-label="Primary sections">
         <a href="#work" data-nav="work">Work</a>
+        <a href="/matrix/">MatrixLab</a>
         <a href="/geoshift/">GeoShift</a>
         <a href="/notes/">Notes</a>
         <a href="#console" data-nav="console">Console</a>
@@ -2293,6 +2294,12 @@
           </div>
 
           <div id="inlineRepoList" class="repo-list">
+            <a href="/matrix/" class="repo-row">
+              <span class="repo-name">MatrixLab</span>
+              <span class="repo-desc">Exact BigInt rational (p/q) linear algebra workbench with 7 instruments, full-screen Exam Mode, precision ruler sliders, and personal browser memory.</span>
+              <span class="repo-lang">Web App</span>
+              <span class="repo-arrow">→</span>
+            </a>
             <a href="https://github.com/shushpaaaa/CloudJukebox" target="_blank" rel="noopener" class="repo-row">
               <span class="repo-name">CloudJukebox</span>
               <span class="repo-desc">Stream SoundCloud music directly from in-game Minecraft jukeboxes with 3D spatial audio attenuation and low-latency buffering.</span>
@@ -2534,9 +2541,18 @@
     </div>
   </div>
 
-  <!-- Off-stage YouTube Audio Host (Zero Visual Footprint) -->
-  <div style="position:fixed;bottom:0;right:0;width:1px;height:1px;opacity:0.001;pointer-events:none;overflow:hidden;" aria-hidden="true">
-    <div id="ytAudioHost"></div>
+  <!-- Off-stage 240x240 YouTube Player (Valid size for YouTube viewability, 100% invisible on page) -->
+  <div style="position:fixed;left:-9999px;top:0;width:240px;height:240px;pointer-events:none;overflow:hidden;" aria-hidden="true">
+    <iframe
+      id="ytAudioFrame"
+      width="240"
+      height="240"
+      src="https://www.youtube.com/embed/WlzFWBcKOgI?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=WlzFWBcKOgI&controls=0&playsinline=1&rel=0"
+      title="Background music"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      referrerpolicy="strict-origin-when-cross-origin"
+    ></iframe>
   </div>
 
   <!-- Persistent Minimal Music & 3D Manifold Switcher -->
@@ -3294,6 +3310,14 @@
       // ==========================================
       const curatedProjects = [
         {
+          name: "MatrixLab",
+          url: "https://olzhas.app/matrix/",
+          releaseUrl: null,
+          description: "Exact BigInt rational linear algebra workbench: 5-method inverse finder, PA=LU & LDL^T, subspaces, Exam Mode, and personal saved matrices.",
+          language: "JavaScript",
+          filterKey: "rust"
+        },
+        {
           name: "GeoShift",
           url: "https://github.com/shushpaaaa/GeoShift",
           releaseUrl: "https://github.com/shushpaaaa/GeoShift/releases/tag/v1.0.0",
@@ -3542,7 +3566,7 @@
       const termInput = document.getElementById("termInput");
       const cmdHistory = [];
       let historyCursor = -1;
-      const validCommands = ["help", "geoshift", "notes", "projects", "stack", "whoami", "contact", "wechat", "open geoshift", "open notes", "open github", "open projects", "clear"];
+      const validCommands = ["help", "matrix", "geoshift", "notes", "projects", "stack", "whoami", "contact", "wechat", "open matrix", "open geoshift", "open notes", "open github", "open projects", "clear"];
 
       function runCommand(raw) {
         const clean = raw.trim();
@@ -3559,6 +3583,7 @@
         let out = "";
         if (cmd === "help") {
           out = [
+            `<span style="color:var(--accent-text);">matrix</span>         — launch MatrixLab exact-rational workbench (olzhas.app/matrix)`,
             `<span style="color:var(--accent-text);">geoshift</span>       — GeoShift v1.0.0 product page &amp; verified binaries`,
             `<span style="color:var(--accent-text);">notes</span>          — engineering write-ups &amp; protocol notes`,
             `<span style="color:var(--accent-text);">projects</span>       — list synced repositories (${allProjects.length} indexed)`,
@@ -3568,6 +3593,12 @@
             `<span style="color:var(--accent-text);">open projects</span>  — open the sliding Projects Hub drawer`,
             `<span style="color:var(--accent-text);">clear</span>          — clear terminal buffer`
           ].join("<br/>");
+        } else if (cmd === "matrix" || cmd === "matrixlab") {
+          out = `MatrixLab — Exact BigInt rational (p/q) linear algebra workbench with 7 instruments, Exam Mode &amp; personal browser memory.<br/>` +
+                `Launch: <a href="/matrix/" style="color:var(--accent-text);text-decoration:underline;">olzhas.app/matrix/ →</a>`;
+        } else if (cmd === "open matrix" || cmd === "open matrixlab") {
+          out = "Navigating to /matrix/...";
+          window.location.href = "/matrix/";
         } else if (cmd === "geoshift") {
           out = `GeoShift v1.0.0 — Native Rust + Tauri v2 iOS GPS simulation controller over Apple DVT/usbmuxd.<br/>` +
                 `Product page: <a href="/geoshift/" style="color:var(--accent-text);text-decoration:underline;">olzhas.app/geoshift/ →</a><br/>` +
@@ -3651,219 +3682,134 @@
       });
 
       // ==========================================
-      // 10. SEAMLESS CYCLIC YOUTUBE BACKGROUND MUSIC & 3D SWITCHER
+      // 10. SEAMLESS CYCLIC YOUTUBE SONG PLAYER (YouTube Only — Zero Synthetic Drone)
       // ==========================================
-      (function initAmbientBar() {
+      (function initMusicBar() {
         const audioBtn = document.getElementById("hudAudioBtn");
         const audioLabel = document.getElementById("hudAudioLabel");
         const miniCanvas = document.getElementById("hudMiniWave");
+        const ytFrame = document.getElementById("ytAudioFrame");
         const topoBtns = Array.from(document.querySelectorAll("[data-topo]"));
-        if (!audioBtn || !miniCanvas) return;
+        if (!audioBtn || !miniCanvas || !ytFrame) return;
 
-        const YT_VIDEO_ID = "WlzFWBcKOgI";
         let ytPlayer = null;
         let ytReady = false;
-        let ytFailed = false;
-        // Start with music ON by default; user can toggle OFF or ON anytime
         let wantPlay = true;
-        let isPlaying = false;
         let isAudible = false;
 
-        // Built-in generative ambient fallback (activates automatically if YouTube is blocked/offline)
-        let audioCtx = null;
-        let masterGain = null;
-        let fallbackBuilt = false;
-
-        function buildFallbackAmbient() {
-          if (fallbackBuilt) return;
-          const Ctx = window.AudioContext || window.webkitAudioContext;
-          if (!Ctx) return;
-          audioCtx = new Ctx();
-          masterGain = audioCtx.createGain();
-          masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-          masterGain.connect(audioCtx.destination);
-
-          const filter = audioCtx.createBiquadFilter();
-          filter.type = "lowpass";
-          filter.frequency.setValueAtTime(340, audioCtx.currentTime);
-          filter.connect(masterGain);
-
-          [
-            { freq: 65.41, type: "sine", gain: 0.2 },
-            { freq: 98.00, type: "triangle", gain: 0.08 },
-            { freq: 146.83, type: "sine", gain: 0.06 },
-            { freq: 246.94, type: "sine", gain: 0.03 }
-          ].forEach((v) => {
-            const osc = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            osc.type = v.type;
-            osc.frequency.setValueAtTime(v.freq, audioCtx.currentTime);
-            g.gain.setValueAtTime(v.gain, audioCtx.currentTime);
-            osc.connect(g);
-            g.connect(filter);
-            osc.start();
-          });
-          fallbackBuilt = true;
+        function postYT(func, args = []) {
+          try {
+            ytFrame.contentWindow?.postMessage(
+              JSON.stringify({ event: "command", func, args }),
+              "*"
+            );
+          } catch (_) {}
         }
 
-        function setFallback(on) {
-          buildFallbackAmbient();
-          if (!audioCtx || !masterGain) return;
-          if (audioCtx.state === "suspended") audioCtx.resume().catch(() => {});
-          const now = audioCtx.currentTime;
-          masterGain.gain.cancelScheduledValues(now);
-          masterGain.gain.setValueAtTime(Math.max(0.0001, masterGain.gain.value), now);
-          masterGain.gain.exponentialRampToValueAtTime(on ? 0.38 : 0.0001, now + (on ? 1.1 : 0.5));
-          isPlaying = on;
-          isAudible = on;
-          syncAudioUI();
-        }
-
-        function syncAudioUI(statusText) {
+        function syncAudioUI(text) {
           audioBtn.classList.toggle("is-active", wantPlay);
           audioBtn.setAttribute("aria-pressed", String(wantPlay));
-          if (statusText) {
-            audioLabel.textContent = statusText;
-          } else {
-            audioLabel.textContent = wantPlay ? "Sound on" : "Sound off";
-          }
+          audioLabel.textContent = text || (wantPlay ? "Sound on" : "Sound off");
         }
 
-        function tryStartUnmuted() {
+        function playUnmutedNow() {
           if (!wantPlay) return;
-          if (ytFailed) {
-            setFallback(true);
-            return;
-          }
+          postYT("setVolume", [55]);
+          postYT("unMute");
+          postYT("playVideo");
           if (ytReady && ytPlayer) {
             try {
-              ytPlayer.setVolume(45);
+              ytPlayer.setVolume(55);
               ytPlayer.unMute();
               ytPlayer.playVideo();
-              isAudible = !ytPlayer.isMuted();
             } catch (_) {}
           }
+          isAudible = true;
+          syncAudioUI("Sound on");
         }
 
-        // Unlock unmuted audio on the first user gesture if browser autoplay policy paused/muted initial start
-        function onFirstInteraction(e) {
-          if (!wantPlay) return;
-          if (e.target && e.target.closest && e.target.closest("#hudAudioBtn")) return;
-          if (isPlaying && isAudible) {
-            cleanupUnlockListeners();
+        function pauseNow() {
+          postYT("pauseVideo");
+          postYT("mute");
+          if (ytReady && ytPlayer) {
+            try {
+              ytPlayer.pauseVideo();
+              ytPlayer.mute();
+            } catch (_) {}
+          }
+          isAudible = false;
+          syncAudioUI("Sound off");
+        }
+
+        function cleanupUnlock() {
+          window.removeEventListener("pointerdown", onFirstGesture, true);
+          window.removeEventListener("keydown", onFirstGesture, true);
+          window.removeEventListener("touchstart", onFirstGesture, true);
+        }
+
+        function onFirstGesture(e) {
+          if (!wantPlay) {
+            cleanupUnlock();
             return;
           }
-          tryStartUnmuted();
+          if (e.target && e.target.closest && e.target.closest("#hudAudioBtn")) return;
+          playUnmutedNow();
+          cleanupUnlock();
         }
 
-        function cleanupUnlockListeners() {
-          window.removeEventListener("pointerdown", onFirstInteraction, true);
-          window.removeEventListener("keydown", onFirstInteraction, true);
-          window.removeEventListener("touchstart", onFirstInteraction, true);
-        }
+        window.addEventListener("pointerdown", onFirstGesture, true);
+        window.addEventListener("keydown", onFirstGesture, true);
+        window.addEventListener("touchstart", onFirstGesture, true);
 
-        window.addEventListener("pointerdown", onFirstInteraction, true);
-        window.addEventListener("keydown", onFirstInteraction, true);
-        window.addEventListener("touchstart", onFirstInteraction, true);
-
-        // Load official YouTube IFrame Player API asynchronously
+        // Attach official YouTube IFrame API to the already-loaded 240x240 iframe
         const ytScript = document.createElement("script");
         ytScript.src = "https://www.youtube.com/iframe_api";
         ytScript.async = true;
-        ytScript.onerror = () => { ytFailed = true; };
         document.head.appendChild(ytScript);
 
         window.onYouTubeIframeAPIReady = function () {
-          if (typeof YT === "undefined" || !YT.Player) {
-            ytFailed = true;
-            return;
-          }
-          ytPlayer = new YT.Player("ytAudioHost", {
-            width: "1",
-            height: "1",
-            videoId: YT_VIDEO_ID,
-            playerVars: {
-              autoplay: 1,
-              controls: 0,
-              disablekb: 1,
-              fs: 0,
-              loop: 1,
-              playlist: YT_VIDEO_ID,
-              modestbranding: 1,
-              playsinline: 1,
-              rel: 0,
-              origin: window.location.origin
-            },
+          if (typeof YT === "undefined" || !YT.Player) return;
+          ytPlayer = new YT.Player("ytAudioFrame", {
             events: {
               onReady: function (e) {
                 ytReady = true;
-                e.target.setVolume(45);
+                e.target.setVolume(55);
                 if (wantPlay) {
-                  // Attempt immediate unmuted playback first
                   try {
                     e.target.unMute();
                     e.target.playVideo();
                   } catch (_) {}
-                  // If browser blocks unmuted autoplay, pre-buffer muted so first gesture unlocks instantly
-                  setTimeout(() => {
-                    if (wantPlay && e.target.getPlayerState() !== YT.PlayerState.PLAYING) {
-                      try {
-                        e.target.mute();
-                        e.target.playVideo();
-                      } catch (_) {}
-                    }
-                  }, 600);
+                } else {
+                  try {
+                    e.target.pauseVideo();
+                  } catch (_) {}
                 }
               },
               onStateChange: function (e) {
                 if (e.data === YT.PlayerState.PLAYING) {
-                  isPlaying = true;
                   isAudible = !e.target.isMuted();
-                  if (isAudible) cleanupUnlockListeners();
-                  syncAudioUI("Sound on");
-                } else if (e.data === YT.PlayerState.PAUSED) {
-                  isPlaying = false;
-                  if (!wantPlay) syncAudioUI("Sound off");
-                } else if (e.data === YT.PlayerState.ENDED) {
-                  // Explicit cyclic loop guarantee
+                  if (isAudible) cleanupUnlock();
+                  if (wantPlay) syncAudioUI("Sound on");
+                } else if (e.data === YT.PlayerState.ENDED && wantPlay) {
                   e.target.seekTo(0);
                   e.target.playVideo();
                 }
-              },
-              onError: function () {
-                ytFailed = true;
               }
             }
           });
         };
 
-        // Failover mark if YouTube API is unreachable in restricted networks
-        setTimeout(() => {
-          if (!ytReady) ytFailed = true;
-        }, 5500);
-
-        function toggleMusic() {
+        audioBtn.addEventListener("click", () => {
           if (wantPlay) {
-            // User explicitly turned music OFF
             wantPlay = false;
-            cleanupUnlockListeners();
-            if (ytReady && ytPlayer) {
-              try { ytPlayer.pauseVideo(); } catch (_) {}
-            }
-            if (fallbackBuilt) setFallback(false);
-            isPlaying = false;
-            isAudible = false;
-            syncAudioUI("Sound off");
-            return;
+            cleanupUnlock();
+            pauseNow();
+          } else {
+            wantPlay = true;
+            playUnmutedNow();
           }
+        });
 
-          // User explicitly turned music ON
-          wantPlay = true;
-          syncAudioUI("Sound on");
-          tryStartUnmuted();
-        }
-
-        audioBtn.addEventListener("click", toggleMusic);
         syncAudioUI("Sound on");
 
         // Simple Direct 3D Topology Switcher
@@ -3894,12 +3840,12 @@
 
         function drawMini() {
           requestAnimationFrame(drawMini);
-          const targetAmp = isPlaying ? 0.88 : (wantPlay ? 0.35 : 0.06);
+          const targetAmp = wantPlay ? 0.85 : 0.06;
           amp += (targetAmp - amp) * 0.08;
-          if (!reducedMotion) phase += isPlaying ? 0.11 : 0.02;
+          if (!reducedMotion) phase += wantPlay ? 0.1 : 0.02;
 
           ctx.clearRect(0, 0, w, h);
-          ctx.strokeStyle = isPlaying ? "#8bb8ff" : "rgba(155, 163, 180, 0.55)";
+          ctx.strokeStyle = wantPlay ? "#8bb8ff" : "rgba(155, 163, 180, 0.55)";
           ctx.lineWidth = 1.3;
           ctx.beginPath();
           const mid = h / 2;
